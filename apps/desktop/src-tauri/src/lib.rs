@@ -213,7 +213,7 @@ type _Pin = Mutex<()>;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    tauri::Builder::default()
+    let app = tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             paraphrase,
             judge_pair,
@@ -222,6 +222,22 @@ pub fn run() {
             library_passages,
             library_get_passage,
         ])
-        .run(tauri::generate_context!())
-        .expect("error while running fathom desktop");
+        .build(tauri::generate_context!())
+        .expect("error while building fathom desktop");
+
+    // Bypass C++ static destructors on shutdown. llama.cpp's `LlamaBackend`
+    // and ort's onnxruntime both register global teardown that SIGABRTs at
+    // process exit on macOS — visible to the user as a "Fathom closed
+    // unexpectedly" dialog after Cmd+Q. We call libc::_exit (underscore
+    // variant: skips atexit handlers and C++ static destructors entirely)
+    // before AppKit's normal shutdown gets a chance to abort us. By the
+    // time ExitRequested fires, the user has already asked to quit and any
+    // pending writes from our own code have already flushed.
+    app.run(|_handle, event| {
+        if let tauri::RunEvent::ExitRequested { .. } = &event {
+            unsafe {
+                libc::_exit(0);
+            }
+        }
+    });
 }

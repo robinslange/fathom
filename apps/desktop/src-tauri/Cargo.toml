@@ -26,5 +26,6 @@ serde_json.workspace = true
 tokio.workspace = true
 anyhow.workspace = true
 once_cell.workspace = true
+libc = "0.2"
 fathom-core.workspace = true
 fathom-engine.workspace = true
