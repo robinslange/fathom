@@ -6,6 +6,7 @@ use fathom_core::{
     bootstrap, fathom_with_global_substrate, fathom_with_judge, judge, FathomResult, JudgeMode,
     Mode, Tier,
 };
+use fathom_embed;
 use fathom_engine::LlamaCppBackend;
 use once_cell::sync::OnceCell;
 use serde::{Deserialize, Serialize};
@@ -257,11 +258,11 @@ async fn library_load_book(gutenberg_id: u32) -> Result<BookView, AppError> {
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct LibraryParaphraseArgs {
     pub gutenberg_id: u32,
-    pub chunk_id: String,
-    pub sel_start: usize,
-    pub sel_end: usize,
+    pub start_byte: usize,
+    pub end_byte: usize,
     pub tier: Tier,
 }
 
@@ -281,7 +282,7 @@ async fn library_paraphrase_selection(
 ) -> Result<FathomResult, AppError> {
     let rt = ensure_runtime().await?;
     let snapped = rt
-        .snap_selection(args.gutenberg_id, &args.chunk_id, args.sel_start, args.sel_end)
+        .snap_selection(args.gutenberg_id, args.start_byte, args.end_byte)
         .await?
         .ok_or_else(|| AppError {
             message: "selection outside any sentence".to_string(),
@@ -299,6 +300,63 @@ async fn library_paraphrase_selection(
         JudgeMode::Always(None),
     )
     .await?)
+}
+
+#[tauri::command]
+async fn library_ensure_embedder(app: AppHandle) -> Result<(), AppError> {
+    let model = bootstrap::ensure_model_downloaded(
+        "bge-small",
+        Some(make_progress_callback(app.clone(), "bge-small")),
+    )
+    .await?;
+    let tokenizer = bootstrap::ensure_model_downloaded(
+        "bge-small-tokenizer",
+        Some(make_progress_callback(app, "bge-small-tokenizer")),
+    )
+    .await?;
+    fathom_embed::init_embedder(&model, &tokenizer)
+        .map_err(|e| AppError { message: format!("init embedder: {e:#}") })?;
+    Ok(())
+}
+
+/// Eagerly fetch + decode the first N shards (alphabetical by author then
+/// title) so library_search has something to rank on first query. Returns
+/// the number of shards now resident in the LRU. Idempotent.
+///
+/// Fetches in parallel with bounded concurrency (8 in flight) to keep the
+/// first-launch wall-clock under ~5s on typical home broadband for the
+/// default limit=64. Sequential awaits would be ~13s due to per-request
+/// round-trip overhead.
+#[tauri::command]
+async fn library_prewarm_shards(limit: usize) -> Result<usize, AppError> {
+    use futures_util::stream::StreamExt;
+    let rt = ensure_runtime().await?;
+    let mut books: Vec<ManifestBook> = rt.manifest().books.clone();
+    books.sort_by(|a, b| {
+        let a_auth = a.translators.first().map(|t| t.name.as_str()).unwrap_or("");
+        let b_auth = b.translators.first().map(|t| t.name.as_str()).unwrap_or("");
+        a_auth.cmp(b_auth).then_with(|| a.title.cmp(&b.title))
+    });
+    let mut stream = futures_util::stream::iter(
+        books.into_iter().take(limit).map(|book| {
+            let rt = rt.clone();
+            async move {
+                match rt.ensure_shard(book.gutenberg_id).await {
+                    Ok(_) => 1usize,
+                    Err(e) => {
+                        eprintln!("prewarm shard {} failed: {e:#}", book.gutenberg_id);
+                        0
+                    }
+                }
+            }
+        }),
+    )
+    .buffer_unordered(8);
+    let mut warmed = 0usize;
+    while let Some(n) = stream.next().await {
+        warmed += n;
+    }
+    Ok(warmed)
 }
 
 #[tauri::command]
@@ -367,6 +425,8 @@ pub fn run() {
             library_search,
             library_load_book,
             library_paraphrase_selection,
+            library_ensure_embedder,
+            library_prewarm_shards,
             library_favourite,
             library_favourites,
         ])

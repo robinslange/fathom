@@ -30,3 +30,5 @@ libc = "0.2"
 directories.workspace = true
 fathom-core.workspace = true
 fathom-engine.workspace = true
+fathom-embed.workspace = true
+futures-util.workspace = true

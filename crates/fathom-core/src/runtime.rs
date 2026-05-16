@@ -362,26 +362,29 @@ impl Runtime {
         Ok(hits)
     }
 
-    /// Snap a byte-offset selection in a chunk's text to the enclosing UAX#29
-    /// sentence boundaries. Wraps `fathom_chunker::snap_to_sentence`.
+    /// Snap a document-absolute byte-offset selection (which may span chunks)
+    /// to the enclosing UAX#29 sentence boundaries within `canonical_text`.
+    ///
+    /// Returns `Ok(None)` if the selection collapses to nothing or doesn't
+    /// overlap any sentence in the canonical text.
     pub async fn snap_selection(
         &self,
         gutenberg_id: u32,
-        chunk_id: &str,
-        sel_start: usize,
-        sel_end: usize,
+        start_byte: usize,
+        end_byte: usize,
     ) -> Result<Option<(usize, usize)>> {
         let shard = self.ensure_shard(gutenberg_id).await?;
-        let chunk = shard
-            .chunks
-            .iter()
-            .find(|c| c.chunk_id == chunk_id)
-            .ok_or_else(|| anyhow!("unknown chunk_id {chunk_id} in book {gutenberg_id}"))?;
-        let text = &shard.canonical_text[chunk.char_offset_start..chunk.char_offset_end];
-        let local_start = sel_start.saturating_sub(chunk.char_offset_start);
-        let local_end = sel_end.saturating_sub(chunk.char_offset_start);
-        let snapped = fathom_chunker::snap_to_sentence(text, local_start, local_end);
-        Ok(snapped.map(|(s, e)| (s + chunk.char_offset_start, e + chunk.char_offset_start)))
+        let text = &shard.canonical_text;
+        let clamped_start = start_byte.min(text.len());
+        let clamped_end = end_byte.min(text.len());
+        if clamped_end <= clamped_start {
+            return Ok(None);
+        }
+        Ok(fathom_chunker::snap_to_sentence(
+            text,
+            clamped_start,
+            clamped_end,
+        ))
     }
 }
 
