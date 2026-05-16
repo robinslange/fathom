@@ -40,11 +40,11 @@ pub const MODEL_MANIFEST: &[ModelManifestEntry] = &[
     },
     ModelManifestEntry {
         id: "deberta-nli",
-        filename: "deberta-v3-base-mnli-fever-anli-int8.onnx",
-        url: "https://huggingface.co/Xenova/DeBERTa-v3-base-mnli-fever-anli/resolve/main/onnx/model_int8.onnx",
+        filename: "deberta-v3-base-mnli-fever-anli-quantized.onnx",
+        url: "https://huggingface.co/Xenova/DeBERTa-v3-base-mnli-fever-anli/resolve/main/onnx/model_quantized.onnx",
         sha256: None,
-        label: "DeBERTa-v3-base MNLI/FEVER/ANLI (int8 ONNX)",
-        size_estimate_bytes: 222_863_108,
+        label: "DeBERTa-v3-base MNLI/FEVER/ANLI (quantized ONNX)",
+        size_estimate_bytes: 244_291_931,
     },
     ModelManifestEntry {
         id: "deberta-nli-tokenizer",

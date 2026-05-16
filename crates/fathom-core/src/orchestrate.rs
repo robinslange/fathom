@@ -1,4 +1,6 @@
+use crate::bootstrap::ProgressCallback;
 use crate::identify::identify_terms;
+use crate::judge;
 use crate::lexicon::{lookup_canonical, LexiconEntry};
 use crate::parser::parse_response;
 use crate::prompts::{
@@ -22,30 +24,91 @@ pub async fn fathom(
     mode: Mode,
     backend: &dyn Backend,
 ) -> Result<FathomResult> {
+    fathom_with_judge(passage, tier, mode, backend, JudgeMode::Always(None)).await
+}
+
+/// How `fathom` interacts with the NLI judge.
+pub enum JudgeMode {
+    /// Always run the judge. If the model isn't loaded, attempt to load it
+    /// (this may download the ONNX on first call). On any judge failure, the
+    /// paraphrase still succeeds but `faithfulness` is `None`. The optional
+    /// callback receives download progress while the model is being fetched.
+    Always(Option<ProgressCallback>),
+    /// Skip the judge entirely. `faithfulness` is `None`. Useful when the
+    /// caller wants raw paraphrase output without paying judge latency.
+    Skip,
+}
+
+/// Lower-level entry point: same as `fathom` but with explicit judge control.
+pub async fn fathom_with_judge(
+    passage: impl Into<Passage>,
+    tier: Tier,
+    mode: Mode,
+    backend: &dyn Backend,
+    judge_mode: JudgeMode,
+) -> Result<FathomResult> {
     let passage = passage.into();
     let audience = tier.audience();
     let model = backend.model_label().to_string();
 
-    if matches!(mode, Mode::Auto | Mode::Curated) {
-        if let Some(entry) = lookup_canonical(&passage.text) {
-            return gloss_curated(passage, entry, audience, tier, model, backend).await;
+    let mut result = if matches!(mode, Mode::Auto | Mode::Curated) {
+        match lookup_canonical(&passage.text) {
+            Some(entry) => gloss_curated(passage, entry, audience, tier, model, backend).await?,
+            None if matches!(mode, Mode::Curated) => {
+                return Err(anyhow!(
+                    "no curated substrate found for this passage; try Mode::Auto or Mode::Jit"
+                ));
+            }
+            None => fall_through_after_curated(passage, audience, tier, mode, model, backend).await?,
         }
-        if matches!(mode, Mode::Curated) {
-            return Err(anyhow!(
-                "no curated substrate found for this passage; try Mode::Auto or Mode::Jit"
-            ));
+    } else if matches!(mode, Mode::Jit) {
+        let terms = identify_terms(&passage.text, backend).await?;
+        if terms.is_empty() {
+            gloss_no_substrate(passage, audience, tier, model, backend).await?
+        } else {
+            gloss_with_identified_terms(passage, terms, audience, tier, model, backend).await?
         }
+    } else {
+        gloss_no_substrate(passage, audience, tier, model, backend).await?
+    };
+
+    if let JudgeMode::Always(progress) = judge_mode {
+        result.faithfulness = run_judge(&result.passage.text, &result.paraphrase, progress).await;
     }
 
-    if matches!(mode, Mode::Auto | Mode::Jit) {
+    Ok(result)
+}
+
+async fn fall_through_after_curated(
+    passage: Passage,
+    audience: &str,
+    tier: Tier,
+    mode: Mode,
+    model: String,
+    backend: &dyn Backend,
+) -> Result<FathomResult> {
+    if matches!(mode, Mode::Auto) {
         let terms = identify_terms(&passage.text, backend).await?;
         if !terms.is_empty() {
             return gloss_with_identified_terms(passage, terms, audience, tier, model, backend)
                 .await;
         }
     }
-
     gloss_no_substrate(passage, audience, tier, model, backend).await
+}
+
+/// Graceful-degrade judge call. Returns `Some(score)` on success, `None` on
+/// any failure (model not yet on disk, download failed, inference failed).
+/// The paraphrase pipeline is never broken by judge failure.
+async fn run_judge(
+    original: &str,
+    paraphrase: &str,
+    progress: Option<ProgressCallback>,
+) -> Option<crate::types::FaithfulnessScore> {
+    if let Err(_e) = judge::ensure_loaded(progress).await {
+        return None;
+    }
+    judge::score_paraphrase(original, paraphrase).ok()
 }
 
 async fn gloss_curated(
