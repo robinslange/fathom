@@ -258,7 +258,7 @@ pub async fn fathom_with_global_substrate(
     );
     let raw = backend.generate(&prompt).await?;
     let (paraphrase, glossary) = parse_response(&raw, Some(&substrate_to_english));
-    let identified_terms = substrate_map.keys().cloned().collect();
+    let identified_terms: Vec<String> = glossary.iter().map(|g| g.term.clone()).collect();
 
     let mut result = FathomResult {
         passage,

@@ -209,6 +209,11 @@ fn sha256_hex(bytes: &[u8]) -> String {
     format!("{:x}", hasher.finalize())
 }
 
+fn decode_shard(raw: &[u8]) -> Result<Shard> {
+    let decompressed = zstd::decode_all(raw).context("zstd decode shard")?;
+    rmp_serde::from_slice(&decompressed).context("decode shard msgpack")
+}
+
 /// Maximum number of decoded shards to keep in memory. 64 covers most search
 /// + read-multiple-books sessions without unbounded growth.
 const SHARD_CACHE_CAPACITY: usize = 64;
@@ -250,6 +255,10 @@ impl Runtime {
 
     /// Ensure the shard for `gutenberg_id` is cached locally and decoded.
     /// Network on cache miss, file IO on disk-cache hit, no-op on memory hit.
+    ///
+    /// Retries once if the disk-cached file is stale relative to the manifest
+    /// (manifest updated since last fetch). The first attempt deletes the stale
+    /// file and the second attempt triggers the cache-miss network path.
     pub async fn ensure_shard(&self, gutenberg_id: u32) -> Result<Arc<Shard>> {
         if let Some(s) = self.shards.lock().await.get(&gutenberg_id) {
             return Ok(s.clone());
@@ -259,54 +268,64 @@ impl Runtime {
             .ok_or_else(|| anyhow!("unknown gutenberg_id {gutenberg_id}"))?
             .clone();
         let local = shard_path(&book.shard_filename)?;
-        if !local.is_file() {
-            let url = format!("{}/shards/{}", base_url(), book.shard_filename);
-            let bytes = self
-                .http
-                .get(&url)
-                .send()
-                .await
-                .with_context(|| format!("GET {url}"))?
-                .error_for_status()?
-                .bytes()
-                .await?;
-            let observed = sha256_hex(&bytes);
-            if !observed.eq_ignore_ascii_case(&book.shard_sha256) {
-                bail!(
-                    "shard {} sha256 mismatch: expected {} got {}",
-                    book.shard_filename,
-                    book.shard_sha256,
-                    observed
-                );
-            }
-            if let Some(parent) = local.parent() {
-                tokio::fs::create_dir_all(parent)
+
+        for attempt in 0..2u8 {
+            if !local.is_file() {
+                let url = format!("{}/shards/{}", base_url(), book.shard_filename);
+                let bytes = self
+                    .http
+                    .get(&url)
+                    .send()
                     .await
-                    .with_context(|| format!("create {}", parent.display()))?;
+                    .with_context(|| format!("GET {url}"))?
+                    .error_for_status()?
+                    .bytes()
+                    .await?;
+                let observed = sha256_hex(&bytes);
+                if !observed.eq_ignore_ascii_case(&book.shard_sha256) {
+                    bail!(
+                        "shard {} sha256 mismatch: expected {} got {}",
+                        book.shard_filename,
+                        book.shard_sha256,
+                        observed
+                    );
+                }
+                if let Some(parent) = local.parent() {
+                    tokio::fs::create_dir_all(parent)
+                        .await
+                        .with_context(|| format!("create {}", parent.display()))?;
+                }
+                let partial = local.with_extension("shard.partial");
+                tokio::fs::write(&partial, &bytes)
+                    .await
+                    .with_context(|| format!("write {}", partial.display()))?;
+                tokio::fs::rename(&partial, &local)
+                    .await
+                    .with_context(|| format!("finalise {}", local.display()))?;
+            } else {
+                let bytes = tokio::fs::read(&local).await?;
+                if !sha256_hex(&bytes).eq_ignore_ascii_case(&book.shard_sha256) {
+                    tokio::fs::remove_file(&local).await.ok();
+                    if attempt == 0 {
+                        continue;
+                    }
+                    bail!(
+                        "shard {} stale after refetch; manifest may be inconsistent",
+                        local.display()
+                    );
+                }
             }
-            let partial = local.with_extension("shard.partial");
-            tokio::fs::write(&partial, &bytes)
-                .await
-                .with_context(|| format!("write {}", partial.display()))?;
-            tokio::fs::rename(&partial, &local)
-                .await
-                .with_context(|| format!("finalise {}", local.display()))?;
-        } else {
-            // Verify the cached file matches manifest hash. Stale shard
-            // (manifest updated since last fetch) → refetch.
-            let bytes = tokio::fs::read(&local).await?;
-            if !sha256_hex(&bytes).eq_ignore_ascii_case(&book.shard_sha256) {
-                tokio::fs::remove_file(&local).await.ok();
-                bail!(
-                    "stale shard at {}; deleted, retry by calling ensure_shard again",
-                    local.display()
-                );
-            }
+            break;
         }
+
         let raw = tokio::fs::read(&local).await?;
-        let decompressed =
-            zstd::decode_all(&raw[..]).context("zstd decode shard")?;
-        let shard: Shard = rmp_serde::from_slice(&decompressed).context("decode shard msgpack")?;
+        let shard = match decode_shard(&raw) {
+            Ok(s) => s,
+            Err(e) => {
+                tokio::fs::remove_file(&local).await.ok();
+                return Err(e);
+            }
+        };
         let arc = Arc::new(shard);
         self.shards.lock().await.put(gutenberg_id, arc.clone());
         Ok(arc)
