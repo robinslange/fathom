@@ -74,6 +74,20 @@
     "deberta-nli": "Loading faithfulness model (DeBERTa NLI)",
   };
 
+  // Glossary entries the model surfaced that weren't already shown in the
+  // passage's "Terms of art" panel. On the curated path the model just
+  // recites the lexicon, so this is usually empty; on JIT/no-substrate
+  // paths it's where newly-identified terms appear.
+  let newGlossaryTerms = $derived.by(() => {
+    if (!result || !selectedPassage) return [];
+    const known = new Set(
+      selectedPassage.terms.map((t) => t.term.toLowerCase().trim()),
+    );
+    return result.glossary.filter(
+      (g) => !known.has(g.term.toLowerCase().trim()),
+    );
+  });
+
   // ----- lifecycle -----
   onMount(async () => {
     [traditions, themes] = await Promise.all([
@@ -345,10 +359,10 @@
                 </div>
               {/if}
 
-              {#if result.glossary.length > 0}
-                <h4>Glossary</h4>
+              {#if newGlossaryTerms.length > 0}
+                <h4>New terms surfaced</h4>
                 <dl class="glossary">
-                  {#each result.glossary as g}
+                  {#each newGlossaryTerms as g}
                     <div class="term">
                       <dt>
                         <span class="term-name">{g.term}</span>
