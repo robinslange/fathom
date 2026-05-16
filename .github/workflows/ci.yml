@@ -74,13 +74,6 @@ jobs:
         run: npm run build
 
       - name: Build Tauri app bundle
+        if: github.event_name == 'pull_request'
         working-directory: apps/desktop
         run: npm run tauri -- build
-
-      - name: Upload Fathom.app artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Fathom-macos
-          path: target/release/bundle/macos/Fathom.app
-          if-no-files-found: error
-          retention-days: 14

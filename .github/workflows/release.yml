@@ -2,8 +2,13 @@ name: Release
 
 on:
   push:
+    branches: [main]
     tags:
       - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -43,7 +48,24 @@ jobs:
         working-directory: target/release/bundle/macos
         run: ditto -c -k --sequesterRsrc --keepParent Fathom.app Fathom-macos.zip
 
-      - name: Create GitHub release
+      - name: Publish rolling `latest` prerelease
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: "Latest build from main"
+          body: |
+            Rolling build from the latest commit on `main` (${{ github.sha }}).
+
+            This is a prerelease that is replaced on every push to `main`. For a
+            pinned, versioned build, watch for `v*` tags on the Releases page.
+          prerelease: true
+          make_latest: "false"
+          files: target/release/bundle/macos/Fathom-macos.zip
+          fail_on_unmatched_files: true
+
+      - name: Publish tagged release
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           files: target/release/bundle/macos/Fathom-macos.zip

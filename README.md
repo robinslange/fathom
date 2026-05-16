@@ -6,7 +6,7 @@ Fathom paraphrases classical philosophy into plain English while keeping every t
 
 ## Quick start (desktop app)
 
-Download the latest `Fathom-macos.zip` from [Releases](https://github.com/robinslange/fathom/releases) and drag `Fathom.app` to `/Applications/`. The app is ad-hoc signed for now, so you may need to right-click → Open the first time.
+Download `Fathom-macos.zip` from the [latest rolling build](https://github.com/robinslange/fathom/releases/tag/latest) (rebuilt on every push to `main`) and drag `Fathom.app` to `/Applications/`. The app is ad-hoc signed for now, so you may need to right-click → Open the first time.
 
 On first paraphrase the app downloads two models into your OS app-data directory:
 - **Gemma 3 4B IT (Q4_K_M GGUF)** — ~2.5GB, runs locally via the bundled `llama.cpp` with Metal acceleration.
