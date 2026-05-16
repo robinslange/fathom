@@ -2,6 +2,7 @@
 
 pub mod catalog_sync;
 pub mod chunk_stage;
+pub mod deploy;
 pub mod embed_stage;
 pub mod enrich_translators;
 pub mod fetch_corpus;

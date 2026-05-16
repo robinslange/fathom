@@ -15,8 +15,8 @@ mod translators;
 mod types;
 
 use stages::{
-    catalog_sync, chunk_stage, embed_stage, enrich_translators, fetch_corpus, filter_stage,
-    harvest_substrate, manifest, shard, sign, verify,
+    catalog_sync, chunk_stage, deploy, embed_stage, enrich_translators, fetch_corpus,
+    filter_stage, harvest_substrate, manifest, shard, sign, verify,
 };
 
 #[derive(Parser)]
@@ -50,6 +50,8 @@ enum Stage {
     /// Harvest substrate-term candidates from the chunked corpus into
     /// pending-lexicon.jsonl for operator review.
     HarvestSubstrate(harvest_substrate::Args),
+    /// Upload the signed dist tree to R2 via the locally authenticated wrangler CLI.
+    Deploy(deploy::Args),
     /// Run the full pipeline end-to-end.
     All,
     /// Verify a built dist tree (hashes, signature, manifest schema).
@@ -70,6 +72,7 @@ async fn main() -> anyhow::Result<()> {
         Stage::Manifest(args) => manifest::run(args).await,
         Stage::Sign(args) => sign::run(args).await,
         Stage::HarvestSubstrate(args) => harvest_substrate::run(args).await,
+        Stage::Deploy(args) => deploy::run(args).await,
         Stage::All => {
             catalog_sync::run(catalog_sync::Args::default()).await?;
             enrich_translators::run(enrich_translators::Args::default()).await?;
