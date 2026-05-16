@@ -6,6 +6,7 @@ pub mod embed_stage;
 pub mod enrich_translators;
 pub mod fetch_corpus;
 pub mod filter_stage;
+pub mod harvest_substrate;
 pub mod manifest;
 pub mod shard;
 pub mod sign;

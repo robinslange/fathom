@@ -16,7 +16,7 @@ mod types;
 
 use stages::{
     catalog_sync, chunk_stage, embed_stage, enrich_translators, fetch_corpus, filter_stage,
-    manifest, shard, sign, verify,
+    harvest_substrate, manifest, shard, sign, verify,
 };
 
 #[derive(Parser)]
@@ -47,6 +47,9 @@ enum Stage {
     Manifest(manifest::Args),
     /// Sign the manifest via minisign.
     Sign(sign::Args),
+    /// Harvest substrate-term candidates from the chunked corpus into
+    /// pending-lexicon.jsonl for operator review.
+    HarvestSubstrate(harvest_substrate::Args),
     /// Run the full pipeline end-to-end.
     All,
     /// Verify a built dist tree (hashes, signature, manifest schema).
@@ -66,6 +69,7 @@ async fn main() -> anyhow::Result<()> {
         Stage::Shard(args) => shard::run(args).await,
         Stage::Manifest(args) => manifest::run(args).await,
         Stage::Sign(args) => sign::run(args).await,
+        Stage::HarvestSubstrate(args) => harvest_substrate::run(args).await,
         Stage::All => {
             catalog_sync::run(catalog_sync::Args::default()).await?;
             enrich_translators::run(enrich_translators::Args::default()).await?;

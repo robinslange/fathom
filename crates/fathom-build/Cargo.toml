@@ -40,6 +40,8 @@ serde_bytes.workspace = true
 # shared with runtime
 fathom-chunker.workspace = true
 fathom-embed.workspace = true
+fathom-core.workspace = true
+fathom-engine.workspace = true
 
 [dev-dependencies]
 serde_yaml.workspace = true
