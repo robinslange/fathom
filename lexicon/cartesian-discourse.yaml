@@ -36,8 +36,8 @@ passages:
     fingerprint: "whilst I thus wished to think that all was false"
     terms:
       "I think therefore I am":
-        substrate: "cogito ergo sum"
-        gloss: "The first principle of Descartes' philosophy, as formulated in the Discourse (originally in French: je pense, donc je suis); because the act of doubting is itself a form of thinking, the doubter cannot doubt their own existence as a thinking thing"
+        substrate: "je pense, donc je suis / cogito ergo sum"
+        gloss: "The first principle of Descartes' philosophy. The Discourse (1637) gives the French je pense, donc je suis; the Latin cogito ergo sum as a sentence first appears in the Principles (1644). Because doubting is itself a form of thinking, the doubter cannot doubt their own existence as a thinking thing"
       "soul":
         substrate: "âme / anima"
         gloss: "The thinking subject whose existence the cogito establishes; in the Discourse Descartes uses 'soul' interchangeably with 'mind' — its essence is thought alone, wholly distinct from any bodily substance"

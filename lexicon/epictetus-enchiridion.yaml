@@ -74,8 +74,8 @@ passages:
     fingerprint: "Everything has two handles: one by which it may be borne,"
     terms:
       "by which it may be borne":
-        substrate: "eph' hēmin"
-        gloss: "The handle that is ours to grasp — the aspect of any situation that falls within our prohairesis; contrasted with the handle of injustice, which falls outside it"
+        substrate: "phoreton"
+        gloss: "Bearable (φορητόν) — the actual Greek adjective Epictetus uses for the handle that can be carried; interpretively, the aspect of any situation falling within our prohairesis"
       "brother acts unjustly":
-        substrate: "adiaphoron"
-        gloss: "His injustice is an indifferent — not within our power to control; grasping it as if it were an evil is what makes the situation unbearable"
+        substrate: "aphoreton"
+        gloss: "Unbearable (ἀφόρητον) — the actual Greek adjective for the contrasting handle; interpretively, the indifferent (adiaphoron) we grasp as if it were within our control, which is what renders the situation insufferable"
