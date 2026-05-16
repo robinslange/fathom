@@ -8,6 +8,7 @@ source:
 passages:
   - id: "gita-2-47-karma-yoga"
     fingerprint: "Let right deeds be thy motive, not the fruit which comes from"
+    themes: ["action-and-impulse", "freedom-and-fate"]
     terms:
       "right deeds":
         substrate: "karma"
@@ -21,6 +22,7 @@ passages:
 
   - id: "gita-3-35-svadharma"
     fingerprint: "Better thine own work is, though done with fault, than doing"
+    themes: ["action-and-impulse", "virtue-and-character"]
     terms:
       "thine own work":
         substrate: "svadharma"
@@ -34,6 +36,7 @@ passages:
 
   - id: "gita-13-1-field-knower"
     fingerprint: "This body, O son of Kuntī, is called the Field"
+    themes: ["mind-and-self", "transcendence-and-the-absolute"]
     terms:
       "Field":
         substrate: "kṣetra"
@@ -47,6 +50,7 @@ passages:
 
   - id: "gita-14-5-three-gunas"
     fingerprint: "Matter hath three constituents — Sattva, Rajas, Tamas"
+    themes: ["mind-and-self", "language-and-meaning"]
     terms:
       "constituents":
         substrate: "guṇa"
@@ -66,6 +70,7 @@ passages:
 
   - id: "gita-18-54-bhakti"
     fingerprint: "He who hath put away all selfish aims, achieved this eminence"
+    themes: ["transcendence-and-the-absolute", "virtue-and-character"]
     terms:
       "devotion":
         substrate: "bhakti"

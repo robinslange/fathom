@@ -8,6 +8,7 @@ source:
 passages:
   - id: "da-2-1-soul-definition"
     fingerprint: "the soul is the first grade of actuality of a natural body"
+    themes: ["mind-and-self"]
     terms:
       "soul":
         substrate: "psychē"
@@ -21,6 +22,7 @@ passages:
 
   - id: "da-2-12-perception-form-without-matter"
     fingerprint: "what has the power of receiving into itself the sensible forms"
+    themes: ["mind-and-self", "knowledge-and-doubt"]
     terms:
       "perception":
         substrate: "aisthēsis"
@@ -34,6 +36,7 @@ passages:
 
   - id: "da-3-4-nous-separable"
     fingerprint: "Mind must be related to what is thinkable, as sense is to what is sensible"
+    themes: ["mind-and-self", "transcendence-and-the-absolute"]
     terms:
       "mind":
         substrate: "nous"
@@ -47,6 +50,7 @@ passages:
 
   - id: "da-3-5-active-intellect"
     fingerprint: "mind as we have described it is what it is by virtue of becoming all things"
+    themes: ["mind-and-self", "transcendence-and-the-absolute"]
     terms:
       "passive intellect":
         substrate: "nous pathetikos"

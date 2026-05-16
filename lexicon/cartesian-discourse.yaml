@@ -8,6 +8,7 @@ source:
 passages:
   - id: "disc-1-good-sense"
     fingerprint: "Good sense is of all things in the world the most equally"
+    themes: ["knowledge-and-doubt", "mind-and-self"]
     terms:
       "good sense":
         substrate: "bon sens / bona mens"
@@ -18,6 +19,7 @@ passages:
 
   - id: "disc-2-four-rules"
     fingerprint: "never to accept anything for true which I did not clearly"
+    themes: ["knowledge-and-doubt", "action-and-impulse"]
     terms:
       "evidence":
         substrate: "évidence / evidentia"
@@ -34,6 +36,7 @@ passages:
 
   - id: "disc-4-cogito"
     fingerprint: "whilst I thus wished to think that all was false"
+    themes: ["knowledge-and-doubt", "mind-and-self"]
     terms:
       "I think therefore I am":
         substrate: "je pense, donc je suis / cogito ergo sum"
@@ -47,6 +50,7 @@ passages:
 
   - id: "disc-4-god-soul"
     fingerprint: "After this I reflected upon the fact that I doubted"
+    themes: ["transcendence-and-the-absolute", "knowledge-and-doubt"]
     terms:
       "perfection":
         substrate: "perfection / perfectio"
@@ -60,6 +64,7 @@ passages:
 
   - id: "disc-5-mechanism"
     fingerprint: "I had described the rational soul, and shown that it cannot"
+    themes: ["mind-and-self", "language-and-meaning"]
     terms:
       "rational soul":
         substrate: "âme raisonnable / anima rationalis"

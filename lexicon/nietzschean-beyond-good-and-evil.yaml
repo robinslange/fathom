@@ -8,6 +8,7 @@ source:
 passages:
   - id: "bge-13-will-to-power"
     fingerprint: "Psychologists should bethink themselves before putting down"
+    themes: ["action-and-impulse", "mind-and-self"]
     text: "Psychologists should bethink themselves before putting down the instinct of self-preservation as the cardinal instinct of an organic being. A living thing seeks above all to DISCHARGE its strength--life itself is WILL TO POWER; self-preservation is only one of the indirect and most frequent RESULTS thereof."
     terms:
       "will to power":
@@ -19,6 +20,7 @@ passages:
 
   - id: "bge-36-world-as-will"
     fingerprint: "Supposing that nothing else is 'given' as real but our world of desires"
+    themes: ["mind-and-self", "action-and-impulse"]
     text: "Supposing that nothing else is 'given' as real but our world of desires and passions, that we cannot sink or rise to any other 'reality' but just that of our impulses--for thinking is only a relation of these impulses to one another:--are we not permitted to make the attempt and to ask the question whether this which is 'given' does not SUFFICE, by means of our counterparts, for the understanding even of the so-called mechanical (or 'material') world?"
     terms:
       "impulses":
@@ -30,6 +32,7 @@ passages:
 
   - id: "bge-260-master-slave-morality"
     fingerprint: "In a tour through the many finer and coarser moralities which have"
+    themes: ["virtue-and-character", "society-and-justice"]
     text: "In a tour through the many finer and coarser moralities which have hitherto prevailed or still prevail on the earth, I found certain traits recurring regularly together and connected with one another, until finally two primary types revealed themselves to me, and a radical distinction was brought to light. There is MASTER-MORALITY and SLAVE-MORALITY."
     terms:
       "master morality":
@@ -44,6 +47,7 @@ passages:
 
   - id: "bge-2-perspectivism"
     fingerprint: "The falseness of an opinion is not for us any objection to it"
+    themes: ["knowledge-and-doubt", "language-and-meaning"]
     text: "The falseness of an opinion is not for us any objection to it: it is here, perhaps, that our new language sounds most strangely. The question is, how far an opinion is life-furthering, life-preserving, species-preserving, perhaps species-rearing; and we are fundamentally inclined to maintain that the falsest opinions (to which the synthetic judgments a priori belong) are the most indispensable to us."
     terms:
       "life-furthering":
@@ -58,6 +62,7 @@ passages:
 
   - id: "bge-257-aristocratic-order"
     fingerprint: "Every elevation of the type 'man,' has hitherto been the work"
+    themes: ["society-and-justice", "virtue-and-character"]
     text: "Every elevation of the type 'man,' has hitherto been the work of an aristocratic society--and so will it always be: a society which believes in a long scale of gradations of rank and differences of worth among human beings, and which needs slavery in some sense or other."
     terms:
       "pathos of distance":

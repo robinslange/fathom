@@ -9,6 +9,7 @@ source:
 passages:
   - id: "ft-knight-of-faith"
     fingerprint: "Abraham chooses to be 'the exception' and set aside the general law"
+    themes: ["transcendence-and-the-absolute", "virtue-and-character"]
     text: "Abraham chooses to be 'the exception' and set aside the general law, as well as does the æsthetic individual; but, note well: 'in fear and trembling,' and at the express command of God! He is a 'knight of faith.' But because this direct relation to the divinity necessarily can be certain only to Abraham's self, his action is altogether incomprehensible to others."
     terms:
       "knight of faith":
@@ -23,6 +24,7 @@ passages:
 
   - id: "ft-teleological-suspension"
     fingerprint: "In the end, Abraham by a grand resolve transgresses the law"
+    themes: ["transcendence-and-the-absolute", "virtue-and-character"]
     text: "In the end, Abraham by a grand resolve transgresses the law; and lo! because he has faith, against certainty, that he will keep Isaac, and does not merely resign him, as many a tragic hero would have done, he receives all again, in a new and higher sphere."
     terms:
       "teleological suspension of the ethical":
@@ -37,6 +39,7 @@ passages:
 
   - id: "ft-leap-of-faith"
     fingerprint: "It is only by a decisive 'leap,' from objective thinking into subjective faith"
+    themes: ["transcendence-and-the-absolute", "freedom-and-fate"]
     text: "It is only by a decisive 'leap,' from objective thinking into subjective faith, with the consciousness of sin as the driving power, that the individual may realize Christianity."
     terms:
       "the leap":
@@ -51,6 +54,7 @@ passages:
 
   - id: "ft-absolute-paradox"
     fingerprint: "Because this direct relation to the divinity necessarily can be certain"
+    themes: ["transcendence-and-the-absolute", "mind-and-self"]
     text: "Because this direct relation to the divinity necessarily can be certain only to Abraham's self, his action is altogether incomprehensible to others. He cannot communicate it, he cannot 'be understood': he is 'alone with God.'"
     terms:
       "inwardness":

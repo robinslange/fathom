@@ -8,6 +8,7 @@ source:
 passages:
   - id: "epistulae-1-3"
     fingerprint: "Nothing, Lucilius, is ours, except time. We were entrusted"
+    themes: ["freedom-and-fate", "action-and-impulse"]
     terms:
       "ours":
         substrate: "nostrum"
@@ -21,6 +22,7 @@ passages:
 
   - id: "epistulae-1-2"
     fingerprint: "Whatever years lie behind us are in death's hands. Therefore"
+    themes: ["suffering-and-loss", "action-and-impulse"]
     terms:
       "dying daily":
         substrate: "intellegant se cotidie mori"
@@ -34,6 +36,7 @@ passages:
 
   - id: "epistulae-7"
     fingerprint: "To consort with the crowd is harmful; there is no person wh"
+    themes: ["virtue-and-character", "society-and-justice"]
     terms:
       "crowd":
         substrate: "turba"
@@ -47,6 +50,7 @@ passages:
 
   - id: "epistulae-47"
     fingerprint: "They are slaves. Nay, rather they are men. Slaves! No, com"
+    themes: ["society-and-justice", "freedom-and-fate"]
     terms:
       "slaves":
         substrate: "servi"

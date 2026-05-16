@@ -8,6 +8,7 @@ source:
 passages:
   - id: "meditations-2-1"
     fingerprint: "Remember how long thou hast already put off these things,"
+    themes: ["freedom-and-fate", "action-and-impulse"]
     terms:
       "put off":
         substrate: "prokrastinō"
@@ -18,6 +19,7 @@ passages:
 
   - id: "meditations-2-4"
     fingerprint: "Why should any of these things that happen externally, so"
+    themes: ["mind-and-self", "knowledge-and-doubt"]
     terms:
       "happen externally":
         substrate: "ektos"
@@ -31,6 +33,7 @@ passages:
 
   - id: "meditations-4-3"
     fingerprint: "They seek for themselves private retiring places, as count"
+    themes: ["mind-and-self", "suffering-and-loss"]
     terms:
       "private retiring places":
         substrate: "anachōrēsis"
@@ -44,6 +47,7 @@ passages:
 
   - id: "meditations-2-14"
     fingerprint: "A man's soul doth wrong and disrespect itself first and esp"
+    themes: ["virtue-and-character", "society-and-justice"]
     terms:
       "aposteme":
         substrate: "apostēma"

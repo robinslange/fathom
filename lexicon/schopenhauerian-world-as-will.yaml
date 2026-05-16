@@ -8,6 +8,7 @@ source:
 passages:
   - id: "www-world-as-representation"
     fingerprint: "The world is my representation — this is a truth valid with reference to every living"
+    themes: ["knowledge-and-doubt", "mind-and-self"]
     terms:
       "representation":
         substrate: "Vorstellung"
@@ -24,6 +25,7 @@ passages:
 
   - id: "www-world-as-will"
     fingerprint: "What is the will? It is not a concept, not an abstraction; it is that which is nearest"
+    themes: ["transcendence-and-the-absolute", "mind-and-self"]
     terms:
       "will":
         substrate: "Wille"
@@ -37,6 +39,7 @@ passages:
 
   - id: "www-principium-individuationis"
     fingerprint: "Time and space are the principium individuationis, the principle of individuation"
+    themes: ["language-and-meaning", "transcendence-and-the-absolute"]
     terms:
       "principle of individuation":
         substrate: "principium individuationis"
@@ -50,6 +53,7 @@ passages:
 
   - id: "www-aesthetic-contemplation"
     fingerprint: "when we are devoted to the pure contemplation of a beautiful object, we forget ourselves entirely"
+    themes: ["suffering-and-loss", "mind-and-self"]
     terms:
       "pure knowing subject":
         substrate: "reines, willenloses Subjekt des Erkennens"
@@ -63,6 +67,7 @@ passages:
 
   - id: "www-denial-of-will"
     fingerprint: "the will now turns away from life; it shudders at the pleasures in which it recognises the assertion of life"
+    themes: ["suffering-and-loss", "transcendence-and-the-absolute"]
     terms:
       "denial of the will":
         substrate: "Verneinung des Willens"

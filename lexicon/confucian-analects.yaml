@@ -8,6 +8,7 @@ source:
 passages:
   - id: "analects-1-1-learning"
     fingerprint: "Is it not pleasant to learn with a constant perseverance"
+    themes: ["virtue-and-character", "knowledge-and-doubt"]
     text: |
       The Master said, "Is it not pleasant to learn with a constant perseverance and application?
       Is it not delightful to have friends coming from distant quarters?
@@ -25,6 +26,7 @@ passages:
 
   - id: "analects-2-1-virtue-governance"
     fingerprint: "He who exercises government by means of his virtue"
+    themes: ["society-and-justice", "virtue-and-character"]
     text: |
       The Master said, "He who exercises government by means of his virtue may be compared
       to the north polar star, which keeps its place and all the stars turn towards it."
@@ -41,6 +43,7 @@ passages:
 
   - id: "analects-4-15-one-thread"
     fingerprint: "Shan, my doctrine is that of an all-pervading unity"
+    themes: ["virtue-and-character", "society-and-justice"]
     text: |
       The Master said, "Shan, my doctrine is that of an all-pervading unity."
       The disciple Tsang replied, "Yes."
@@ -60,6 +63,7 @@ passages:
 
   - id: "analects-12-1-overcoming-self"
     fingerprint: "To subdue one's self and return to propriety"
+    themes: ["virtue-and-character", "action-and-impulse"]
     text: |
       Yen Yuan asked about perfect virtue. The Master said,
       "To subdue one's self and return to propriety, is perfect virtue.
@@ -80,6 +84,7 @@ passages:
 
   - id: "analects-15-24-reciprocity"
     fingerprint: "Is there one word which may serve as a rule of practice"
+    themes: ["virtue-and-character", "society-and-justice"]
     text: |
       Tsze-kung asked, saying, "Is there one word which may serve as a rule of practice for
       all one's life?" The Master said, "Is not reciprocity such a word?

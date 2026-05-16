@@ -8,6 +8,7 @@ source:
 passages:
   - id: "heart-sutra-form-emptiness"
     fingerprint: "Form is emptiness, emptiness is form"
+    themes: ["transcendence-and-the-absolute", "language-and-meaning"]
     terms:
       "form":
         substrate: "rūpa"
@@ -21,6 +22,7 @@ passages:
 
   - id: "heart-sutra-no-marks"
     fingerprint: "All phenomena are marked with emptiness; they are not produced"
+    themes: ["transcendence-and-the-absolute", "language-and-meaning"]
     terms:
       "marked with emptiness":
         substrate: "sarva-dharmāḥ śūnyatā-lakṣaṇāḥ"
@@ -37,6 +39,7 @@ passages:
 
   - id: "heart-sutra-no-attainment"
     fingerprint: "There is no knowledge, no attainment, and no non-attainment"
+    themes: ["transcendence-and-the-absolute", "knowledge-and-doubt"]
     terms:
       "knowledge":
         substrate: "jñāna"

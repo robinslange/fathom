@@ -8,6 +8,7 @@ source:
 passages:
   - id: "med-2-cogito"
     fingerprint: "I am, I exist, that is certain. But how often?"
+    themes: ["knowledge-and-doubt", "mind-and-self"]
     terms:
       "I am, I exist":
         substrate: "Ego sum, ego existo"
@@ -21,6 +22,7 @@ passages:
 
   - id: "med-2-wax"
     fingerprint: "Let us take, for example, this piece of wax"
+    themes: ["knowledge-and-doubt", "language-and-meaning"]
     terms:
       "extension":
         substrate: "extensio"
@@ -37,6 +39,7 @@ passages:
 
   - id: "med-3-god-infinite"
     fingerprint: "by the name God I understand a substance infinite"
+    themes: ["transcendence-and-the-absolute", "knowledge-and-doubt"]
     terms:
       "substance":
         substrate: "substantia"
@@ -53,6 +56,7 @@ passages:
 
   - id: "med-5-ontological"
     fingerprint: "existence can no more be separated from the essence of God"
+    themes: ["transcendence-and-the-absolute", "language-and-meaning"]
     terms:
       "essence":
         substrate: "essentia"
@@ -66,6 +70,7 @@ passages:
 
   - id: "med-6-mind-body"
     fingerprint: "I have a clear and distinct idea of myself as a thinking"
+    themes: ["mind-and-self", "language-and-meaning"]
     terms:
       "thinking thing":
         substrate: "res cogitans"

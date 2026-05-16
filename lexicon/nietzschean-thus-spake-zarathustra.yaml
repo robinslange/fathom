@@ -8,6 +8,7 @@ source:
 passages:
   - id: "zarathustra-prologue-3-overman"
     fingerprint: "I TEACH YOU THE SUPERMAN. Man is something that is to be surpassed."
+    themes: ["virtue-and-character", "freedom-and-fate"]
     text: "I TEACH YOU THE SUPERMAN. Man is something that is to be surpassed. What have ye done to surpass man? All beings hitherto have created something beyond themselves: and ye want to be the ebb of that great tide, and would rather go back to the beast than surpass man?"
     terms:
       "Superman":
@@ -19,6 +20,7 @@ passages:
 
   - id: "zarathustra-prologue-5-last-man"
     fingerprint: "What is love? What is creation? What is longing? What is a star?"
+    themes: ["virtue-and-character", "society-and-justice"]
     text: "\"What is love? What is creation? What is longing? What is a star?\"--so asketh the last man and blinketh. The earth hath then become small, and on it there hoppeth the last man who maketh everything small. His species is ineradicable like that of the ground-flea; the last man liveth longest."
     terms:
       "the last man":
@@ -30,6 +32,7 @@ passages:
 
   - id: "zarathustra-1-three-metamorphoses"
     fingerprint: "Three metamorphoses of the spirit do I designate to you"
+    themes: ["virtue-and-character", "freedom-and-fate"]
     text: "Three metamorphoses of the spirit do I designate to you: how the spirit becometh a camel, the camel a lion, and the lion at last a child. Innocence is the child, and forgetfulness, a new beginning, a game, a self-rolling wheel, a first movement, a holy Yea."
     terms:
       "the camel":
@@ -47,6 +50,7 @@ passages:
 
   - id: "zarathustra-eternal-recurrence"
     fingerprint: "Everything goeth, everything returneth; eternally rolleth the wheel of existence."
+    themes: ["freedom-and-fate", "action-and-impulse"]
     text: "Everything goeth, everything returneth; eternally rolleth the wheel of existence. Everything dieth, everything blossometh forth again; eternally runneth on the year of existence. Everything breaketh, everything is integrated anew; eternally buildeth itself the same house of existence."
     source_note: "From 'The Convalescent,' Part III — Zarathustra's animals recite the doctrine back to him. Thomas Common translation (1909), public domain. Gutenberg pg1998.txt is Part I only; this passage from Part III should be verified against the complete Common translation before production use."
     terms:

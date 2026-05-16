@@ -8,6 +8,7 @@ source:
 passages:
   - id: "groundwork-categorical-imperative"
     fingerprint: "Act only according to that maxim whereby thou canst at the same time will"
+    themes: ["virtue-and-character", "action-and-impulse"]
     terms:
       "maxim":
         substrate: "Maxime"
@@ -24,6 +25,7 @@ passages:
 
   - id: "groundwork-humanity-formula"
     fingerprint: "Act so that thou treat humanity, whether in thine own person or in that of any other"
+    themes: ["virtue-and-character", "society-and-justice"]
     terms:
       "humanity":
         substrate: "Menschheit"
@@ -40,6 +42,7 @@ passages:
 
   - id: "groundwork-autonomy"
     fingerprint: "the will is therefore not merely subject to the law, but subject to it in such a way"
+    themes: ["freedom-and-fate", "virtue-and-character"]
     terms:
       "autonomy":
         substrate: "Autonomie"
@@ -56,6 +59,7 @@ passages:
 
   - id: "groundwork-kingdom-of-ends"
     fingerprint: "a kingdom of ends is possible only on the analogy of a kingdom of nature"
+    themes: ["society-and-justice", "virtue-and-character"]
     terms:
       "kingdom of ends":
         substrate: "Reich der Zwecke"
@@ -69,6 +73,7 @@ passages:
 
   - id: "groundwork-good-will"
     fingerprint: "Nothing in the world — indeed nothing even beyond the world — can possibly be conceived"
+    themes: ["virtue-and-character", "action-and-impulse"]
     terms:
       "good will":
         substrate: "guter Wille"

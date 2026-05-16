@@ -8,6 +8,7 @@ source:
 passages:
   - id: "eth-1-def-substance-attribute-mode"
     fingerprint: "By substance I understand that which is in itself"
+    themes: ["language-and-meaning", "transcendence-and-the-absolute"]
     terms:
       "substance":
         substrate: "substantia"
@@ -21,6 +22,7 @@ passages:
 
   - id: "eth-1-def6-god"
     fingerprint: "By God, I mean a being absolutely infinite"
+    themes: ["transcendence-and-the-absolute", "language-and-meaning"]
     terms:
       "God":
         substrate: "Deus"
@@ -34,6 +36,7 @@ passages:
 
   - id: "eth-3-conatus"
     fingerprint: "Each thing, as far as it can by its own power, strives"
+    themes: ["action-and-impulse", "mind-and-self"]
     terms:
       "conatus":
         substrate: "conatus"
@@ -47,6 +50,7 @@ passages:
 
   - id: "eth-3-affects-primary"
     fingerprint: "By emotion I understand the modifications of the body"
+    themes: ["mind-and-self", "action-and-impulse"]
     terms:
       "affect":
         substrate: "affectus"
@@ -63,6 +67,7 @@ passages:
 
   - id: "eth-5-sub-specie-aeternitatis"
     fingerprint: "We conceive things as actual in two ways"
+    themes: ["transcendence-and-the-absolute", "knowledge-and-doubt"]
     terms:
       "under the form of eternity":
         substrate: "sub specie aeternitatis"

@@ -8,6 +8,7 @@ source:
 passages:
   - id: "meta-1-1-desire-to-know"
     fingerprint: "ALL men by nature desire to know. An indication of this"
+    themes: ["knowledge-and-doubt", "mind-and-self"]
     terms:
       "desire to know":
         substrate: "oregontai tou eidenai"
@@ -18,6 +19,7 @@ passages:
 
   - id: "meta-7-1-substance-primary"
     fingerprint: "the question which was raised of old and is raised now and always"
+    themes: ["language-and-meaning", "knowledge-and-doubt"]
     terms:
       "being":
         substrate: "to on"
@@ -28,6 +30,7 @@ passages:
 
   - id: "meta-7-3-matter-form-composite"
     fingerprint: "By the matter I mean, for instance, the bronze, by the shape"
+    themes: ["language-and-meaning"]
     terms:
       "matter":
         substrate: "hylē"
@@ -44,6 +47,7 @@ passages:
 
   - id: "meta-5-2-four-causes"
     fingerprint: "causes are spoken of in four senses"
+    themes: ["language-and-meaning", "knowledge-and-doubt"]
     terms:
       "material cause":
         substrate: "hylikon aition"
@@ -60,6 +64,7 @@ passages:
 
   - id: "meta-9-6-potency-actuality"
     fingerprint: "Actuality, then, is the existence of a thing not in the way which we express by 'potentially'"
+    themes: ["language-and-meaning", "action-and-impulse"]
     terms:
       "potentiality":
         substrate: "dynamis"

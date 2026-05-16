@@ -8,6 +8,7 @@ source:
 passages:
   - id: "pol-1-1-polis-highest-community"
     fingerprint: "Every state is a community of some kind, and every community"
+    themes: ["society-and-justice"]
     terms:
       "state":
         substrate: "polis"
@@ -21,6 +22,7 @@ passages:
 
   - id: "pol-1-2-political-animal"
     fingerprint: "Hence it is evident that the state is a creation of nature"
+    themes: ["society-and-justice", "mind-and-self"]
     terms:
       "political animal":
         substrate: "politikon zōion"
@@ -34,6 +36,7 @@ passages:
 
   - id: "pol-1-5-natural-slavery"
     fingerprint: "For that some should rule and others be ruled is a thing not only necessary"
+    themes: ["society-and-justice", "freedom-and-fate"]
     terms:
       "rule":
         substrate: "archē"
@@ -47,6 +50,7 @@ passages:
 
   - id: "pol-3-7-constitutions"
     fingerprint: "Of the above-mentioned forms, the perversions are as follows"
+    themes: ["society-and-justice"]
     terms:
       "constitution":
         substrate: "politeia"

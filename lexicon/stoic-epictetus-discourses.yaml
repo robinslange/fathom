@@ -8,6 +8,7 @@ source:
 passages:
   - id: "discourses-on-power-a"
     fingerprint: "Of all the faculties (except that which I shall soon mention"
+    themes: ["mind-and-self", "action-and-impulse"]
     terms:
       "capable of contemplating itself":
         substrate: "prohairesis"
@@ -18,6 +19,7 @@ passages:
 
   - id: "discourses-on-power-b"
     fingerprint: "I must die. Must I then die lamenting? I must be put in ch"
+    themes: ["suffering-and-loss", "freedom-and-fate"]
     terms:
       "die lamenting":
         substrate: "pathē"
@@ -31,6 +33,7 @@ passages:
 
   - id: "discourses-on-character"
     fingerprint: "To the rational animal only is the irrational intolerable"
+    themes: ["virtue-and-character", "mind-and-self"]
     terms:
       "rational animal":
         substrate: "zōon logikon"
@@ -44,6 +47,7 @@ passages:
 
   - id: "discourses-on-god-and-man"
     fingerprint: "God has introduced man to be a spectator of God and of his"
+    themes: ["transcendence-and-the-absolute", "mind-and-self"]
     terms:
       "appearances":
         substrate: "phantasiai"

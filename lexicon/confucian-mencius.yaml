@@ -8,6 +8,7 @@ source:
 passages:
   - id: "mencius-2a-6-four-sprouts"
     fingerprint: "The feeling of commiseration belongs to all men"
+    themes: ["virtue-and-character", "mind-and-self"]
     text: |
       The feeling of commiseration belongs to all men; so does that of shame and dislike;
       and that of modesty and complaisance; and that of approving and disapproving.
@@ -34,6 +35,7 @@ passages:
 
   - id: "mencius-2a-6-child-well"
     fingerprint: "Now, when men suddenly see a child about to fall into a well"
+    themes: ["virtue-and-character", "mind-and-self"]
     text: |
       Now, when men suddenly see a child about to fall into a well, they all have a feeling
       of alarm and commiseration — not to gain the favour of the child's parents,
@@ -49,6 +51,7 @@ passages:
 
   - id: "mencius-6a-8-ox-mountain"
     fingerprint: "The trees of the Niu mountain were once beautiful"
+    themes: ["virtue-and-character", "suffering-and-loss"]
     text: |
       The trees of the Niu mountain were once beautiful. Being situated, however, in the borders
       of a large state, they were hewn down with axes and bills — and could they retain their beauty?
@@ -70,6 +73,7 @@ passages:
 
   - id: "mencius-2a-2-flood-like-qi"
     fingerprint: "It is difficult to describe. It is a vast, flowing, vigour"
+    themes: ["virtue-and-character", "action-and-impulse"]
     text: |
       "It is difficult to describe. It is a vast, flowing, vigour. If you cultivate it with
       uprightness and do it no injury, it will fill up the vacancy between heaven and earth.
@@ -92,6 +96,7 @@ passages:
 
   - id: "mencius-4a-27-noble-parts"
     fingerprint: "Now here is a finger which is bent, and cannot be stretched out straight"
+    themes: ["virtue-and-character", "mind-and-self"]
     text: |
       The Master said, "There are the noble parts of a man, and there are the ignoble parts,
       and there are the great parts, and there are the small parts. The difference is,

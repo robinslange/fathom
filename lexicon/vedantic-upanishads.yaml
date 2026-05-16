@@ -8,6 +8,7 @@ source:
 passages:
   - id: "chandogya-6-8-7-tat-tvam-asi"
     fingerprint: "That which is the subtile essence, in it all that exists has"
+    themes: ["transcendence-and-the-absolute", "mind-and-self"]
     terms:
       "subtile essence":
         substrate: "sat"
@@ -24,6 +25,7 @@ passages:
 
   - id: "brihadaranyaka-2-3-6-neti-neti"
     fingerprint: "Now therefore the description of brahman: Not so, not so"
+    themes: ["transcendence-and-the-absolute", "language-and-meaning"]
     terms:
       "not so, not so":
         substrate: "neti neti"
@@ -37,6 +39,7 @@ passages:
 
   - id: "mandukya-2-consciousness"
     fingerprint: "All this is brahman. This self is brahman."
+    themes: ["transcendence-and-the-absolute", "mind-and-self"]
     terms:
       "self":
         substrate: "ātman"
@@ -53,6 +56,7 @@ passages:
 
   - id: "taittiriya-2-1-five-sheaths"
     fingerprint: "Different from and within that which consists of the essence of food"
+    themes: ["mind-and-self", "transcendence-and-the-absolute"]
     terms:
       "sheath":
         substrate: "kośa"
@@ -72,6 +76,7 @@ passages:
 
   - id: "mandukya-upanishad-om"
     fingerprint: "Om — this syllable is all this."
+    themes: ["transcendence-and-the-absolute", "language-and-meaning"]
     terms:
       "Om":
         substrate: "oṃ / praṇava"

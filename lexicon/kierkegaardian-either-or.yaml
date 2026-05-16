@@ -9,6 +9,7 @@ source:
 passages:
   - id: "eo-diapsalmata-poet"
     fingerprint: "What is a poet? An unhappy man who conceals profound anguish"
+    themes: ["suffering-and-loss", "mind-and-self"]
     text: "What is a poet? An unhappy man who conceals profound anguish in his heart, but whose lips are so fashioned that when sighs and groans pass over them they sound like beautiful music."
     terms:
       "the aesthetic stage":
@@ -20,6 +21,7 @@ passages:
 
   - id: "eo-diapsalmata-passion"
     fingerprint: "Let others complain that the times are wicked. I complain that they are paltry"
+    themes: ["virtue-and-character", "society-and-justice"]
     text: "Let others complain that the times are wicked. I complain that they are paltry; for they are without passion. The thoughts of men are thin and frail like lace, and they themselves are feeble like girl lace-makers."
     terms:
       "passion":
@@ -31,6 +33,7 @@ passages:
 
   - id: "eo-aesthetic-ethical-stages"
     fingerprint: "the æsthetic individual has no fixed principle except that he means not to be bound"
+    themes: ["virtue-and-character", "freedom-and-fate"]
     text: "The æsthetic individual has no fixed principle except that he means not to be bound to anything or anybody. Conversely, the ethical life demands that one elect a definite calling, marry, if possible, and thus subject himself to the 'general law.'"
     terms:
       "the ethical stage":
@@ -45,6 +48,7 @@ passages:
 
   - id: "eo-stages-on-lifes-way"
     fingerprint: "In the splendidly written Gjentagelse 'Repetition' we are shown"
+    themes: ["transcendence-and-the-absolute", "freedom-and-fate"]
     text: "In the splendidly written Gjentagelse 'Repetition' we are shown an abortive transition into the religious sphere."
     terms:
       "repetition":
@@ -59,6 +63,7 @@ passages:
 
   - id: "eo-either-or-choice"
     fingerprint: "Either/Or is the word before which the floodgates of subjectivity are opened"
+    themes: ["freedom-and-fate", "mind-and-self"]
     text: "Either/Or is the word before which the floodgates of subjectivity are opened."
     terms:
       "either/or":

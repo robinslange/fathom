@@ -8,6 +8,7 @@ source:
 passages:
   - id: "ttp-preface-freedom"
     fingerprint: "the main purpose of this Treatise is to separate faith from philosophy"
+    themes: ["society-and-justice", "freedom-and-fate"]
     terms:
       "freedom to philosophize":
         substrate: "libertas philosophandi"
@@ -21,6 +22,7 @@ passages:
 
   - id: "ttp-ch1-prophecy"
     fingerprint: "Prophecy, or revelation, is sure knowledge of God"
+    themes: ["transcendence-and-the-absolute", "knowledge-and-doubt"]
     terms:
       "prophecy":
         substrate: "prophetia"
@@ -34,6 +36,7 @@ passages:
 
   - id: "ttp-ch4-divine-law"
     fingerprint: "The divine law, which renders men truly blessed"
+    themes: ["virtue-and-character", "transcendence-and-the-absolute"]
     terms:
       "divine law":
         substrate: "lex divina"
@@ -47,6 +50,7 @@ passages:
 
   - id: "ttp-ch14-faith-reason"
     fingerprint: "Faith does not demand that dogmas should be true"
+    themes: ["knowledge-and-doubt", "language-and-meaning"]
     terms:
       "faith":
         substrate: "fides"
@@ -60,6 +64,7 @@ passages:
 
   - id: "ttp-ch20-liberty"
     fingerprint: "every man is by indefeasible natural right the master of his own thoughts"
+    themes: ["society-and-justice", "freedom-and-fate"]
     terms:
       "natural right":
         substrate: "jus naturale"

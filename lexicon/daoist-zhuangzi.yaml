@@ -8,6 +8,7 @@ source:
 passages:
   - id: "zz-2-butterfly-dream"
     fingerprint: "Once upon a time, I, Chuang Tzŭ, dreamt I was a butterfly"
+    themes: ["mind-and-self", "knowledge-and-doubt"]
     text: |
       Once upon a time, I, Chuang Tzŭ, dreamt I was a butterfly, fluttering hither and thither,
       to all intents and purposes a butterfly. I was conscious only of my happiness as a butterfly,
@@ -31,6 +32,7 @@ passages:
 
   - id: "zz-3-cook-ding"
     fingerprint: "Every blow of his hand, every heave of his shoulders"
+    themes: ["action-and-impulse", "virtue-and-character"]
     text: |
       Every blow of his hand, every heave of his shoulders, every tread of his foot, every thrust
       of his knee — in the sound of the rushing wind as he cleaved through joints and cavities,
@@ -53,6 +55,7 @@ passages:
 
   - id: "zz-2-three-in-morning"
     fingerprint: "A keeper of monkeys said with regard to their rations"
+    themes: ["knowledge-and-doubt", "mind-and-self"]
     text: |
       A keeper of monkeys said with regard to their rations of chestnuts that each monkey was
       to have three in the morning and four at night. But at this the monkeys were very angry,
@@ -77,6 +80,7 @@ passages:
 
   - id: "zz-1-useless-tree"
     fingerprint: "Now if you have a big tree and are at a loss what to do"
+    themes: ["freedom-and-fate", "virtue-and-character"]
     text: |
       Now if you have a big tree and are at a loss what to do with it, why not plant it in the
       domain of non-existence, in a wide and barren wild, where you might loiter idly by its side,

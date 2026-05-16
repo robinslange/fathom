@@ -8,6 +8,7 @@ source:
 passages:
   - id: "ne-1-7-function"
     fingerprint: "Presumably, however, to say that happiness is the chief good"
+    themes: ["virtue-and-character", "mind-and-self"]
     terms:
       "happiness":
         substrate: "eudaimonia"
@@ -24,6 +25,7 @@ passages:
 
   - id: "ne-2-1-habit"
     fingerprint: "Virtue, then, being of two kinds, intellectual and moral"
+    themes: ["virtue-and-character", "action-and-impulse"]
     terms:
       "moral virtue":
         substrate: "ēthikē aretē"
@@ -40,6 +42,7 @@ passages:
 
   - id: "ne-2-6-mean"
     fingerprint: "Virtue, then, is a state of character concerned with choice"
+    themes: ["virtue-and-character", "action-and-impulse"]
     terms:
       "state of character":
         substrate: "hexis"
@@ -59,6 +62,7 @@ passages:
 
   - id: "ne-8-1-friendship"
     fingerprint: "After what we have said, a discussion of friendship would naturally follow"
+    themes: ["society-and-justice", "virtue-and-character"]
     terms:
       "friendship":
         substrate: "philia"
@@ -69,6 +73,7 @@ passages:
 
   - id: "ne-10-7-contemplation"
     fingerprint: "the activity of this in accordance with its proper virtue will be perfect happiness"
+    themes: ["transcendence-and-the-absolute", "virtue-and-character", "mind-and-self"]
     terms:
       "perfect happiness":
         substrate: "eudaimonia"

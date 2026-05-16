@@ -8,6 +8,7 @@ source:
 passages:
   - id: "genealogy-1-10-slave-revolt"
     fingerprint: "The revolt of the slaves in morals begins in the very principle"
+    themes: ["virtue-and-character", "society-and-justice"]
     text: "The revolt of the slaves in morals begins in the very principle of resentment becoming creative and giving birth to values--a resentment experienced by creatures who, deprived as they are of the proper outlet of action, are forced to find their compensation in an imaginary revenge."
     terms:
       "slave revolt in morals":
@@ -22,6 +23,7 @@ passages:
 
   - id: "genealogy-1-10-noble-affirmation"
     fingerprint: "While every aristocratic morality springs from a triumphant affirmation"
+    themes: ["virtue-and-character", "action-and-impulse"]
     text: "While every aristocratic morality springs from a triumphant affirmation of its own demands, the slave morality says 'no' from the very outset to what is 'outside itself,' 'different from itself,' and 'not itself': and this 'no' is its creative deed."
     terms:
       "aristocratic morality":
@@ -36,6 +38,7 @@ passages:
 
   - id: "genealogy-2-4-bad-conscience"
     fingerprint: "But how is it that that other melancholy object, the consciousness of sin"
+    themes: ["mind-and-self", "suffering-and-loss"]
     text: "But how is it that that other melancholy object, the consciousness of sin, the whole 'bad conscience,' came into the world?"
     terms:
       "bad conscience":
@@ -47,6 +50,7 @@ passages:
 
   - id: "genealogy-2-16-creditor-debtor"
     fingerprint: "Have these genealogists of morals hitherto allowed themselves"
+    themes: ["language-and-meaning", "society-and-justice"]
     text: "Have these genealogists of morals hitherto allowed themselves to dream, even distantly, that, for instance, the main moral idea of 'guilt' has its origin in the very material idea of 'debt'?"
     verification_note: "Fingerprint confirmed against Essay II theme; exact Samuel/Kennedy phrasing not independently verified against full text — treat as provisional until cross-checked against pg52319."
     terms:
@@ -62,6 +66,7 @@ passages:
 
   - id: "genealogy-3-ascetic-ideal"
     fingerprint: "What is the meaning of ascetic ideals?"
+    themes: ["virtue-and-character", "suffering-and-loss"]
     text: "What is the meaning of ascetic ideals? In the case of artists they mean nothing, or too many things; in the case of philosophers and scholars they mean something like a scent and instinct for the most favourable conditions of higher intellectuality; in the case of women, at best, one additional seductive charm."
     verification_note: "The opening question is the confirmed Essay III chapter title (Gutenberg TOC). The continuation is accurate Nietzsche but the exact Samuel/Kennedy phrasing was not verified from pg52319 (text truncated mid-Essay II). Cross-check before production use."
     terms:

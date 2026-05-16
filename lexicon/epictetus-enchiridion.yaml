@@ -8,6 +8,7 @@ source:
 passages:
   - id: "enchiridion-1"
     fingerprint: "Of things some are in our power, and others are not"
+    themes: ["freedom-and-fate", "action-and-impulse"]
     terms:
       "in our power":
         substrate: "eph' hēmin"
@@ -33,6 +34,7 @@ passages:
 
   - id: "enchiridion-5"
     fingerprint: "Men are disturbed not by things, but by the views which they"
+    themes: ["knowledge-and-doubt", "mind-and-self"]
     terms:
       "views":
         substrate: "hypolēpseis"
@@ -49,6 +51,7 @@ passages:
 
   - id: "enchiridion-8"
     fingerprint: "Demand not that events should happen as you wish; but wish"
+    themes: ["freedom-and-fate", "action-and-impulse"]
     terms:
       "events should happen as you wish":
         substrate: "orexis"
@@ -59,6 +62,7 @@ passages:
 
   - id: "enchiridion-20"
     fingerprint: "Remember that it is not he who gives abuse or blows, who"
+    themes: ["mind-and-self", "action-and-impulse"]
     terms:
       "view we take":
         substrate: "hypolēpsis"
@@ -72,6 +76,7 @@ passages:
 
   - id: "enchiridion-43"
     fingerprint: "Everything has two handles: one by which it may be borne,"
+    themes: ["virtue-and-character", "action-and-impulse"]
     terms:
       "by which it may be borne":
         substrate: "phoreton"

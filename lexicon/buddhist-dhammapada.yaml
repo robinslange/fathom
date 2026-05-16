@@ -8,6 +8,7 @@ source:
 passages:
   - id: "dhp-1-mind-forerunner"
     fingerprint: "All that we are is the result of what we have thought"
+    themes: ["mind-and-self", "action-and-impulse", "suffering-and-loss"]
     terms:
       "what we have thought":
         substrate: "mano"
@@ -24,6 +25,7 @@ passages:
 
   - id: "dhp-1-2-mind-master"
     fingerprint: "If a man speaks or acts with a pure thought, happiness follows"
+    themes: ["mind-and-self", "virtue-and-character"]
     terms:
       "pure thought":
         substrate: "kusala-citta"
@@ -34,6 +36,7 @@ passages:
 
   - id: "dhp-183-nibbana"
     fingerprint: "Not to commit any sin, to do good, and to purify one's mind"
+    themes: ["transcendence-and-the-absolute", "virtue-and-character"]
     terms:
       "purify one's mind":
         substrate: "sacitta-pariyodapanaṃ"
@@ -47,6 +50,7 @@ passages:
 
   - id: "dhp-277-anicca"
     fingerprint: "All created things are impermanent"
+    themes: ["suffering-and-loss", "knowledge-and-doubt"]
     terms:
       "impermanent":
         substrate: "anicca"
@@ -60,6 +64,7 @@ passages:
 
   - id: "dhp-279-anatta"
     fingerprint: "All created things are suffering; all existing things are without self"
+    themes: ["mind-and-self", "suffering-and-loss"]
     terms:
       "without self":
         substrate: "anattā"
