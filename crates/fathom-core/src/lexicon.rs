@@ -107,6 +107,22 @@ pub fn all_entries() -> &'static [LexiconEntry] {
     &LEXICON
 }
 
+/// Union of every passage's substrate terms across the whole bundled lexicon.
+/// Used by the runtime's library paraphrase path so any substrate the model
+/// surfaces (and that exists somewhere in the corpus) is preserved by the
+/// hallucination guard.
+pub fn global_substrate_map() -> std::collections::BTreeMap<String, TermEntry> {
+    let mut out = std::collections::BTreeMap::new();
+    for entry in all_entries() {
+        for (english, info) in &entry.passage.terms {
+            // First-wins on duplicate English keys; the lexicon's source order
+            // is alphabetical-by-tradition, so collisions resolve deterministically.
+            out.entry(english.clone()).or_insert_with(|| info.clone());
+        }
+    }
+    out
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

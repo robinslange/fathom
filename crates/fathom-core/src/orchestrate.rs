@@ -223,6 +223,63 @@ async fn gloss_no_substrate(
     })
 }
 
+/// Library paraphrase entry point: curated path with a substrate map built
+/// from the whole enlarged lexicon (not a single per-passage match). The
+/// caller is expected to have already snapped the selection to a sentence
+/// boundary; this fn just paraphrases what it receives.
+pub async fn fathom_with_global_substrate(
+    passage: impl Into<Passage>,
+    tier: Tier,
+    backend: &dyn Backend,
+    substrate_map: &std::collections::BTreeMap<String, crate::lexicon::TermEntry>,
+    judge_mode: JudgeMode,
+) -> Result<FathomResult> {
+    let passage = passage.into();
+    let audience = tier.audience();
+    let model = backend.model_label().to_string();
+
+    let mut substrate_lines = Vec::with_capacity(substrate_map.len());
+    let mut substrate_to_english = HashMap::new();
+    for (english, info) in substrate_map {
+        substrate_lines.push(format!(
+            "- \"{}\" → `{}`: {}",
+            english, info.substrate, info.gloss
+        ));
+        substrate_to_english.insert(info.substrate.clone(), english.clone());
+    }
+    let prompt = render(
+        CURATED_PROMPT,
+        &[
+            ("author", "(library passage)"),
+            ("audience", audience),
+            ("substrate", &substrate_lines.join("\n")),
+            ("passage", &passage.text),
+        ],
+    );
+    let raw = backend.generate(&prompt).await?;
+    let (paraphrase, glossary) = parse_response(&raw, Some(&substrate_to_english));
+    let identified_terms = substrate_map.keys().cloned().collect();
+
+    let mut result = FathomResult {
+        passage,
+        paraphrase,
+        glossary,
+        tier,
+        resolution: Resolution::Curated,
+        model,
+        identified_terms,
+        faithfulness: None,
+        faithfulness_verdict: None,
+    };
+
+    if let JudgeMode::Always(progress) = judge_mode {
+        result.faithfulness = run_judge(&result.passage.text, &result.paraphrase, progress).await;
+        result.faithfulness_verdict = result.faithfulness.as_ref().map(|f| f.verdict());
+    }
+
+    Ok(result)
+}
+
 impl From<String> for Passage {
     fn from(text: String) -> Self {
         Passage::new(text)
@@ -232,5 +289,20 @@ impl From<String> for Passage {
 impl From<&str> for Passage {
     fn from(text: &str) -> Self {
         Passage::new(text)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn global_substrate_map_builds_without_panic() {
+        let m = crate::lexicon::global_substrate_map();
+        assert!(!m.is_empty(), "seed lexicon should yield at least one substrate entry");
+        // Sanity: at least one expected term from the seed (Aristotelian).
+        // If the seed changes shape, update this assertion.
+        let has_eudaimonia = m.values().any(|v| v.substrate == "eudaimonia");
+        assert!(has_eudaimonia, "expected 'eudaimonia' somewhere in the seed lexicon");
     }
 }
