@@ -3,24 +3,20 @@
 //! Operator-only tool. Runs on Robin's machine. Produces signed manifest +
 //! per-book msgpack-zstd shards in ./dist/, ready for separate R2 deploy.
 //!
-//! Stages (each idempotent, content-addressed where reasonable):
-//!   catalog-sync       Fetch pg_catalog.csv, filter to LoCC=B*, Language=en
-//!   enrich-translators For each candidate: parse pg{id}.rdf for <marcrel:trl>,
-//!                      fall back to Wikidata + Open Library for missing
-//!   filter             Apply NZ life+50 cutoff (translator d. ≤ 1975), exclude unresolved
-//!   fetch-corpus       rsync EPUB subset via --files-from from filtered IDs
-//!   chunk              Parse EPUBs (rbook + roxmltree), chunk via fathom-chunker
-//!   embed              Pass chunks through fathom-embed (bge-small CPU)
-//!   shard              Pack per-book {chunks + embeddings + offsets} → msgpack-zstd
-//!   manifest           Assemble index.msgpack — books, traditions (from traditions.json),
-//!                      per-shard SHA-256
-//!   sign               minisign on index.msgpack → index.msgpack.minisig
-//!   all                Run the full pipeline
-//!   verify             Sanity-check a built ./dist/ tree (hashes + signature)
-//!
-//! Deploy is a separate step. See decision note for rclone invocation.
+//! See `0-inbox/fathom-v0-2-build-pipeline-shape-decision.md` for architecture.
 
-use clap::{Parser, Subcommand};
+use clap::Parser;
+
+mod catalog;
+mod fs_state;
+mod stages;
+mod translators;
+mod types;
+
+use stages::{
+    catalog_sync, chunk_stage, embed_stage, enrich_translators, fetch_corpus, filter_stage,
+    manifest, shard, sign, verify,
+};
 
 #[derive(Parser)]
 #[command(name = "fathom-build")]
@@ -30,14 +26,14 @@ struct Cli {
     command: Stage,
 }
 
-#[derive(Subcommand)]
+#[derive(clap::Subcommand)]
 enum Stage {
     /// Fetch pg_catalog.csv and filter to LoCC=B* English-language candidates.
-    CatalogSync,
+    CatalogSync(catalog_sync::Args),
     /// Parse per-book RDFs for translator metadata; fall back to Wikidata + Open Library.
-    EnrichTranslators,
+    EnrichTranslators(enrich_translators::Args),
     /// Apply NZ life+50 cutoff; default-exclude unresolved.
-    Filter,
+    Filter(filter_stage::Args),
     /// rsync the filtered EPUB subset from rsync.ibiblio.org::gutenberg-epub.
     FetchCorpus,
     /// Parse EPUBs into paragraph chunks via fathom-chunker.
@@ -60,69 +56,27 @@ enum Stage {
 async fn main() -> anyhow::Result<()> {
     let cli = Cli::parse();
     match cli.command {
-        Stage::CatalogSync => stage_catalog_sync().await,
-        Stage::EnrichTranslators => stage_enrich_translators().await,
-        Stage::Filter => stage_filter().await,
-        Stage::FetchCorpus => stage_fetch_corpus().await,
-        Stage::Chunk => stage_chunk().await,
-        Stage::Embed => stage_embed().await,
-        Stage::Shard => stage_shard().await,
-        Stage::Manifest => stage_manifest().await,
-        Stage::Sign => stage_sign().await,
-        Stage::All => stage_all().await,
-        Stage::Verify => stage_verify().await,
+        Stage::CatalogSync(args) => catalog_sync::run(args).await,
+        Stage::EnrichTranslators(args) => enrich_translators::run(args).await,
+        Stage::Filter(args) => filter_stage::run(args).await,
+        Stage::FetchCorpus => fetch_corpus::run().await,
+        Stage::Chunk => chunk_stage::run().await,
+        Stage::Embed => embed_stage::run().await,
+        Stage::Shard => shard::run().await,
+        Stage::Manifest => manifest::run().await,
+        Stage::Sign => sign::run().await,
+        Stage::All => {
+            catalog_sync::run(catalog_sync::Args::default()).await?;
+            enrich_translators::run(enrich_translators::Args::default()).await?;
+            filter_stage::run(filter_stage::Args::default()).await?;
+            fetch_corpus::run().await?;
+            chunk_stage::run().await?;
+            embed_stage::run().await?;
+            shard::run().await?;
+            manifest::run().await?;
+            sign::run().await?;
+            Ok(())
+        }
+        Stage::Verify => verify::run().await,
     }
-}
-
-async fn stage_catalog_sync() -> anyhow::Result<()> {
-    todo!("fetch https://www.gutenberg.org/cache/epub/feeds/pg_catalog.csv, filter LoCC + Language, write build-state/candidates.json")
-}
-
-async fn stage_enrich_translators() -> anyhow::Result<()> {
-    todo!("for each candidate: fetch pg{{id}}.rdf, extract <marcrel:trl>; on miss, queue for Wikidata + Open Library")
-}
-
-async fn stage_filter() -> anyhow::Result<()> {
-    todo!("apply translator d. ≤ 1975; default-exclude unresolved; write build-state/filtered.json")
-}
-
-async fn stage_fetch_corpus() -> anyhow::Result<()> {
-    todo!("invoke rsync --files-from=ids.txt against rsync.ibiblio.org::gutenberg-epub into build-state/corpus/")
-}
-
-async fn stage_chunk() -> anyhow::Result<()> {
-    todo!("for each EPUB: rbook spine iteration, roxmltree paragraph extraction with HTML-entity pre-process, fathom-chunker, write build-state/chunks/{{id}}.json")
-}
-
-async fn stage_embed() -> anyhow::Result<()> {
-    todo!("for each book's chunks: fathom-embed batch (32-64 at a time), write build-state/embeddings/{{id}}.bin")
-}
-
-async fn stage_shard() -> anyhow::Result<()> {
-    todo!("for each book: combine chunks + embeddings + offsets → rmp-serde + zstd, write dist/shards/{{id}}.shard")
-}
-
-async fn stage_manifest() -> anyhow::Result<()> {
-    todo!("assemble index.msgpack from filtered.json + traditions.json + per-shard SHA-256; write dist/index.msgpack")
-}
-
-async fn stage_sign() -> anyhow::Result<()> {
-    todo!("minisign sign dist/index.msgpack → dist/index.msgpack.minisig using ~/.minisign/minisign.key")
-}
-
-async fn stage_all() -> anyhow::Result<()> {
-    stage_catalog_sync().await?;
-    stage_enrich_translators().await?;
-    stage_filter().await?;
-    stage_fetch_corpus().await?;
-    stage_chunk().await?;
-    stage_embed().await?;
-    stage_shard().await?;
-    stage_manifest().await?;
-    stage_sign().await?;
-    Ok(())
-}
-
-async fn stage_verify() -> anyhow::Result<()> {
-    todo!("recompute SHA-256 over each shard, compare to manifest; verify minisig against dist/fathom.pub")
 }

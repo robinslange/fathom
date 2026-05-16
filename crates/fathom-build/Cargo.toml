@@ -33,6 +33,8 @@ minisign.workspace = true
 rbook.workspace = true
 roxmltree.workspace = true
 quick-xml.workspace = true
+csv.workspace = true
+chrono.workspace = true
 
 # shared with runtime
 fathom-chunker.workspace = true

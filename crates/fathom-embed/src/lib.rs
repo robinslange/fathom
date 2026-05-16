@@ -10,7 +10,7 @@
 //!
 //! Model + tokenizer are loaded once into a process-singleton.
 
-use anyhow::{anyhow, bail, Context, Result};
+use anyhow::{anyhow, bail, Result};
 use half::f16;
 use ndarray::Array2;
 use once_cell::sync::OnceCell;
@@ -108,7 +108,7 @@ pub fn embed_batch(texts: &[&str]) -> Result<Vec<Embedding>> {
 
     let mut input_ids = Array2::<i64>::zeros((batch_size, max_len));
     let mut attention_mask = Array2::<i64>::zeros((batch_size, max_len));
-    let mut token_type_ids = Array2::<i64>::zeros((batch_size, max_len));
+    let token_type_ids = Array2::<i64>::zeros((batch_size, max_len));
 
     for (row, enc) in encodings.iter().enumerate() {
         let ids = enc.get_ids();
