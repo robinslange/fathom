@@ -95,6 +95,11 @@ pub struct FathomResult {
     /// "verification unavailable" when this is None.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub faithfulness: Option<FaithfulnessScore>,
+    /// Threshold-derived verdict for `faithfulness`. Owned by the Rust side
+    /// so the UI never reimplements the support/contradiction thresholds.
+    /// `None` when `faithfulness` is None.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub faithfulness_verdict: Option<FaithfulnessVerdict>,
 }
 
 /// Sentence-aggregated NLI judgment over a paraphrase against the original passage.
@@ -113,10 +118,38 @@ pub struct FaithfulnessScore {
     pub introductions: Vec<String>,
 }
 
+/// Faithfulness gate constants (Rust + JS read from here via serde).
+/// Tuned against the spike v4 calibration. Surfaced on the wire as
+/// `FaithfulnessVerdict` so the UI never reimplements these.
+pub const FAITHFULNESS_SUPPORT_FLOOR: f32 = 0.6;
+pub const FAITHFULNESS_CONTRADICTION_CEILING: f32 = 0.1;
+
 impl FaithfulnessScore {
     /// Heuristic gate: a paraphrase passes if it has strong overall support
-    /// and no single sentence flips. Tuned against the spike v4 calibration.
+    /// and no single sentence flips.
     pub fn is_faithful(&self) -> bool {
-        self.support > 0.6 && self.contradiction_max < 0.1
+        self.support > FAITHFULNESS_SUPPORT_FLOOR
+            && self.contradiction_max < FAITHFULNESS_CONTRADICTION_CEILING
     }
+
+    /// Returns the wire-friendly verdict shape: thresholds + boolean pass.
+    /// Callers serialise this alongside `FaithfulnessScore` so the UI does
+    /// not own the threshold logic.
+    pub fn verdict(&self) -> FaithfulnessVerdict {
+        FaithfulnessVerdict {
+            faithful: self.is_faithful(),
+            support_floor: FAITHFULNESS_SUPPORT_FLOOR,
+            contradiction_ceiling: FAITHFULNESS_CONTRADICTION_CEILING,
+        }
+    }
+}
+
+/// Wire-side faithfulness verdict. The Rust thresholds are authoritative;
+/// the UI reads `faithful` for warn-state styling and `*_floor` / `*_ceiling`
+/// if it wants to render the threshold values in tooltips.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FaithfulnessVerdict {
+    pub faithful: bool,
+    pub support_floor: f32,
+    pub contradiction_ceiling: f32,
 }

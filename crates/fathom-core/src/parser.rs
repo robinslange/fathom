@@ -17,7 +17,10 @@ static PARENS_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"\(([^)]*)\)").unwrap()
 /// Handles multiple Gemma output variants — substrate-first, term-first,
 /// substrate-only, substrate + parenthetical-english. If a curated
 /// `substrate_to_english` map is supplied, backticked terms are resolved
-/// to their canonical English from the lexicon.
+/// to their canonical English from the lexicon, AND any glossary entry
+/// whose backticked substrate is *not* in the curated map is dropped —
+/// the curated prompt enumerates the exact substrate set, so an unknown
+/// substrate is by construction a model hallucination, not a valid term.
 pub fn parse_response(
     text: &str,
     substrate_to_english: Option<&HashMap<String, String>>,
@@ -63,6 +66,16 @@ fn parse_glossary(
             .captures(before)
             .and_then(|c| c.get(1))
             .map(|m| m.as_str().trim().to_string());
+
+        // Curated-substrate guard: when the caller supplied a substrate map
+        // (curated path), drop entries whose backticked substrate isn't in
+        // the lexicon. The curated prompt enumerates the substrate set
+        // exactly, so an out-of-set substrate is a hallucination.
+        if let (Some(map), Some(sub)) = (substrate_to_english, substrate.as_deref()) {
+            if !map.contains_key(sub) {
+                continue;
+            }
+        }
 
         let term = match (&substrate, substrate_to_english) {
             (Some(sub), Some(map)) if map.contains_key(sub) => map[sub].clone(),
@@ -114,5 +127,28 @@ mod tests {
         let (_, gloss) = parse_response(raw, Some(&map));
         assert_eq!(gloss[0].term, "in our power");
         assert_eq!(gloss[0].substrate_term.as_deref(), Some("eph' hēmin"));
+    }
+
+    #[test]
+    fn curated_path_drops_substrate_not_in_map() {
+        // Model hallucinates `phantasia` alongside the legit `eph' hēmin`. The
+        // curated guard must drop the unknown entry but keep the real one.
+        let raw = "PARAPHRASE:\nFoo.\n\nGLOSSARY:\n- `eph' hēmin` (in our power): up to us\n- `phantasia`: an appearance or impression\n";
+        let mut map = HashMap::new();
+        map.insert("eph' hēmin".to_string(), "in our power".to_string());
+        let (_, gloss) = parse_response(raw, Some(&map));
+        assert_eq!(gloss.len(), 1);
+        assert_eq!(gloss[0].substrate_term.as_deref(), Some("eph' hēmin"));
+    }
+
+    #[test]
+    fn jit_path_keeps_substrate_not_in_map() {
+        // No curated map → JIT/no-substrate path. Any substrate the model
+        // surfaces should be kept; the prompt guard "wrong Greek is worse
+        // than no Greek" is enforced upstream, not at parse time.
+        let raw = "PARAPHRASE:\nFoo.\n\nGLOSSARY:\n- `phantasia`: an appearance or impression\n";
+        let (_, gloss) = parse_response(raw, None);
+        assert_eq!(gloss.len(), 1);
+        assert_eq!(gloss[0].substrate_term.as_deref(), Some("phantasia"));
     }
 }

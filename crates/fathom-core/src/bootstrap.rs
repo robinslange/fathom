@@ -118,24 +118,32 @@ pub async fn ensure_model_downloaded(
         }
     }
 
-    download_streaming(entry.url, &dest, progress).await?;
+    let partial = download_streaming(entry.url, &dest, progress).await?;
 
     if let Some(expected) = entry.sha256 {
-        let actual = sha256_file(&dest).await?;
+        // Verify the .partial before promoting it to dest — a corrupted
+        // download must never land at the canonical path, or future
+        // is_downloaded() checks will return a poisoned cache hit.
+        let actual = sha256_file(&partial).await?;
         if !actual.eq_ignore_ascii_case(expected) {
-            tokio::fs::remove_file(&dest).await.ok();
+            tokio::fs::remove_file(&partial).await.ok();
             bail!("sha256 mismatch for {id}: expected {expected}, got {actual}");
         }
     }
 
+    tokio::fs::rename(&partial, &dest)
+        .await
+        .with_context(|| format!("finalising {}", dest.display()))?;
     Ok(dest)
 }
 
+/// Download to a `.partial` sibling of `dest`. Returns the partial path so the
+/// caller can verify it before renaming to the canonical destination.
 async fn download_streaming(
     url: &str,
     dest: &Path,
     progress: Option<ProgressCallback>,
-) -> Result<()> {
+) -> Result<PathBuf> {
     let partial = partial_path(dest);
     let client = reqwest::Client::builder()
         .user_agent(concat!("fathom/", env!("CARGO_PKG_VERSION")))
@@ -198,10 +206,7 @@ async fn download_streaming(
     file.flush().await?;
     drop(file);
 
-    tokio::fs::rename(&partial, dest)
-        .await
-        .with_context(|| format!("finalising {}", dest.display()))?;
-    Ok(())
+    Ok(partial)
 }
 
 /// Parse the `/Z` part of a `Content-Range: bytes X-Y/Z` (or `bytes */Z`) header

@@ -74,6 +74,7 @@ pub async fn fathom_with_judge(
 
     if let JudgeMode::Always(progress) = judge_mode {
         result.faithfulness = run_judge(&result.passage.text, &result.paraphrase, progress).await;
+        result.faithfulness_verdict = result.faithfulness.as_ref().map(|f| f.verdict());
     }
 
     Ok(result)
@@ -105,10 +106,17 @@ async fn run_judge(
     paraphrase: &str,
     progress: Option<ProgressCallback>,
 ) -> Option<crate::types::FaithfulnessScore> {
-    if let Err(_e) = judge::ensure_loaded(progress).await {
+    if let Err(e) = judge::ensure_loaded(progress).await {
+        eprintln!("fathom: NLI judge unavailable, faithfulness skipped: {e:#}");
         return None;
     }
-    judge::score_paraphrase(original, paraphrase).ok()
+    match judge::score_paraphrase(original, paraphrase) {
+        Ok(score) => Some(score),
+        Err(e) => {
+            eprintln!("fathom: NLI scoring failed: {e:#}");
+            None
+        }
+    }
 }
 
 async fn gloss_curated(
@@ -149,6 +157,7 @@ async fn gloss_curated(
         model,
         identified_terms,
         faithfulness: None,
+        faithfulness_verdict: None,
     })
 }
 
@@ -184,6 +193,7 @@ async fn gloss_with_identified_terms(
         model,
         identified_terms: terms,
         faithfulness: None,
+        faithfulness_verdict: None,
     })
 }
 
@@ -209,6 +219,7 @@ async fn gloss_no_substrate(
         model,
         identified_terms: Vec::new(),
         faithfulness: None,
+        faithfulness_verdict: None,
     })
 }
 

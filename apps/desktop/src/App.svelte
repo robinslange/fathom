@@ -39,6 +39,11 @@
     contradiction_max: number;
     introductions: string[];
   };
+  type FaithfulnessVerdict = {
+    faithful: boolean;
+    support_floor: number;
+    contradiction_ceiling: number;
+  };
   type FathomResult = {
     paraphrase: string;
     glossary: GlossaryEntry[];
@@ -47,6 +52,7 @@
     model: string;
     identified_terms: string[];
     faithfulness?: FaithfulnessScore | null;
+    faithfulness_verdict?: FaithfulnessVerdict | null;
   };
 
   type DownloadProgress = {
@@ -333,9 +339,11 @@
 
               {#if result.faithfulness}
                 {@const f = result.faithfulness}
+                {@const v = result.faithfulness_verdict}
                 <div
                   class="faithfulness"
-                  class:warn={f.support < 0.5 || f.contradiction_max > 0.1}
+                  class:warn={v ? !v.faithful : false}
+                  title={v ? `passes when support > ${v.support_floor} and contradiction < ${v.contradiction_ceiling}` : ""}
                 >
                   <div class="faithfulness-summary">
                     <span>support {f.support.toFixed(2)}</span>

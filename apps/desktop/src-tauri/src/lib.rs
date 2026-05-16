@@ -2,13 +2,12 @@ use fathom_core::library::{
     self, PassageSummary, ThemeSummary, TraditionSummary,
 };
 use fathom_core::{
-    bootstrap, fathom_with_judge, judge, FaithfulnessScore, FathomResult, JudgeMode, Mode, Tier,
+    bootstrap, fathom_with_judge, judge, FathomResult, JudgeMode, Mode, Tier,
 };
-use fathom_engine::{LlamaCppBackend, OllamaBackend};
+use fathom_engine::LlamaCppBackend;
 use once_cell::sync::OnceCell;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
-use std::sync::Mutex;
 use std::sync::Arc;
 use tauri::{AppHandle, Emitter};
 use tokio::sync::Mutex as AsyncMutex;
@@ -24,9 +23,6 @@ pub struct ParaphraseArgs {
     pub text: String,
     pub tier: Tier,
     pub mode: Mode,
-    /// Optional override; if absent, the bundled LlamaCpp backend is used.
-    pub ollama_model: Option<String>,
-    pub ollama_base_url: Option<String>,
 }
 
 #[derive(Debug, Serialize, Clone)]
@@ -104,37 +100,16 @@ async fn ensure_judge(handle: &AppHandle) -> Result<(), AppError> {
 
 #[tauri::command]
 async fn paraphrase(app: AppHandle, args: ParaphraseArgs) -> Result<FathomResult, AppError> {
-    // Make sure judge is ready before paraphrase so faithfulness is populated.
     ensure_judge(&app).await?;
-
-    if let Some(model) = args.ollama_model.clone() {
-        let mut backend = OllamaBackend::new(model);
-        if let Some(url) = args.ollama_base_url {
-            backend = backend.with_base_url(url);
-        }
-        Ok(fathom_with_judge(args.text, args.tier, args.mode, &backend, JudgeMode::Always(None)).await?)
-    } else {
-        let llama = ensure_llama(&app).await?;
-        Ok(fathom_with_judge(
-            args.text,
-            args.tier,
-            args.mode,
-            llama.as_ref(),
-            JudgeMode::Always(None),
-        )
-        .await?)
-    }
-}
-
-#[tauri::command]
-async fn judge_pair(
-    app: AppHandle,
-    original: String,
-    paraphrase_text: String,
-) -> Result<FaithfulnessScore, AppError> {
-    ensure_judge(&app).await?;
-    let score = judge::score_paraphrase(original.trim(), paraphrase_text.trim())?;
-    Ok(score)
+    let llama = ensure_llama(&app).await?;
+    Ok(fathom_with_judge(
+        args.text,
+        args.tier,
+        args.mode,
+        llama.as_ref(),
+        JudgeMode::Always(None),
+    )
+    .await?)
 }
 
 #[tauri::command]
@@ -207,16 +182,11 @@ fn library_get_passage(id: String) -> Option<PassageDetail> {
     })
 }
 
-// Silence unused warning for `Mutex` (kept for future per-task locks).
-#[allow(dead_code)]
-type _Pin = Mutex<()>;
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let app = tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             paraphrase,
-            judge_pair,
             library_traditions,
             library_themes,
             library_passages,

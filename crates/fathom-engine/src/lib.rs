@@ -1,22 +1,17 @@
 //! Backend abstraction.
 //!
-//! Three backends planned:
+//! Two backends:
 //!
-//! - [`OllamaBackend`] — local Ollama HTTP server (the connector option).
-//!   Implemented now; useful for dev + power users who already run Ollama.
+//! - [`OllamaBackend`] — local Ollama HTTP server. Useful for dev + power
+//!   users who already run Ollama.
 //! - [`LlamaCppBackend`] — bundled inference via `llama-cpp-2`, the default
-//!   for the desktop app. Stub for now; implementation lands when the
-//!   first-launch model-download flow is built.
-//! - [`HttpBackend`] — Anthropic/OpenAI completions-compat endpoints, for
-//!   users who want cloud inference instead of local. Stub for now.
+//!   for the desktop app.
 
 use async_trait::async_trait;
 
 pub mod ollama;
 pub mod llama_cpp;
-pub mod http;
 
-pub use http::HttpBackend;
 pub use llama_cpp::LlamaCppBackend;
 pub use ollama::OllamaBackend;
 

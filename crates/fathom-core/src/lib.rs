@@ -10,5 +10,6 @@ pub mod types;
 
 pub use orchestrate::{fathom, fathom_with_judge, JudgeMode};
 pub use types::{
-    FaithfulnessScore, FathomResult, GlossaryEntry, Mode, Passage, Resolution, Tier,
+    FaithfulnessScore, FaithfulnessVerdict, FathomResult, GlossaryEntry, Mode, Passage, Resolution,
+    Tier,
 };
