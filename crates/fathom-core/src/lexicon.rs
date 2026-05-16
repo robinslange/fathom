@@ -28,6 +28,10 @@ pub struct PassageEntry {
     pub id: String,
     pub fingerprint: String,
     pub terms: BTreeMap<String, TermEntry>,
+    /// Optional theme slugs from the v0.1 taxonomy. Empty if unset; passages
+    /// without themes simply don't appear in theme-browse views.
+    #[serde(default)]
+    pub themes: Vec<String>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]

@@ -2,6 +2,7 @@ pub mod bootstrap;
 pub mod identify;
 pub mod judge;
 pub mod lexicon;
+pub mod library;
 pub mod orchestrate;
 pub mod parser;
 pub mod prompts;
