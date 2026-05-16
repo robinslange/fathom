@@ -113,6 +113,8 @@ fn cluster_observations(
                 b.support
                     .partial_cmp(&a.support)
                     .unwrap_or(std::cmp::Ordering::Equal)
+                    .then_with(|| a.gutenberg_id.cmp(&b.gutenberg_id))
+                    .then_with(|| a.chunk_id.cmp(&b.chunk_id))
             });
             HarvestCandidate {
                 canonical,
@@ -124,7 +126,10 @@ fn cluster_observations(
             }
         })
         .collect();
-    clusters.sort_by_key(|c| std::cmp::Reverse(c.citations.len()));
+    clusters.sort_by(|a, b| {
+        b.citations.len().cmp(&a.citations.len())
+            .then_with(|| a.canonical.cmp(&b.canonical))
+    });
     clusters
 }
 
@@ -189,7 +194,13 @@ pub async fn run(args: Args) -> Result<()> {
                 let prompt = render_gloss_prompt(&chunk.text, &phrase);
                 let response_json = match gemma.generate_json(&prompt).await {
                     Ok(j) => j,
-                    Err(_) => continue,
+                    Err(e) => {
+                        eprintln!(
+                            "harvest: gloss failed for gid={} chunk={} phrase={phrase:?}: {e:#}",
+                            cb.gutenberg_id, chunk.chunk_id
+                        );
+                        continue;
+                    }
                 };
                 let response: HarvestGlossResponse =
                     match serde_json::from_str(&response_json) {
@@ -202,7 +213,13 @@ pub async fn run(args: Args) -> Result<()> {
                 let paraphrase = format!("{phrase}: {gloss}");
                 let score = match judge::score_paraphrase(&chunk.text, &paraphrase) {
                     Ok(s) => s,
-                    Err(_) => continue,
+                    Err(e) => {
+                        eprintln!(
+                            "harvest: NLI score failed for gid={} chunk={}: {e:#}",
+                            cb.gutenberg_id, chunk.chunk_id
+                        );
+                        continue;
+                    }
                 };
                 if score.support <= FAITHFULNESS_SUPPORT_FLOOR
                     || score.contradiction_max >= FAITHFULNESS_CONTRADICTION_CEILING
