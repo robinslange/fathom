@@ -1,0 +1,17 @@
+[package]
+name = "fathom-chunker"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+description = "Fathom chunking: paragraph-level with UAX#29 sentence boundaries and char-offset preservation. Shared between build pipeline and runtime user-text path."
+
+[dependencies]
+anyhow.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+unicode-segmentation.workspace = true
+regex.workspace = true
+once_cell.workspace = true

@@ -54,6 +54,22 @@ pub const MODEL_MANIFEST: &[ModelManifestEntry] = &[
         label: "DeBERTa-v3-base NLI tokenizer",
         size_estimate_bytes: 8_656_551,
     },
+    ModelManifestEntry {
+        id: "bge-small",
+        filename: "bge-small-en-v1.5.onnx",
+        url: "https://huggingface.co/BAAI/bge-small-en-v1.5/resolve/main/onnx/model.onnx",
+        sha256: None,
+        label: "BAAI bge-small-en-v1.5 (384-dim sentence embeddings)",
+        size_estimate_bytes: 133_000_000,
+    },
+    ModelManifestEntry {
+        id: "bge-small-tokenizer",
+        filename: "bge-small-en-v1.5-tokenizer.json",
+        url: "https://huggingface.co/BAAI/bge-small-en-v1.5/resolve/main/tokenizer.json",
+        sha256: None,
+        label: "bge-small tokenizer",
+        size_estimate_bytes: 711_396,
+    },
 ];
 
 pub fn lookup_manifest(id: &str) -> Option<ModelManifestEntry> {

@@ -1,0 +1,19 @@
+[package]
+name = "fathom-embed"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+description = "Fathom embeddings: bge-small ONNX wrapper. Deterministic CPU-only path shared between build-time corpus embedding and runtime query embedding."
+
+[dependencies]
+anyhow.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+ort.workspace = true
+ndarray.workspace = true
+tokenizers.workspace = true
+once_cell.workspace = true
+half.workspace = true
