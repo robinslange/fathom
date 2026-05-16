@@ -33,8 +33,21 @@ static LLAMA_BACKEND: OnceCell<LlamaBackend> = OnceCell::new();
 
 fn get_backend() -> Result<&'static LlamaBackend> {
     LLAMA_BACKEND.get_or_try_init(|| {
-        LlamaBackend::init().map_err(|e| anyhow!("llama backend init failed: {e}"))
+        let mut backend =
+            LlamaBackend::init().map_err(|e| anyhow!("llama backend init failed: {e}"))?;
+        backend.void_logs();
+        unsafe {
+            llama_cpp_sys_2::ggml_log_set(Some(void_log), std::ptr::null_mut());
+        }
+        Ok::<LlamaBackend, anyhow::Error>(backend)
     })
+}
+
+unsafe extern "C" fn void_log(
+    _level: llama_cpp_sys_2::ggml_log_level,
+    _text: *const std::os::raw::c_char,
+    _user_data: *mut std::os::raw::c_void,
+) {
 }
 
 pub struct LlamaCppBackend {

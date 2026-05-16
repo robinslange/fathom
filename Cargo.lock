@@ -988,6 +988,7 @@ dependencies = [
  "async-trait",
  "encoding_rs",
  "llama-cpp-2",
+ "llama-cpp-sys-2",
  "once_cell",
  "reqwest 0.12.28",
  "serde",
