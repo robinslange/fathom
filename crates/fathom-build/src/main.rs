@@ -9,6 +9,7 @@ use clap::Parser;
 
 mod catalog;
 mod fs_state;
+mod shard_format;
 mod stages;
 mod translators;
 mod types;
@@ -35,17 +36,17 @@ enum Stage {
     /// Apply NZ life+50 cutoff; default-exclude unresolved.
     Filter(filter_stage::Args),
     /// rsync the filtered EPUB subset from rsync.ibiblio.org::gutenberg-epub.
-    FetchCorpus,
+    FetchCorpus(fetch_corpus::Args),
     /// Parse EPUBs into paragraph chunks via fathom-chunker.
-    Chunk,
+    Chunk(chunk_stage::Args),
     /// Embed all chunks via fathom-embed (bge-small CPU).
-    Embed,
+    Embed(embed_stage::Args),
     /// Pack per-book shards (msgpack-zstd).
-    Shard,
+    Shard(shard::Args),
     /// Assemble the manifest (index.msgpack).
-    Manifest,
+    Manifest(manifest::Args),
     /// Sign the manifest via minisign.
-    Sign,
+    Sign(sign::Args),
     /// Run the full pipeline end-to-end.
     All,
     /// Verify a built dist tree (hashes, signature, manifest schema).
@@ -59,22 +60,35 @@ async fn main() -> anyhow::Result<()> {
         Stage::CatalogSync(args) => catalog_sync::run(args).await,
         Stage::EnrichTranslators(args) => enrich_translators::run(args).await,
         Stage::Filter(args) => filter_stage::run(args).await,
-        Stage::FetchCorpus => fetch_corpus::run().await,
-        Stage::Chunk => chunk_stage::run().await,
-        Stage::Embed => embed_stage::run().await,
-        Stage::Shard => shard::run().await,
-        Stage::Manifest => manifest::run().await,
-        Stage::Sign => sign::run().await,
+        Stage::FetchCorpus(args) => fetch_corpus::run(args).await,
+        Stage::Chunk(args) => chunk_stage::run(args).await,
+        Stage::Embed(args) => embed_stage::run(args).await,
+        Stage::Shard(args) => shard::run(args).await,
+        Stage::Manifest(args) => manifest::run(args).await,
+        Stage::Sign(args) => sign::run(args).await,
         Stage::All => {
             catalog_sync::run(catalog_sync::Args::default()).await?;
             enrich_translators::run(enrich_translators::Args::default()).await?;
             filter_stage::run(filter_stage::Args::default()).await?;
-            fetch_corpus::run().await?;
-            chunk_stage::run().await?;
-            embed_stage::run().await?;
-            shard::run().await?;
-            manifest::run().await?;
-            sign::run().await?;
+            fetch_corpus::run(fetch_corpus::Args::default()).await?;
+            chunk_stage::run(chunk_stage::Args::default()).await?;
+            embed_stage::run(embed_stage::Args {
+                model_dir: std::env::var("FATHOM_BGE_MODEL_DIR")
+                    .map(std::path::PathBuf::from)
+                    .unwrap_or_default(),
+                batch: 32,
+                limit: None,
+                force: false,
+            })
+            .await?;
+            shard::run(shard::Args::default()).await?;
+            manifest::run(manifest::Args::default()).await?;
+            sign::run(sign::Args {
+                key: None,
+                pub_key: None,
+                auto_generate: true,
+            })
+            .await?;
             Ok(())
         }
         Stage::Verify => verify::run().await,

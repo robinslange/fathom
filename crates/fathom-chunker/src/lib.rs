@@ -13,8 +13,6 @@
 //! UTF-8 text; the runtime stores this canonical text and uses offsets for the
 //! highlight-to-paraphrase flow.
 
-use once_cell::sync::Lazy;
-use regex::Regex;
 use serde::{Deserialize, Serialize};
 use unicode_segmentation::UnicodeSegmentation;
 
@@ -185,11 +183,6 @@ pub fn sentence_spans(text: &str) -> Vec<(usize, usize)> {
     }
     spans
 }
-
-// Re-export marker stripping for callers that need to see what was stripped.
-static _MARKER_REGEX_UNUSED: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"^\s*[IVXLCDM]+\.\s+").unwrap()
-});
 
 #[cfg(test)]
 mod tests;

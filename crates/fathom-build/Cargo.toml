@@ -35,7 +35,11 @@ roxmltree.workspace = true
 quick-xml.workspace = true
 csv.workspace = true
 chrono.workspace = true
+serde_bytes.workspace = true
 
 # shared with runtime
 fathom-chunker.workspace = true
 fathom-embed.workspace = true
+
+[dev-dependencies]
+serde_yaml.workspace = true
