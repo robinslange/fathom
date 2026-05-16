@@ -1,7 +1,7 @@
-use anyhow::Result;
+use anyhow::{anyhow, Result};
 use clap::{Parser, Subcommand, ValueEnum};
-use fathom_core::{fathom, Mode, Tier};
-use fathom_engine::OllamaBackend;
+use fathom_core::{bootstrap, fathom, Mode, Tier};
+use fathom_engine::{Backend, LlamaCppBackend, OllamaBackend};
 use std::io::Read;
 use std::path::PathBuf;
 
@@ -27,7 +27,11 @@ enum Command {
         #[arg(long, value_enum, default_value_t = ModeArg::Auto)]
         mode: ModeArg,
 
-        /// Ollama model tag.
+        /// Inference backend.
+        #[arg(long, value_enum, default_value_t = BackendArg::Ollama)]
+        backend: BackendArg,
+
+        /// Ollama model tag (only used when --backend=ollama).
         #[arg(long, default_value = "gemma3:4b")]
         model: String,
 
@@ -35,12 +39,22 @@ enum Command {
         #[arg(long)]
         base_url: Option<String>,
 
+        /// Manifest model id for the bundled llama.cpp backend (only used when --backend=llama-cpp).
+        #[arg(long, default_value = "gemma3-4b")]
+        llama_model: String,
+
         /// Emit JSON instead of human-readable text.
         #[arg(long)]
         json: bool,
     },
     /// Show how many lexicon entries are loaded and which traditions are covered.
     Lexicon,
+    /// Download a model file into the OS app data dir if not already present.
+    Bootstrap {
+        /// Manifest model id (e.g. `gemma3-4b`, `deberta-nli`).
+        #[arg(long, default_value = "gemma3-4b")]
+        model: String,
+    },
 }
 
 #[derive(ValueEnum, Clone, Copy)]
@@ -79,6 +93,12 @@ impl From<ModeArg> for Mode {
     }
 }
 
+#[derive(ValueEnum, Clone, Copy)]
+enum BackendArg {
+    Ollama,
+    LlamaCpp,
+}
+
 #[tokio::main]
 async fn main() -> Result<()> {
     let cli = Cli::parse();
@@ -87,16 +107,32 @@ async fn main() -> Result<()> {
             file,
             tier,
             mode,
+            backend,
             model,
             base_url,
+            llama_model,
             json,
         } => {
             let text = read_input(&file)?;
-            let mut backend = OllamaBackend::new(&model);
-            if let Some(url) = base_url {
-                backend = backend.with_base_url(url);
-            }
-            let result = fathom(text, tier.into(), mode.into(), &backend).await?;
+            let backend_impl: Box<dyn Backend> = match backend {
+                BackendArg::Ollama => {
+                    let mut b = OllamaBackend::new(&model);
+                    if let Some(url) = base_url {
+                        b = b.with_base_url(url);
+                    }
+                    Box::new(b)
+                }
+                BackendArg::LlamaCpp => {
+                    let path = bootstrap::ensure_model_downloaded(
+                        &llama_model,
+                        Some(stderr_progress()),
+                    )
+                    .await?;
+                    eprintln!("\nloading model from {} ...", path.display());
+                    Box::new(LlamaCppBackend::load(path)?)
+                }
+            };
+            let result = fathom(text, tier.into(), mode.into(), backend_impl.as_ref()).await?;
 
             if json {
                 println!("{}", serde_json::to_string_pretty(&result)?);
@@ -134,6 +170,18 @@ async fn main() -> Result<()> {
             println!("traditions: {}", traditions.into_iter().collect::<Vec<_>>().join(", "));
             println!("authors: {}", authors.into_iter().collect::<Vec<_>>().join(", "));
         }
+        Command::Bootstrap { model } => {
+            let entry = bootstrap::lookup_manifest(&model)
+                .ok_or_else(|| anyhow!("unknown model id: {model}"))?;
+            eprintln!(
+                "downloading {} ({} MB est.) from {}",
+                entry.label,
+                entry.size_estimate_bytes / 1_000_000,
+                entry.url
+            );
+            let path = bootstrap::ensure_model_downloaded(&model, Some(stderr_progress())).await?;
+            eprintln!("\nready: {}", path.display());
+        }
     }
     Ok(())
 }
@@ -146,4 +194,19 @@ fn read_input(file: &str) -> Result<String> {
     } else {
         Ok(std::fs::read_to_string(PathBuf::from(file))?)
     }
+}
+
+fn stderr_progress() -> bootstrap::ProgressCallback {
+    use std::io::Write;
+    Box::new(|bytes, total| {
+        let bytes_mb = bytes / 1_000_000;
+        match total {
+            Some(t) => {
+                let total_mb = t / 1_000_000;
+                eprint!("\r  {} / {} MB", bytes_mb, total_mb);
+            }
+            None => eprint!("\r  {} MB", bytes_mb),
+        }
+        let _ = std::io::stderr().flush();
+    })
 }

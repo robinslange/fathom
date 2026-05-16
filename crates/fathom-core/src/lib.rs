@@ -1,3 +1,4 @@
+pub mod bootstrap;
 pub mod identify;
 pub mod judge;
 pub mod lexicon;

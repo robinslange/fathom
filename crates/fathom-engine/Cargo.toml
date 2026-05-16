@@ -16,3 +16,11 @@ serde_json.workspace = true
 reqwest.workspace = true
 async-trait.workspace = true
 tokio.workspace = true
+once_cell.workspace = true
+encoding_rs = "0.8"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+llama-cpp-2 = { workspace = true, features = ["metal"] }
+
+[target.'cfg(not(target_os = "macos"))'.dependencies]
+llama-cpp-2 = { workspace = true }
