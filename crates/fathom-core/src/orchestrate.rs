@@ -85,6 +85,7 @@ async fn gloss_curated(
         resolution: Resolution::Curated,
         model,
         identified_terms,
+        faithfulness: None,
     })
 }
 
@@ -119,6 +120,7 @@ async fn gloss_with_identified_terms(
         resolution: Resolution::Jit,
         model,
         identified_terms: terms,
+        faithfulness: None,
     })
 }
 
@@ -143,6 +145,7 @@ async fn gloss_no_substrate(
         resolution: Resolution::NoSubstrate,
         model,
         identified_terms: Vec::new(),
+        faithfulness: None,
     })
 }
 

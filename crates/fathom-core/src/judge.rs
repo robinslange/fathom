@@ -17,6 +17,13 @@
 use crate::types::FaithfulnessScore;
 use anyhow::Result;
 
+/// Score a paraphrase against the original passage. Returns the three-channel
+/// spike v4 aggregation: `support` (mean entailment), `contradiction_max`
+/// (worst flip), `introductions` (paraphrase sentences not entailed by anything
+/// in the original).
+///
+/// NLI implementation lands in the next slice. For now this is a typed stub so
+/// downstream code can already reference the function signature.
 pub fn score_paraphrase(_original: &str, _paraphrase: &str) -> Result<FaithfulnessScore> {
     anyhow::bail!("NLI judge not yet wired. See judge.rs design notes.")
 }

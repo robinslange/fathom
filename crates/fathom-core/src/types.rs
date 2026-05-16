@@ -90,17 +90,33 @@ pub struct FathomResult {
     pub model: String,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub identified_terms: Vec<String>,
+    /// `None` if the judge couldn't run (NLI model not yet downloaded, load
+    /// failure, etc.). The paraphrase is still useful; the UI surfaces
+    /// "verification unavailable" when this is None.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub faithfulness: Option<FaithfulnessScore>,
 }
 
+/// Sentence-aggregated NLI judgment over a paraphrase against the original passage.
+/// Unidirectional: premise = original sentence, hypothesis = paraphrase sentence.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FaithfulnessScore {
-    pub entailment: f32,
-    pub contradiction: f32,
-    pub neutral: f32,
+    /// Mean per-paraphrase-sentence entailment probability (best-aligned original
+    /// sentence). Range 0..=1; higher = better supported.
+    pub support: f32,
+    /// Worst per-paraphrase-sentence contradiction probability. Range 0..=1;
+    /// any value above ~0.1 typically indicates a hard semantic flip somewhere.
+    pub contradiction_max: f32,
+    /// Paraphrase sentences whose best-aligned original sentence still falls
+    /// below the entailment threshold. Candidates for glossing introductions
+    /// rather than penalties — the spike validated these as a separate channel.
+    pub introductions: Vec<String>,
 }
 
 impl FaithfulnessScore {
+    /// Heuristic gate: a paraphrase passes if it has strong overall support
+    /// and no single sentence flips. Tuned against the spike v4 calibration.
     pub fn is_faithful(&self) -> bool {
-        self.entailment > 0.5 && self.contradiction < 0.1
+        self.support > 0.6 && self.contradiction_max < 0.1
     }
 }
