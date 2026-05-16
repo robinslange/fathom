@@ -6,8 +6,8 @@
   "build": {
     "frontendDist": "../dist",
     "devUrl": "http://localhost:1420",
-    "beforeDevCommand": "pnpm dev",
-    "beforeBuildCommand": "pnpm build"
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build"
   },
   "app": {
     "windows": [
@@ -25,8 +25,14 @@
   },
   "bundle": {
     "active": true,
-    "targets": "all",
-    "icon": [],
+    "targets": "app",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
     "category": "Education",
     "shortDescription": "Read philosophy at your depth without losing the words",
     "longDescription": "Fathom paraphrases classical philosophy text into Simple, Standard, or Scholarly registers while preserving every term-of-art that carries the argument."

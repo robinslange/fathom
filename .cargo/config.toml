@@ -1,0 +1,8 @@
+[env]
+# llama.cpp uses `std::filesystem::path`, which the macOS SDK gates behind
+# the 10.15 deployment target. cmake-rs (0.1.x) does NOT propagate
+# MACOSX_DEPLOYMENT_TARGET to cmake, but llama-cpp-sys-2's build.rs loops
+# over CMAKE_-prefixed env vars and passes them through as -D defines, so
+# CMAKE_OSX_DEPLOYMENT_TARGET is the lever that actually reaches the
+# C++ compiler. See llama-cpp-sys-2 build.rs:538-540.
+CMAKE_OSX_DEPLOYMENT_TARGET = "12.0"
