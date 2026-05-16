@@ -24,7 +24,7 @@ thiserror = "2"
 serde = { version = "1", features = ["derive"] }
 serde_yaml = "0.9"
 serde_json = "1"
-tokio = { version = "1", features = ["macros", "rt-multi-thread", "fs", "io-util"] }
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "fs", "io-util", "process"] }
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls", "stream"] }
 clap = { version = "4", features = ["derive", "env"] }
 include_dir = "0.7"
