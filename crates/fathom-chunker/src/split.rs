@@ -42,7 +42,17 @@ pub fn split_overlong(paragraph: &str, base_offset: usize, max_tokens: usize) ->
     let mut out = Vec::new();
     let sentences: Vec<(usize, usize, &str)> = sentence_spans(paragraph)
         .into_iter()
-        .map(|(s, e)| (s, e, &paragraph[s..e]))
+        .filter_map(|(s, e)| {
+            // Defensive: clamp to char boundaries. unicode-segmentation should
+            // give char-aligned offsets but edge cases around trim_end with
+            // multibyte trailing chars have surfaced on the full corpus run.
+            let s = floor_char_boundary(paragraph, s);
+            let e = ceil_char_boundary(paragraph, e);
+            if s >= e {
+                return None;
+            }
+            Some((s, e, &paragraph[s..e]))
+        })
         .collect();
 
     if sentences.is_empty() {
@@ -87,6 +97,26 @@ pub fn split_overlong(paragraph: &str, base_offset: usize, max_tokens: usize) ->
     });
 
     out
+}
+
+fn floor_char_boundary(s: &str, mut idx: usize) -> usize {
+    if idx >= s.len() {
+        return s.len();
+    }
+    while idx > 0 && !s.is_char_boundary(idx) {
+        idx -= 1;
+    }
+    idx
+}
+
+fn ceil_char_boundary(s: &str, mut idx: usize) -> usize {
+    if idx >= s.len() {
+        return s.len();
+    }
+    while idx < s.len() && !s.is_char_boundary(idx) {
+        idx += 1;
+    }
+    idx
 }
 
 /// UAX#29 sentence spans within a single paragraph — offsets are relative to

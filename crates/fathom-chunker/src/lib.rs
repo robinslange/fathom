@@ -168,14 +168,23 @@ pub fn snap_to_sentence(chunk_text: &str, sel_start: usize, sel_end: usize) -> O
 }
 
 /// UAX#29 sentence spans over `text`, with whitespace trimmed from each end.
+/// Returned offsets are guaranteed to land on UTF-8 char boundaries.
 pub fn sentence_spans(text: &str) -> Vec<(usize, usize)> {
     let mut spans = Vec::new();
     let mut offset = 0usize;
     for sentence in text.unicode_sentences() {
         let leading_ws = sentence.len() - sentence.trim_start().len();
         let trailing_ws = sentence.len() - sentence.trim_end().len();
-        let start = offset + leading_ws;
-        let end = offset + sentence.len() - trailing_ws;
+        let mut start = offset + leading_ws;
+        let mut end = offset + sentence.len() - trailing_ws;
+        // Defensive clamp to char boundaries — multibyte trailing chars + odd
+        // whitespace counts have surfaced offsets that fail debug-mode slicing.
+        while start < text.len() && !text.is_char_boundary(start) {
+            start += 1;
+        }
+        while end > 0 && end < text.len() && !text.is_char_boundary(end) {
+            end -= 1;
+        }
         if start < end {
             spans.push((start, end));
         }

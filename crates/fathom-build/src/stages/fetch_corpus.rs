@@ -96,10 +96,18 @@ fn invoke_rsync(list_path: &PathBuf, dest: &PathBuf, endpoint: &str) -> Result<(
         .arg(dest)
         .status()
         .context("invoke rsync — is it installed?")?;
-    if !status.success() {
-        bail!("rsync exited with {:?}", status.code());
+    // rsync exit 23 = "partial transfer due to error". On macOS this commonly
+    // fires for permission-set on missing source files; the EPUBs we actually
+    // wanted may all be present anyway. Warn and continue; downstream stages
+    // surface any missing files.
+    match status.code() {
+        Some(0) => Ok(()),
+        Some(23) => {
+            eprintln!("fetch-corpus: rsync exited 23 (partial). Continuing — count_fetched will report any missing files.");
+            Ok(())
+        }
+        other => bail!("rsync exited with {:?}", other),
     }
-    Ok(())
 }
 
 fn count_fetched(corpus_dir: &PathBuf, books: &[&Filtered]) -> Result<usize> {
