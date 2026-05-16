@@ -1,6 +1,6 @@
 use anyhow::{anyhow, Result};
 use clap::{Parser, Subcommand, ValueEnum};
-use fathom_core::{bootstrap, fathom, Mode, Tier};
+use fathom_core::{bootstrap, fathom, judge, Mode, Tier};
 use fathom_engine::{Backend, LlamaCppBackend, OllamaBackend};
 use std::io::Read;
 use std::path::PathBuf;
@@ -54,6 +54,21 @@ enum Command {
         /// Manifest model id (e.g. `gemma3-4b`, `deberta-nli`).
         #[arg(long, default_value = "gemma3-4b")]
         model: String,
+    },
+    /// Score a paraphrase against the original passage using the NLI judge.
+    /// Useful for offline lexicon-harness sweeps and regression tests.
+    Judge {
+        /// Original passage file path, or `-` for stdin.
+        #[arg(long)]
+        original: String,
+
+        /// Paraphrase file path, or `-` for stdin (only one source can use `-`).
+        #[arg(long)]
+        paraphrase: String,
+
+        /// Emit JSON instead of human-readable text.
+        #[arg(long)]
+        json: bool,
     },
 }
 
@@ -181,6 +196,39 @@ async fn main() -> Result<()> {
             );
             let path = bootstrap::ensure_model_downloaded(&model, Some(stderr_progress())).await?;
             eprintln!("\nready: {}", path.display());
+        }
+        Command::Judge {
+            original,
+            paraphrase,
+            json,
+        } => {
+            if original == "-" && paraphrase == "-" {
+                return Err(anyhow!(
+                    "only one of --original / --paraphrase can read from stdin"
+                ));
+            }
+            let original_text = read_input(&original)?;
+            let paraphrase_text = read_input(&paraphrase)?;
+
+            judge::ensure_loaded(Some(stderr_progress())).await?;
+            let score = judge::score_paraphrase(original_text.trim(), paraphrase_text.trim())?;
+
+            if json {
+                println!("{}", serde_json::to_string_pretty(&score)?);
+            } else {
+                println!("support:           {:.3}", score.support);
+                println!("contradiction_max: {:.3}", score.contradiction_max);
+                if score.introductions.is_empty() {
+                    println!("introductions:     (none)");
+                } else {
+                    println!("introductions:");
+                    for s in &score.introductions {
+                        println!("  - {s}");
+                    }
+                }
+                let verdict = if score.is_faithful() { "faithful" } else { "review" };
+                println!("verdict:           {verdict}");
+            }
         }
     }
     Ok(())
