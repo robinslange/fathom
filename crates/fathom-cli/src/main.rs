@@ -1,6 +1,6 @@
 use anyhow::{anyhow, Result};
 use clap::{Parser, Subcommand, ValueEnum};
-use fathom_core::{bootstrap, fathom, judge, Mode, Tier};
+use fathom_core::{bootstrap, fathom, judge, library, Mode, Tier};
 use fathom_engine::{Backend, LlamaCppBackend, OllamaBackend};
 use std::io::Read;
 use std::path::PathBuf;
@@ -66,6 +66,39 @@ enum Command {
         #[arg(long)]
         paraphrase: String,
 
+        /// Emit JSON instead of human-readable text.
+        #[arg(long)]
+        json: bool,
+    },
+    /// Browse the v0.1 library of curated philosophy passages.
+    Library {
+        #[command(subcommand)]
+        action: LibraryAction,
+    },
+}
+
+#[derive(Subcommand)]
+enum LibraryAction {
+    /// List all traditions present in the lexicon with passage counts.
+    Traditions,
+    /// List all v0.1 themes with passage counts.
+    Themes,
+    /// List passages filtered by tradition or theme. Pass exactly one of --tradition or --theme.
+    List {
+        /// Tradition name (e.g. "Stoic"). Mutually exclusive with --theme.
+        #[arg(long)]
+        tradition: Option<String>,
+        /// Theme slug (e.g. "freedom-and-fate"). Mutually exclusive with --tradition.
+        #[arg(long)]
+        theme: Option<String>,
+        /// Emit JSON instead of human-readable text.
+        #[arg(long)]
+        json: bool,
+    },
+    /// Show a single passage by id, including its terms and substrate.
+    Show {
+        /// Passage id (e.g. "enchiridion-1").
+        id: String,
         /// Emit JSON instead of human-readable text.
         #[arg(long)]
         json: bool,
@@ -230,6 +263,78 @@ async fn main() -> Result<()> {
                 println!("verdict:           {verdict}");
             }
         }
+        Command::Library { action } => match action {
+            LibraryAction::Traditions => {
+                let traditions = library::list_traditions();
+                let total: usize = traditions.iter().map(|t| t.passage_count).sum();
+                println!("{total} passages across {} traditions:", traditions.len());
+                for t in traditions {
+                    println!("  {:>3}  {}", t.passage_count, t.tradition);
+                }
+            }
+            LibraryAction::Themes => {
+                let themes = library::list_themes();
+                let total: usize = themes.iter().map(|t| t.passage_count).sum();
+                println!(
+                    "{} tagged theme entries across {} themes (passages may have multiple):",
+                    total,
+                    themes.len()
+                );
+                for t in themes {
+                    println!("  {:>3}  {:<40} ({})", t.passage_count, t.label, t.slug);
+                }
+            }
+            LibraryAction::List {
+                tradition,
+                theme,
+                json,
+            } => {
+                let summaries = match (tradition, theme) {
+                    (Some(_), Some(_)) => {
+                        return Err(anyhow!(
+                            "pass exactly one of --tradition or --theme, not both"
+                        ))
+                    }
+                    (Some(t), None) => library::list_passages_by_tradition(&t),
+                    (None, Some(t)) => library::list_passages_by_theme(&t),
+                    (None, None) => library::list_all_passages(),
+                };
+                if json {
+                    println!("{}", serde_json::to_string_pretty(&summaries)?);
+                } else {
+                    println!("{} passages:", summaries.len());
+                    for s in &summaries {
+                        let tags = if s.themes.is_empty() {
+                            String::new()
+                        } else {
+                            format!("  [{}]", s.themes.join(", "))
+                        };
+                        let snippet = if s.fingerprint.len() > 60 {
+                            format!("{}…", &s.fingerprint[..60])
+                        } else {
+                            s.fingerprint.clone()
+                        };
+                        println!("  {} — {} · {}{}", s.id, s.author, snippet, tags);
+                    }
+                }
+            }
+            LibraryAction::Show { id, json } => {
+                let entry = library::get_passage(&id)
+                    .ok_or_else(|| anyhow!("no passage with id: {id}"))?;
+                if json {
+                    println!("{}", serde_json::to_string_pretty(&entry.passage)?);
+                } else {
+                    println!("{} — {}", entry.source.title, entry.source.author);
+                    println!("tradition: {}", entry.source.tradition);
+                    println!("themes:    {}", entry.passage.themes.join(", "));
+                    println!("fingerprint: {}", entry.passage.fingerprint);
+                    println!("terms:");
+                    for (term, info) in &entry.passage.terms {
+                        println!("  - {term} (`{}`): {}", info.substrate, info.gloss);
+                    }
+                }
+            }
+        },
     }
     Ok(())
 }
