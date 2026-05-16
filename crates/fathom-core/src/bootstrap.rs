@@ -12,7 +12,9 @@ use directories::ProjectDirs;
 use futures_util::StreamExt;
 use sha2::{Digest, Sha256};
 use std::path::{Path, PathBuf};
-use tokio::fs::File;
+use reqwest::header::{CONTENT_RANGE, RANGE};
+use reqwest::StatusCode;
+use tokio::fs::{File, OpenOptions};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 
 #[derive(Debug, Clone, Copy)]
@@ -122,20 +124,53 @@ async fn download_streaming(
     let client = reqwest::Client::builder()
         .user_agent(concat!("fathom/", env!("CARGO_PKG_VERSION")))
         .build()?;
-    let response = client
-        .get(url)
+
+    let existing = match tokio::fs::metadata(&partial).await {
+        Ok(meta) if meta.is_file() => meta.len(),
+        _ => 0,
+    };
+
+    let mut request = client.get(url);
+    if existing > 0 {
+        request = request.header(RANGE, format!("bytes={existing}-"));
+    }
+    let response = request
         .send()
         .await
         .with_context(|| format!("request failed: {url}"))?
         .error_for_status()
         .with_context(|| format!("download failed: {url}"))?;
-    let total = response.content_length();
 
-    let mut file = File::create(&partial)
-        .await
-        .with_context(|| format!("creating partial file {}", partial.display()))?;
+    let status = response.status();
+    let (mut bytes_so_far, total, append) = match status {
+        StatusCode::PARTIAL_CONTENT => {
+            let full = response
+                .headers()
+                .get(CONTENT_RANGE)
+                .and_then(|v| v.to_str().ok())
+                .and_then(parse_content_range_total);
+            (existing, full, true)
+        }
+        _ => (0, response.content_length(), false),
+    };
+
+    let mut file = if append {
+        OpenOptions::new()
+            .append(true)
+            .open(&partial)
+            .await
+            .with_context(|| format!("opening partial for append {}", partial.display()))?
+    } else {
+        File::create(&partial)
+            .await
+            .with_context(|| format!("creating partial file {}", partial.display()))?
+    };
+
+    if let Some(cb) = &progress {
+        cb(bytes_so_far, total);
+    }
+
     let mut stream = response.bytes_stream();
-    let mut bytes_so_far: u64 = 0;
     while let Some(chunk) = stream.next().await {
         let chunk = chunk?;
         file.write_all(&chunk).await?;
@@ -151,6 +186,18 @@ async fn download_streaming(
         .await
         .with_context(|| format!("finalising {}", dest.display()))?;
     Ok(())
+}
+
+/// Parse the `/Z` part of a `Content-Range: bytes X-Y/Z` (or `bytes */Z`) header
+/// into the total file size. Returns `None` if the size is `*` (unknown) or the
+/// header is malformed.
+fn parse_content_range_total(value: &str) -> Option<u64> {
+    let after_slash = value.rsplit('/').next()?.trim();
+    if after_slash == "*" {
+        None
+    } else {
+        after_slash.parse::<u64>().ok()
+    }
 }
 
 fn partial_path(dest: &Path) -> PathBuf {
@@ -202,6 +249,25 @@ mod tests {
         assert_eq!(p, PathBuf::from("/tmp/foo.gguf.partial"));
         let q = partial_path(Path::new("/tmp/noext"));
         assert_eq!(q, PathBuf::from("/tmp/noext.partial"));
+    }
+
+    #[test]
+    fn content_range_total_parses_typical_header() {
+        assert_eq!(
+            parse_content_range_total("bytes 1000-2489999999/2490000000"),
+            Some(2_490_000_000)
+        );
+        assert_eq!(
+            parse_content_range_total("bytes 0-499/1234"),
+            Some(1234)
+        );
+    }
+
+    #[test]
+    fn content_range_total_handles_unknown_size() {
+        assert_eq!(parse_content_range_total("bytes 0-499/*"), None);
+        assert_eq!(parse_content_range_total("bytes */12345"), Some(12345));
+        assert_eq!(parse_content_range_total("garbage"), None);
     }
 
     #[tokio::test]
