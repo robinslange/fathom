@@ -1,0 +1,81 @@
+source:
+  title: "Meditations on First Philosophy"
+  author: "René Descartes"
+  translation: "John Veitch (1901), public domain"
+  language: "Latin"
+  tradition: "Rationalist"
+
+passages:
+  - id: "med-2-cogito"
+    fingerprint: "I am, I exist, that is certain. But how often?"
+    terms:
+      "I am, I exist":
+        substrate: "Ego sum, ego existo"
+        gloss: "The proposition Descartes holds indubitable — the thinking self's existence is the one certainty that survives universal doubt; it is not an inference here but an immediate intuition, true whenever conceived"
+      "thinking thing":
+        substrate: "res cogitans"
+        gloss: "A thing whose whole essence is thought — the conclusion Descartes draws once he strips away every bodily attribute; it will ground the mind–body distinction argued in the Sixth Meditation"
+      "doubt":
+        substrate: "dubitatio"
+        gloss: "Methodical suspension of assent; the instrument by which all beliefs founded on sense or custom are set aside, clearing the way for what resists every attempt at rejection"
+
+  - id: "med-2-wax"
+    fingerprint: "Let us take, for example, this piece of wax"
+    terms:
+      "extension":
+        substrate: "extensio"
+        gloss: "The attribute of occupying three-dimensional space; Descartes argues it is the only property that remains constant through all changes in the wax, making it essential to body as such"
+      "imagination":
+        substrate: "imaginatio"
+        gloss: "The faculty that forms images of things; Descartes distinguishes it from pure intellect — imagination is tied to the body and cannot grasp the infinite varieties the wax can take"
+      "intellect":
+        substrate: "intellectus"
+        gloss: "The faculty of pure understanding, independent of sensory images; the wax argument concludes that bodies are perceived not by the senses or imagination but by intellect alone"
+      "perception":
+        substrate: "perceptio"
+        gloss: "Apprehension or grasp of something by the mind; here distinguished into sensory, imaginative, and purely intellectual modes — the last being the only reliable one"
+
+  - id: "med-3-god-infinite"
+    fingerprint: "by the name God I understand a substance infinite"
+    terms:
+      "substance":
+        substrate: "substantia"
+        gloss: "A thing that exists in itself and requires no other thing for its existence; Descartes uses the term in a Scholastic sense, distinguishing infinite substance (God) from finite substances (mind and body)"
+      "infinite":
+        substrate: "infinita"
+        gloss: "Unlimited, admitting of no privation; the idea of the infinite cannot be derived from finite things or from negation of the finite — its positive content points to a cause of corresponding reality"
+      "idea":
+        substrate: "idea"
+        gloss: "A mode of thinking that represents something; Descartes classifies ideas by their origin (innate, adventitious, factitious) and by their objective reality — the idea of God has more objective reality than any other"
+      "objective reality":
+        substrate: "realitas obiectiva"
+        gloss: "The representational content or being that an idea has insofar as it stands for something; the idea of an infinite being must have a cause with at least as much formal reality as the idea has objective reality"
+
+  - id: "med-5-ontological"
+    fingerprint: "existence can no more be separated from the essence of God"
+    terms:
+      "essence":
+        substrate: "essentia"
+        gloss: "What a thing is — its defining nature; the ontological argument claims that necessary existence belongs to God's essence just as having angles summing to two right angles belongs to the essence of a triangle"
+      "necessary existence":
+        substrate: "existentia necessaria"
+        gloss: "Existence that cannot be withheld or denied — as opposed to the contingent existence of finite things; Descartes holds this belongs to God alone and is perceivable by clear and distinct cognition"
+      "clear and distinct":
+        substrate: "clara et distincta"
+        gloss: "The dual criterion of Cartesian certainty: clear means present and manifest to attentive thought; distinct means precisely delimited so as to contain nothing confused — only such perceptions are guaranteed true by divine veracity"
+
+  - id: "med-6-mind-body"
+    fingerprint: "I have a clear and distinct idea of myself as a thinking"
+    terms:
+      "thinking thing":
+        substrate: "res cogitans"
+        gloss: "Substance whose entire nature is thought — the mind as Descartes understands it; non-extended, indivisible, and known with more certainty than any body"
+      "extended thing":
+        substrate: "res extensa"
+        gloss: "Substance whose entire nature is extension — the physical world including the human body; divisible, subject to mechanistic laws, and known through the intellect though presented to the senses"
+      "real distinction":
+        substrate: "distinctio realis"
+        gloss: "The strongest of Descartes' three grades of distinction: two things are really distinct when each can be conceived and exist entirely apart from the other; mind and body meet this condition, establishing substance dualism"
+      "union":
+        substrate: "unio"
+        gloss: "The intimate joining of mind and body in the human being; Descartes treats it as a brute fact of experience — natural impulses of hunger and pain attest to the union even though it resists the clear-and-distinct analysis that separates the two substances"

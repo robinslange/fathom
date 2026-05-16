@@ -1,0 +1,76 @@
+source:
+  title: "On the Genealogy of Morals"
+  author: "Friedrich Nietzsche"
+  translation: "Horace B. Samuel and J. M. Kennedy (1913), public domain"
+  language: "German"
+  tradition: "Existentialism (proto)"
+
+passages:
+  - id: "genealogy-1-10-slave-revolt"
+    fingerprint: "The revolt of the slaves in morals begins in the very principle"
+    text: "The revolt of the slaves in morals begins in the very principle of resentment becoming creative and giving birth to values--a resentment experienced by creatures who, deprived as they are of the proper outlet of action, are forced to find their compensation in an imaginary revenge."
+    terms:
+      "slave revolt in morals":
+        substrate: "Sklavenaufstand in der Moral"
+        gloss: "Nietzsche's name for the historical inversion by which the powerless redefine the strength and excellence of the powerful as evil — the origin of the moral framework that makes weakness virtuous"
+      "resentment":
+        substrate: "ressentiment"
+        gloss: "Reactive resentment that cannot discharge itself in action and so turns inward, generating values through negation — the psychological engine of slave morality; Nietzsche borrows the French term deliberately to mark it as foreign to noble self-affirmation"
+      "imaginary revenge":
+        substrate: "imaginäre Rache"
+        gloss: "The compensatory fantasy through which the resentful create their value inversions: unable to act against the powerful, they revalue powerlessness as virtue and strength as evil"
+
+  - id: "genealogy-1-10-noble-affirmation"
+    fingerprint: "While every aristocratic morality springs from a triumphant affirmation"
+    text: "While every aristocratic morality springs from a triumphant affirmation of its own demands, the slave morality says 'no' from the very outset to what is 'outside itself,' 'different from itself,' and 'not itself': and this 'no' is its creative deed."
+    terms:
+      "aristocratic morality":
+        substrate: "aristokratische Moral"
+        gloss: "Master morality — grounded in self-affirmation; the noble type defines itself as 'good' first and designates its opposite 'bad' only as an afterthought, without rancour"
+      "slave morality":
+        substrate: "Sklavenmoral"
+        gloss: "Morality that originates in negation of the other rather than affirmation of the self; it is essentially reactive and requires an enemy to give itself definition"
+      "creative deed":
+        substrate: "schöpferische That"
+        gloss: "The paradox Nietzsche identifies: what looks like passivity — the slave's 'no' — is in fact the generative act that produces an entire moral world, inverting the noble valuations"
+
+  - id: "genealogy-2-4-bad-conscience"
+    fingerprint: "But how is it that that other melancholy object, the consciousness of sin"
+    text: "But how is it that that other melancholy object, the consciousness of sin, the whole 'bad conscience,' came into the world?"
+    terms:
+      "bad conscience":
+        substrate: "schlechtes Gewissen"
+        gloss: "The internalisation of instincts that can no longer discharge themselves outwardly; when human animals were forcibly enclosed in society, their aggressive drives turned inward, producing guilt, self-punishment, and the sense of moral indebtedness"
+      "consciousness of sin":
+        substrate: "Sündenbewusstsein"
+        gloss: "The religious intensification of bad conscience — the debtor-relation to God, in which the individual owes an unpayable debt that generates permanent guilt; Nietzsche traces it to primitive creditor-debtor relations"
+
+  - id: "genealogy-2-16-creditor-debtor"
+    fingerprint: "Have these genealogists of morals hitherto allowed themselves"
+    text: "Have these genealogists of morals hitherto allowed themselves to dream, even distantly, that, for instance, the main moral idea of 'guilt' has its origin in the very material idea of 'debt'?"
+    verification_note: "Fingerprint confirmed against Essay II theme; exact Samuel/Kennedy phrasing not independently verified against full text — treat as provisional until cross-checked against pg52319."
+    terms:
+      "guilt":
+        substrate: "Schuld"
+        gloss: "Crucially, Schuld means both 'guilt' and 'debt' in German — Nietzsche exploits this double meaning to argue that moral guilt is a metamorphosis of the material obligation owed to a creditor"
+      "debt":
+        substrate: "Schulden"
+        gloss: "The material ancestor of moral guilt; the creditor-debtor relation is, for Nietzsche, the origin of the concepts of responsibility, punishment, and moral obligation"
+      "punishment":
+        substrate: "Strafe"
+        gloss: "In Nietzsche's genealogy, punishment is not originally about making the guilty feel guilty but about compensation — the creditor derives pleasure from inflicting pain on the defaulting debtor, pain as equivalent"
+
+  - id: "genealogy-3-ascetic-ideal"
+    fingerprint: "What is the meaning of ascetic ideals?"
+    text: "What is the meaning of ascetic ideals? In the case of artists they mean nothing, or too many things; in the case of philosophers and scholars they mean something like a scent and instinct for the most favourable conditions of higher intellectuality; in the case of women, at best, one additional seductive charm."
+    verification_note: "The opening question is the confirmed Essay III chapter title (Gutenberg TOC). The continuation is accurate Nietzsche but the exact Samuel/Kennedy phrasing was not verified from pg52319 (text truncated mid-Essay II). Cross-check before production use."
+    terms:
+      "ascetic ideal":
+        substrate: "asketisches Ideal"
+        gloss: "The ideal of self-denial, poverty, chastity, and humility — which Nietzsche reads not as genuine negation of life but as a life-preserving strategy: a will to nothingness is still a will, and so protects the suffering animal from nihilism"
+      "ascetic priest":
+        substrate: "asketische Priester"
+        gloss: "The figure who champions the ascetic ideal and thereby becomes the physician of the suffering herd — directing ressentiment inward rather than outward, and so containing its destructive force while deepening bad conscience"
+      "will to nothingness":
+        substrate: "Wille zum Nichts"
+        gloss: "Nietzsche's formulation of the ascetic ideal's inner logic: man would rather will nothingness than not will — the ascetic ideal is a will that saves willing itself by giving it a negative object"

@@ -1,0 +1,81 @@
+source:
+  title: "Nicomachean Ethics"
+  author: "Aristotle"
+  translation: "W. D. Ross (1908), public domain"
+  language: "Greek"
+  tradition: "Aristotelian"
+
+passages:
+  - id: "ne-1-7-function"
+    fingerprint: "Presumably, however, to say that happiness is the chief good"
+    terms:
+      "happiness":
+        substrate: "eudaimonia"
+        gloss: "Human flourishing; the activity of the soul in accordance with virtue over a complete life, not a subjective mood or feeling"
+      "function":
+        substrate: "ergon"
+        gloss: "The characteristic activity proper to a kind of thing — that which distinguishes it and makes it what it is"
+      "activity of soul":
+        substrate: "psychēs energeia"
+        gloss: "The active exercise of the soul's capacities, not mere possession of them — being at work, not merely equipped"
+      "virtue":
+        substrate: "aretē"
+        gloss: "Excellence of character; a stable disposition to act, feel, and reason well, acquired through habituation"
+
+  - id: "ne-2-1-habit"
+    fingerprint: "Virtue, then, being of two kinds, intellectual and moral"
+    terms:
+      "moral virtue":
+        substrate: "ēthikē aretē"
+        gloss: "Excellence of character (as opposed to intellect), formed through repeated action — its very name derives from ethos, habit"
+      "intellectual virtue":
+        substrate: "dianoētikē aretē"
+        gloss: "Excellence of the thinking part of the soul; requires teaching, experience, and time rather than habituation alone"
+      "habit":
+        substrate: "ethos"
+        gloss: "The customary practice through which character is formed; Aristotle's pun is explicit — ēthikē (moral) is a slight variation of ethos"
+      "state of character":
+        substrate: "hexis"
+        gloss: "A stable, durable disposition — not a passing feeling or raw capacity, but a settled way of being that has been trained into the person"
+
+  - id: "ne-2-6-mean"
+    fingerprint: "Virtue, then, is a state of character concerned with choice"
+    terms:
+      "state of character":
+        substrate: "hexis"
+        gloss: "A stable, trained disposition — virtue is not a momentary act but a settled character trait"
+      "choice":
+        substrate: "prohairesis"
+        gloss: "Deliberate choice; action issuing from reasoned deliberation about what promotes the good, not mere impulse or desire"
+      "mean":
+        substrate: "to meson / mesotēs"
+        gloss: "The intermediate between excess and deficiency relative to us — not an arithmetical midpoint but what the person of practical wisdom would determine"
+      "practical wisdom":
+        substrate: "phronēsis"
+        gloss: "The intellectual virtue of discerning the right action in particular circumstances; the capacity by which the mean is determined"
+      "rational principle":
+        substrate: "logos"
+        gloss: "Reason or reasoned account; the standard that governs virtuous action and by which the mean is identified"
+
+  - id: "ne-8-1-friendship"
+    fingerprint: "After what we have said, a discussion of friendship would naturally follow"
+    terms:
+      "friendship":
+        substrate: "philia"
+        gloss: "Reciprocal goodwill and affection; extends from voluntary associations to family bonds; for Aristotle, a constitutive part of the good life, not merely useful"
+      "virtue":
+        substrate: "aretē"
+        gloss: "Excellence of character; friendship based on virtue is the highest form, not the friendship of utility or pleasure"
+
+  - id: "ne-10-7-contemplation"
+    fingerprint: "the activity of this in accordance with its proper virtue will be perfect happiness"
+    terms:
+      "perfect happiness":
+        substrate: "eudaimonia"
+        gloss: "Complete human flourishing; in this passage Aristotle identifies it with contemplative activity as the highest exercise of our highest capacity"
+      "contemplative":
+        substrate: "theōrētikos"
+        gloss: "Of or pertaining to theōria — the pure exercise of theoretical reason for its own sake, which Aristotle regards as the most self-sufficient and continuous activity available to humans"
+      "self-sufficiency":
+        substrate: "autarkeia"
+        gloss: "The condition of needing nothing external for one's flourishing; the contemplative life achieves this most fully among human lives"

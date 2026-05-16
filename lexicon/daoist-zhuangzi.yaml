@@ -1,0 +1,94 @@
+source:
+  title: "Chuang Tzŭ: Mystic, Moralist, and Social Reformer"
+  author: "Zhuangzi"
+  translation: "Herbert A. Giles (1889), public domain"
+  language: "Classical Chinese (pinyin)"
+  tradition: "Daoist"
+
+passages:
+  - id: "zz-2-butterfly-dream"
+    fingerprint: "Once upon a time, I, Chuang Tzŭ, dreamt I was a butterfly"
+    text: |
+      Once upon a time, I, Chuang Tzŭ, dreamt I was a butterfly, fluttering hither and thither,
+      to all intents and purposes a butterfly. I was conscious only of my happiness as a butterfly,
+      unaware that I was Chuang Tzŭ. Soon I awaked, and there lay Chuang Tzŭ on his bed.
+      But I could not tell whether I had been Chuang Tzŭ dreaming I was a butterfly, or whether
+      I am now a butterfly dreaming I am Chuang Tzŭ. Between a man and a butterfly there is
+      necessarily a barrier. The transition is called Metempsychosis.
+    terms:
+      "butterfly":
+        substrate: "húdié"
+        gloss: "Butterfly; the passage uses the butterfly as the vehicle for questioning fixed identity — the point is not the butterfly as such but the unresolved reversibility of subject and dream"
+      "Metempsychosis":
+        substrate: "wù huà"
+        gloss: "Transformation of things; wù huà is Giles's referent — the philosophical point is that all discrete identities are momentary phases of an ongoing Daoist transformation with no fixed centre"
+      "barrier":
+        substrate: "bì"
+        gloss: "Necessary division or partition; ironically, the passage ends by acknowledging the very boundary it has destabilised — transformation is real but so is the discontinuity between states"
+      "Chuang Tzŭ":
+        substrate: "zhuāngzǐ"
+        gloss: "Zhuangzi; the authorial self placed inside the dream as one more contingent perspective — no more privileged than the butterfly's, which is the passage's sting"
+
+  - id: "zz-3-cook-ding"
+    fingerprint: "Every blow of his hand, every heave of his shoulders"
+    text: |
+      Every blow of his hand, every heave of his shoulders, every tread of his foot, every thrust
+      of his knee — in the sound of the rushing wind as he cleaved through joints and cavities,
+      was in perfect harmony — rhythmical like the dance of the Mulberry Grove.
+      "I follow such openings or cavities as there may be, according to the natural constitution
+      of the animal. I do not attempt to cut through joints or bones."
+    terms:
+      "natural constitution":
+        substrate: "tiān lǐ"
+        gloss: "The natural grain or principle of things; the cook does not impose his will on the ox but follows its inherent structure — tiān lǐ (heavenly pattern) is what the Daoist adept tracks in any domain"
+      "harmony":
+        substrate: "hé"
+        gloss: "Resonant accord or fit; the cook's rhythm is not performance but the consequence of aligning action with the Dao of the ox — skill perfected to the point of effortlessness"
+      "dé":
+        substrate: "dé"
+        gloss: "Virtuosity; the cook embodies dé not as moral virtue but as cultivated excellence — the concentrated power that flows from sustained alignment with a thing's natural way"
+      "wú wéi":
+        substrate: "wú wéi"
+        gloss: "Non-coercive action; the cook's blade never forces — it finds the spaces that already exist, making the passage a practical illustration of wú wéi as skilled attunement rather than withdrawal"
+
+  - id: "zz-2-three-in-morning"
+    fingerprint: "A keeper of monkeys said with regard to their rations"
+    text: |
+      A keeper of monkeys said with regard to their rations of chestnuts that each monkey was
+      to have three in the morning and four at night. But at this the monkeys were very angry,
+      so the keeper said they might have four in the morning and three at night, with which
+      arrangement they were all well pleased. The actual number of the chestnuts remained the same,
+      but there was an adaptation to the likes and dislikes of those concerned.
+      Wherefore the true Sage, while regarding contraries as identical, adapts himself to the
+      laws of Heaven. This is called following two courses at once.
+    terms:
+      "contraries as identical":
+        substrate: "qí wù"
+        gloss: "Equalisation of things; the philosophical thesis of Chapter 2 of the Zhuangzi — all distinctions (morning/evening, this/that, right/wrong) are perspective-relative rather than absolute, and the sage sees through them to underlying equivalence"
+      "the true Sage":
+        substrate: "shèng rén"
+        gloss: "The sage; here defined not by moral achievement but by epistemic flexibility — the ability to inhabit multiple frames without fixing on any one as uniquely true"
+      "laws of Heaven":
+        substrate: "tiān jūn"
+        gloss: "The equaliser of heaven; tiān jūn (heavenly balance or pivot) is the axis from which the sage surveys contraries without taking sides — a term peculiar to Zhuangzi's epistemological Daoism"
+      "following two courses at once":
+        substrate: "liǎng xíng"
+        gloss: "Walking two roads; the practical upshot of qí wù — the sage can operate within conventional distinctions while not being imprisoned by them"
+
+  - id: "zz-1-useless-tree"
+    fingerprint: "Now if you have a big tree and are at a loss what to do"
+    text: |
+      Now if you have a big tree and are at a loss what to do with it, why not plant it in the
+      domain of non-existence, in a wide and barren wild, where you might loiter idly by its side,
+      and lie down in blissful repose beneath its shade? There it would be safe from the axe
+      and from all other injury; for being of no use to others, itself would be free from harm.
+    terms:
+      "domain of non-existence":
+        substrate: "wú hé yǒu zhī xiāng"
+        gloss: "The land of nowhere or non-being; a Zhuangzian imaginary space free from instrumental valuation — by placing the useless tree there, the parable inverts utility as the measure of worth"
+      "of no use to others":
+        substrate: "wú yòng"
+        gloss: "Uselessness; the central irony — the tree's survival and the wanderer's rest both depend on the tree being worthless by conventional standards. Zhuangzi reclaims wú yòng as the condition of genuine freedom"
+      "blissful repose":
+        substrate: "wú wéi"
+        gloss: "Non-coercive rest aligned with nature; the scene of lounging beneath the useless tree is a lived image of wú wéi — not striving, not useful, not in danger"

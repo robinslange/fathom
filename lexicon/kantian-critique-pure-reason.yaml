@@ -1,0 +1,78 @@
+source:
+  title: "Critique of Pure Reason"
+  author: "Immanuel Kant"
+  translation: "John M. D. Meiklejohn (1855), public domain"
+  language: "German"
+  tradition: "German Idealism"
+
+passages:
+  - id: "cpr-transcendental-aesthetic-intro"
+    fingerprint: "In whatever manner and by whatever means a mode of knowledge may relate to objects"
+    terms:
+      "intuition":
+        substrate: "Anschauung"
+        gloss: "Immediate singular representation of an object, as contrasted with a concept; for Kant, the only way objects are given to us — through sensibility, not thought"
+      "sensibility":
+        substrate: "Sinnlichkeit"
+        gloss: "The passive faculty of receptivity through which objects affect us and give rise to intuitions; it supplies the matter that understanding then orders under concepts"
+      "concept":
+        substrate: "Begriff"
+        gloss: "A general representation applied to many objects through understanding; concepts without intuitions are empty, intuitions without concepts are blind"
+      "understanding":
+        substrate: "Verstand"
+        gloss: "The active faculty that thinks objects through concepts and categories; distinct from both sensibility (which receives) and reason (which extends beyond possible experience)"
+
+  - id: "cpr-a-priori"
+    fingerprint: "we will therefore, in what follows, understand by a priori knowledge, not such"
+    terms:
+      "a priori":
+        substrate: "a priori"
+        gloss: "Knowledge or conditions that are independent of all experience; characterised by strict universality and necessity — Kant's examples are mathematics and the pure categories of understanding"
+      "a posteriori":
+        substrate: "a posteriori"
+        gloss: "Knowledge derived from experience; contingent and particular, it can tell us how things happen to be but never that they must be so"
+      "pure":
+        substrate: "rein"
+        gloss: "Free from any admixture of empirical content; a pure intuition (like space) or a pure concept (a category) contains nothing drawn from sensation"
+
+  - id: "cpr-phenomena-noumena"
+    fingerprint: "Appearances, so far as they are thought as objects according to the unity of the categories"
+    terms:
+      "appearance":
+        substrate: "Erscheinung"
+        gloss: "The object as it is given to our sensibility, subject to the forms of space, time, and the categories; what we can have empirical knowledge of — not a mere illusion, but the only cognisable face of things"
+      "thing in itself":
+        substrate: "Ding an sich"
+        gloss: "The object considered independently of all conditions of our sensibility; unknowable theoretically, it is neither located in space nor in time — those are our forms of intuition, not features of the object as it is in itself"
+      "phenomenon":
+        substrate: "Phänomen"
+        gloss: "The object as it appears within possible experience; the legitimate domain of scientific knowledge and the categories of the understanding"
+      "noumenon":
+        substrate: "Noumenon"
+        gloss: "The object thought through pure reason alone, without any sensible intuition; in its negative sense it marks the limit of our knowledge — we can think but not know the noumenal"
+
+  - id: "cpr-transcendental-unity-apperception"
+    fingerprint: "The I think must be capable of accompanying all my representations"
+    terms:
+      "transcendental unity of apperception":
+        substrate: "transzendentale Einheit der Apperzeption"
+        gloss: "The formal identity of the 'I think' that must be able to accompany every representation belonging to me; the logical (not empirical) ground of the unity of experience — not a soul-substance but a necessary formal condition"
+      "representation":
+        substrate: "Vorstellung"
+        gloss: "Any content of the mind — the genus that includes intuitions, concepts, and ideas; nothing is in the mind except as representation"
+      "transcendental":
+        substrate: "transzendental"
+        gloss: "Concerned with the a priori conditions that make experience possible; to be distinguished from 'transcendent,' which goes beyond all possible experience and produces illusion"
+
+  - id: "cpr-categories-schematism"
+    fingerprint: "The pure concepts of the understanding relate to empirical intuitions through the transcendental schema"
+    terms:
+      "category":
+        substrate: "Kategorie"
+        gloss: "A pure concept of the understanding — one of twelve fundamental forms (causality, substance, etc.) through which the mind actively organises intuitions into experience; derived from the logical forms of judgement"
+      "schema":
+        substrate: "Schema"
+        gloss: "The transcendental time-determination that mediates between a pure category (intellectual) and an empirical intuition (sensible); without it, categories cannot apply to appearances"
+      "imagination":
+        substrate: "Einbildungskraft"
+        gloss: "The faculty that produces schemata; it is neither pure understanding nor raw sensibility but the mediating power that synthesises intuitions according to rules"

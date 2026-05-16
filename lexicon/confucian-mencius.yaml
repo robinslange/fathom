@@ -1,0 +1,109 @@
+source:
+  title: "The Works of Mencius"
+  author: "Mencius (Mèngzǐ)"
+  translation: "James Legge (1861), The Chinese Classics vol. 2, public domain"
+  language: "Classical Chinese (pinyin)"
+  tradition: "Confucian"
+
+passages:
+  - id: "mencius-2a-6-four-sprouts"
+    fingerprint: "The feeling of commiseration belongs to all men"
+    text: |
+      The feeling of commiseration belongs to all men; so does that of shame and dislike;
+      and that of modesty and complaisance; and that of approving and disapproving.
+      The feeling of commiseration implies the principle of benevolence;
+      that of shame and dislike, the principle of righteousness;
+      that of modesty and complaisance, the principle of propriety;
+      and that of approving and disapproving, the principle of knowledge.
+    terms:
+      "feeling of commiseration":
+        substrate: "cè yǐn zhī xīn"
+        gloss: "The heart of compassion; the immediate, involuntary response to suffering in another — Mencius's starting point for the moral psychology argument that benevolence is native to human nature, not imposed from outside"
+      "benevolence":
+        substrate: "rén"
+        gloss: "Humaneness or consummate virtue; for Mencius, not a learned disposition but the full development of an inborn sprout — commiseration is its earliest, weakest manifestation"
+      "righteousness":
+        substrate: "yì"
+        gloss: "Moral rightness or duty; rooted in the sprout of shame and dislike of what is wrong — Mencius pairs rén and yì throughout as the two foundational virtues from which the rest grow"
+      "sprouts":
+        substrate: "duān"
+        gloss: "Germs or beginnings; the four feelings are the duān — nascent, fragile expressions of the four cardinal virtues that all humans possess but must cultivate to full growth through reflection and practice"
+      "propriety":
+        substrate: "lǐ"
+        gloss: "Ritual propriety; its sprout is the feeling of modesty and deference — Mencius locates lǐ in an innate sense of what is fitting rather than in external rule-following"
+
+  - id: "mencius-2a-6-child-well"
+    fingerprint: "Now, when men suddenly see a child about to fall into a well"
+    text: |
+      Now, when men suddenly see a child about to fall into a well, they all have a feeling
+      of alarm and commiseration — not to gain the favour of the child's parents,
+      nor to seek the praise of their neighbours and friends, nor because they dislike
+      the reputation of having been unmoved by such a thing.
+    terms:
+      "alarm and commiseration":
+        substrate: "cè yǐn"
+        gloss: "Involuntary compassion-shock; the thought-experiment is designed to prove that the moral response precedes all self-interested calculation — its immediacy is the evidence that rén is constitutive of human nature"
+      "human nature":
+        substrate: "xìng"
+        gloss: "Nature or moral constitution; Mencius's thesis is that xìng is inherently good — the child-well scenario demonstrates that goodness is not achieved against nature but is nature itself when unobstructed"
+
+  - id: "mencius-6a-8-ox-mountain"
+    fingerprint: "The trees of the Niu mountain were once beautiful"
+    text: |
+      The trees of the Niu mountain were once beautiful. Being situated, however, in the borders
+      of a large state, they were hewn down with axes and bills — and could they retain their beauty?
+      Still through the activity of the vegetative life day and night, and the nourishing influence
+      of the rain and dew, they were not without buds and sprouts springing forth. But then came
+      the cattle and goats, and browsed upon them. To these things is owing the bare and stripped
+      appearance which it presents, and when people now see it, they think it was never finely wooded.
+      But is this the nature of the mountain? And so also of what properly belongs to man...
+    terms:
+      "nature of the mountain":
+        substrate: "shān zhī xìng"
+        gloss: "The intrinsic character of the mountain; Mencius's analogy for human xìng — the mountain's original forest is goodness, the axes and overgrazing are corrupting circumstance, not the mountain's own constitution"
+      "vegetative life":
+        substrate: "yè qì"
+        gloss: "The vital energy of growth; the nocturnal restorative power that allows the mountain's trees to regenerate — Mencius uses it to argue that human moral nature also seeks to recover itself when given space"
+      "buds and sprouts":
+        substrate: "méng niè"
+        gloss: "Shoots and regrowth; the image extends the duān (sprout) metaphor of 2A:6 — goodness is always attempting to re-emerge even in degraded conditions, which is why education and environment matter"
+
+  - id: "mencius-2a-2-flood-like-qi"
+    fingerprint: "It is difficult to describe. It is a vast, flowing, vigour"
+    text: |
+      "It is difficult to describe. It is a vast, flowing, vigour. If you cultivate it with
+      uprightness and do it no injury, it will fill up the vacancy between heaven and earth.
+      It is a vigour which is accompanied by righteousness and the Tao. Without these it would
+      collapse. It is produced by the accumulation of righteous deeds; it is not to be obtained
+      by incidental acts of righteousness."
+    terms:
+      "vast, flowing vigour":
+        substrate: "hào rán zhī qì"
+        gloss: "Flood-like or overwhelming vital energy; qì here is not merely physiological breath but moral-cosmic power — Mencius describes it as the energetic fullness that results from sustained righteous action, intimately linking ethics and cosmology"
+      "righteousness":
+        substrate: "yì"
+        gloss: "Moral rightness; the hào rán zhī qì cannot be manufactured directly but is the byproduct of accumulated yì — the passage insists that moral shortcuts collapse the energy rather than building it"
+      "Tao":
+        substrate: "dào"
+        gloss: "The Way; Mencius uses dào here in the Confucian sense of the moral way of conduct — the hào rán zhī qì must be accompanied by both yì and dào or it dissipates"
+      "uprightness":
+        substrate: "zhí"
+        gloss: "Straight or upright cultivation; the active tending required to let the hào rán zhī qì grow — not forcing it (which would be to 'help the sprouts grow' by pulling them up) but consistently acting from righteous motives"
+
+  - id: "mencius-4a-27-noble-parts"
+    fingerprint: "Now here is a finger which is bent, and cannot be stretched out straight"
+    text: |
+      The Master said, "There are the noble parts of a man, and there are the ignoble parts,
+      and there are the great parts, and there are the small parts. The difference is,
+      — he who is governed by the great part of his constitution is a great man, and he who
+      is governed by the small part is a little man."
+    terms:
+      "noble parts":
+        substrate: "guì jiàn"
+        gloss: "The noble and ignoble; Mencius distinguishes these not by birth or wealth but by which faculties govern — the heart-mind (xīn) is the noble, great part; appetite and sensation are the small, ignoble"
+      "great man":
+        substrate: "dà rén"
+        gloss: "The great person; one governed by the xīn (heart-mind) and its capacities for rén and yì — not a matter of scale or power but of which internal authority one follows"
+      "heart-mind":
+        substrate: "xīn"
+        gloss: "The heart-mind; the organ of both thought and feeling in Mencian moral psychology — xīn is the seat of the four sprouts, and the distinguishing characteristic of humans is that xīn can reflect on and cultivate those sprouts"

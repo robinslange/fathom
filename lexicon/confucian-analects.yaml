@@ -1,0 +1,93 @@
+source:
+  title: "The Analects (Lun Yu)"
+  author: "Confucius (attrib.)"
+  translation: "James Legge (1861), The Chinese Classics vol. 1, public domain"
+  language: "Classical Chinese (pinyin)"
+  tradition: "Confucian"
+
+passages:
+  - id: "analects-1-1-learning"
+    fingerprint: "Is it not pleasant to learn with a constant perseverance"
+    text: |
+      The Master said, "Is it not pleasant to learn with a constant perseverance and application?
+      Is it not delightful to have friends coming from distant quarters?
+      Is he not a man of complete virtue, who feels no discomposure though men may take no note of him?"
+    terms:
+      "learning":
+        substrate: "xué"
+        gloss: "Study or learning; for Confucius, not mere information acquisition but the lifelong practice of cultivating character through mastery of the classics, rites, and moral reflection"
+      "man of complete virtue":
+        substrate: "jūnzǐ"
+        gloss: "The exemplary person or gentleman; the Confucian ideal of moral cultivation — not an aristocratic title but an achieved ethical character, measured here by equanimity under others' inattention"
+      "perseverance and application":
+        substrate: "shí xí"
+        gloss: "Timely practice or constant rehearsal; the character xí implies a bird repeatedly beating its wings to learn flight — virtue is built through returning to and practising what one has learned"
+
+  - id: "analects-2-1-virtue-governance"
+    fingerprint: "He who exercises government by means of his virtue"
+    text: |
+      The Master said, "He who exercises government by means of his virtue may be compared
+      to the north polar star, which keeps its place and all the stars turn towards it."
+    terms:
+      "virtue":
+        substrate: "dé"
+        gloss: "Moral power or virtue; in governance, dé is the magnetic quality of a ruler whose character is so cultivated that others orient toward him naturally — government by attraction rather than coercion"
+      "government":
+        substrate: "zhèng"
+        gloss: "Correct governance or administration; etymologically related to zhèng (correct/upright) — Confucius consistently ties political authority to personal rectitude"
+      "north polar star":
+        substrate: "běi chén"
+        gloss: "The pole star; the analogy is precise — the star governs by remaining still while others move around it, modeling wú wéi-adjacent virtue-leadership that does not require intervention to be effective"
+
+  - id: "analects-4-15-one-thread"
+    fingerprint: "Shan, my doctrine is that of an all-pervading unity"
+    text: |
+      The Master said, "Shan, my doctrine is that of an all-pervading unity."
+      The disciple Tsang replied, "Yes."
+      The Master went out, and the other disciples asked, saying, "What do his words mean?"
+      Tsang said, "The doctrine of our master is to be true to the principles of our nature
+      and the benevolent exercise of them to others — this and nothing more."
+    terms:
+      "all-pervading unity":
+        substrate: "yī guàn zhī"
+        gloss: "One thread running through all; Confucius claims his entire teaching is held together by a single principle — not a list of rules but an integrated moral orientation"
+      "true to the principles of our nature":
+        substrate: "zhōng"
+        gloss: "Loyalty or wholehearted commitment; literally 'centredness of heart' — doing one's utmost in devotion to what is genuinely good rather than performing compliance. One of the two terms that constitute the one thread"
+      "benevolent exercise of them to others":
+        substrate: "shù"
+        gloss: "Reciprocity or sympathetic extension; do not do to others what you would not have done to yourself. Paired with zhōng as the outward-facing half of the single thread — zhōng orients inward, shù extends outward"
+
+  - id: "analects-12-1-overcoming-self"
+    fingerprint: "To subdue one's self and return to propriety"
+    text: |
+      Yen Yuan asked about perfect virtue. The Master said,
+      "To subdue one's self and return to propriety, is perfect virtue.
+      If a man can for one day subdue himself and return to propriety, all under heaven will ascribe
+      perfect virtue to him."
+      "Look not at what is contrary to propriety; listen not to what is contrary to propriety;
+      speak not what is contrary to propriety; make no movement which is contrary to propriety."
+    terms:
+      "perfect virtue":
+        substrate: "rén"
+        gloss: "Benevolence, humaneness, or consummate virtue; the cardinal Confucian virtue — not a single act but the complete moral character of the exemplary person, here defined as the capacity to overcome self in favour of ritual propriety"
+      "subdue one's self":
+        substrate: "kè jǐ"
+        gloss: "Overcoming or mastering oneself; the inward discipline that rén requires — not asceticism but redirecting inclination from self-serving impulse toward what lǐ demands"
+      "propriety":
+        substrate: "lǐ"
+        gloss: "Ritual propriety or rites; the entire system of ceremonial, social, and ethical norms that structures Confucian moral life — looking, listening, speaking, and moving in accordance with lǐ is the behavioural expression of rén"
+
+  - id: "analects-15-24-reciprocity"
+    fingerprint: "Is there one word which may serve as a rule of practice"
+    text: |
+      Tsze-kung asked, saying, "Is there one word which may serve as a rule of practice for
+      all one's life?" The Master said, "Is not reciprocity such a word?
+      What you do not want done to yourself, do not do to others."
+    terms:
+      "reciprocity":
+        substrate: "shù"
+        gloss: "Sympathetic extension or reciprocity; here distilled into the single-sentence negative golden rule — shù is the outward movement of rén, measuring one's treatment of others by one's own felt experience"
+      "rule of practice for all one's life":
+        substrate: "zhōng shēn xíng zhī"
+        gloss: "A lifelong guide for conduct; the phrase underscores that shù is not a rule for special cases but a universal orientation — the minimal, portable formulation of the Confucian ethical method"

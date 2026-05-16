@@ -1,0 +1,25 @@
+# Rust
+/target/
+**/*.rs.bk
+*.pdb
+Cargo.lock.bak
+
+# Node
+node_modules/
+dist/
+.svelte-kit/
+*.tsbuildinfo
+
+# Tauri build artefacts
+apps/desktop/src-tauri/gen/
+apps/desktop/src-tauri/target/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Local
+.venv/
+*.log

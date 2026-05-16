@@ -1,0 +1,72 @@
+source:
+  title: "A Theologico-Political Treatise"
+  author: "Benedict de Spinoza"
+  translation: "R. H. M. Elwes (1883), public domain"
+  language: "Latin"
+  tradition: "Rationalist"
+
+passages:
+  - id: "ttp-preface-freedom"
+    fingerprint: "the main purpose of this Treatise is to separate faith from philosophy"
+    terms:
+      "freedom to philosophize":
+        substrate: "libertas philosophandi"
+        gloss: "The comprehensive freedom of thought, inquiry, and expression that Spinoza defends as compatible with, and indeed necessary for, a stable republic; the TTP's central political aim is to show that suppressing this freedom serves piety neither and undermines civil peace"
+      "obedience":
+        substrate: "obsequium"
+        gloss: "The outward conformity of conduct to sovereign authority that constitutes what faith requires of citizens; Spinoza sharply separates obsequium — which the state can legitimately demand — from inner conviction, which it cannot compel"
+      "piety":
+        substrate: "pietas"
+        gloss: "The disposition to act justly and charitably toward one's neighbour; Spinoza deliberately redefines piety away from doctrinal orthodoxy — it is an ethical orientation expressed in conduct, not creedal belief"
+
+  - id: "ttp-ch1-prophecy"
+    fingerprint: "Prophecy, or revelation, is sure knowledge of God"
+    terms:
+      "prophecy":
+        substrate: "prophetia"
+        gloss: "Sure knowledge of some matter revealed by God to humans; Spinoza's definition is deliberately broad — he will proceed to argue that prophets possessed vivid imagination rather than superior intellect, and that their authority is moral, not scientific"
+      "revelation":
+        substrate: "revelatio"
+        gloss: "The act by which God makes something known to a prophet; Spinoza treats it as a natural process mediated through the prophet's imaginative faculty, not a supernatural suspension of natural order"
+      "natural light":
+        substrate: "lumen naturale"
+        gloss: "The light of reason — the universal, non-miraculous means by which truth is accessible to all humans; Spinoza contrasts it with prophetic revelation to show that reason is a surer, more universal path to knowledge than prophetic imagination"
+
+  - id: "ttp-ch4-divine-law"
+    fingerprint: "The divine law, which renders men truly blessed"
+    terms:
+      "divine law":
+        substrate: "lex divina"
+        gloss: "The universal law of loving God and one's neighbour, knowable by reason alone and binding on all people regardless of positive institution; Spinoza distinguishes it sharply from the ceremonial law of Moses, which was a positive legal code for the Hebrew state only"
+      "blessedness":
+        substrate: "beatitudo"
+        gloss: "The highest good — the intellectual love of God and the perfection of the mind that flows from adequate knowledge; for Spinoza beatitudo is achieved through reason, not through ritual or ceremony, and is its own reward"
+      "natural knowledge":
+        substrate: "cognitio naturalis"
+        gloss: "Knowledge attained through reason without prophetic mediation; Spinoza argues that divine law is accessible through natural knowledge — it is universal, necessary, and does not depend on historical revelation or the particular covenant with Israel"
+
+  - id: "ttp-ch14-faith-reason"
+    fingerprint: "Faith does not demand that dogmas should be true"
+    terms:
+      "faith":
+        substrate: "fides"
+        gloss: "The disposition to attribute to God such qualities as move one to obey him and to love one's neighbour; Spinoza deliberately evacuates faith of doctrinal content — its dogmas need only be practically efficacious, not metaphysically true"
+      "theology":
+        substrate: "theologia"
+        gloss: "The discipline concerned with Scripture and the moral teaching that conduces to obedience and piety; for Spinoza it is wholly separate from philosophy and has no authority over speculative questions about nature or God's attributes"
+      "philosophy":
+        substrate: "philosophia"
+        gloss: "The pursuit of truth through reason alone; Spinoza insists that Scripture has no authority over philosophical conclusions — the domains are separated, each sovereign in its own sphere, with philosophy answering to reason and theology to obedience"
+
+  - id: "ttp-ch20-liberty"
+    fingerprint: "every man is by indefeasible natural right the master of his own thoughts"
+    terms:
+      "natural right":
+        substrate: "jus naturale"
+        gloss: "The power each thing has by nature — in humans, the capacity to think, judge, and act according to one's own constitution; Spinoza grounds political philosophy in natural right, which cannot be alienated in the case of inner thought even when outward conduct is subjected to sovereign authority"
+      "sovereign":
+        substrate: "summa potestas"
+        gloss: "The supreme authority in a state — literally 'highest power'; Spinoza argues the sovereign may regulate external conduct and expression but cannot reach inner conviction; attempts to legislate thought produce only hypocrisy and undermine the state's own stability"
+      "sedition":
+        substrate: "seditio"
+        gloss: "Rebellion against established authority; Spinoza's argument in the final chapter is that freedom of thought and expression is not seditious but is in fact the condition for civic peace — suppression breeds resentment while tolerance produces loyal citizens"

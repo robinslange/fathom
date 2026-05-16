@@ -1,0 +1,65 @@
+source:
+  title: "Politics"
+  author: "Aristotle"
+  translation: "Benjamin Jowett (1885), public domain"
+  language: "Greek"
+  tradition: "Aristotelian"
+
+passages:
+  - id: "pol-1-1-polis-highest-community"
+    fingerprint: "Every state is a community of some kind, and every community"
+    terms:
+      "state":
+        substrate: "polis"
+        gloss: "The city-state; for Aristotle, the highest form of human community — not merely a defensive alliance or trading arrangement, but the association that aims at the highest good"
+      "community":
+        substrate: "koinōnia"
+        gloss: "A partnership or association constituted by shared ends; all human communities are koinōniai, but they differ in the good they aim at"
+      "good":
+        substrate: "to agathon"
+        gloss: "The good; every community is organised around some conception of it, but the polis aims at the highest good — the complete and self-sufficient life"
+
+  - id: "pol-1-2-political-animal"
+    fingerprint: "Hence it is evident that the state is a creation of nature"
+    terms:
+      "political animal":
+        substrate: "politikon zōion"
+        gloss: "An animal whose nature is fulfilled only in a polis; not merely a social creature but one whose characteristic capacities — speech, justice, deliberation — require political community for their exercise"
+      "nature":
+        substrate: "physis"
+        gloss: "What a thing is when it has reached its full development; to say the polis is natural is to say it is the completion toward which human social life tends"
+      "speech":
+        substrate: "logos"
+        gloss: "Rational discourse; what distinguishes humans from animals that have only voice (phōnē) — the capacity to articulate the just, the unjust, the expedient, the harmful"
+
+  - id: "pol-1-5-natural-slavery"
+    fingerprint: "For that some should rule and others be ruled is a thing not only necessary"
+    terms:
+      "rule":
+        substrate: "archē"
+        gloss: "Governance or authority; Aristotle distinguishes despotic rule (over slaves) from political rule (over free citizens who take turns) and household rule"
+      "master":
+        substrate: "despotēs"
+        gloss: "The master in the master-slave relation; exercises despotic authority — rule in his own interest, not in the interest of those ruled, on Aristotle's contested account"
+      "natural slave":
+        substrate: "physei doulos"
+        gloss: "A person who allegedly lacks the deliberative faculty and is better off under another's rational direction; the argument is among the most contested in the corpus, and many scholars regard it as internally weak"
+
+  - id: "pol-3-7-constitutions"
+    fingerprint: "Of the above-mentioned forms, the perversions are as follows"
+    terms:
+      "constitution":
+        substrate: "politeia"
+        gloss: "The ordering and distribution of offices in a city; defines the city's identity — Aristotle calls it the form of the compound in the same sense that the soul is the form of the body"
+      "kingship":
+        substrate: "basileia"
+        gloss: "Rule of one for the common good; the correct form, of which tyranny is the deviation"
+      "aristocracy":
+        substrate: "aristokratia"
+        gloss: "Rule of the few virtuous for the common good; its deviation is oligarchy, which rules for the rich"
+      "tyranny":
+        substrate: "tyrannis"
+        gloss: "Deviant single rule pursuing the ruler's private interest; the worst constitution for Aristotle because it inverts the proper end of political life"
+      "democracy":
+        substrate: "dēmokratia"
+        gloss: "In Aristotle's taxonomy, the deviant form of constitutional government — rule of the many for their private interest; not the same as what moderns call democracy"

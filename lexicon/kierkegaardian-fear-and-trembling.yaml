@@ -1,0 +1,64 @@
+source:
+  title: "Fear and Trembling"
+  author: "Søren Kierkegaard"
+  translation: "Lee M. Hollander (1919), public domain — passages here drawn from Hollander's introduction and attributed summaries in Selections from the Writings of Kierkegaard (University of Texas, 1923)"
+  language: "Danish"
+  tradition: "Existentialism"
+  note: "No English translation of the full text of Fear and Trembling is in the public domain. The Lowrie (1941) and Swenson (1939) translations remain in copyright. Passages below are drawn from Hollander's 1919 PD anthology, which quotes and paraphrases the work in attributed form. A v1 release should seek a Danish scholar to render new PD translations from the 1843 original (itself PD)."
+
+passages:
+  - id: "ft-knight-of-faith"
+    fingerprint: "Abraham chooses to be 'the exception' and set aside the general law"
+    text: "Abraham chooses to be 'the exception' and set aside the general law, as well as does the æsthetic individual; but, note well: 'in fear and trembling,' and at the express command of God! He is a 'knight of faith.' But because this direct relation to the divinity necessarily can be certain only to Abraham's self, his action is altogether incomprehensible to others."
+    terms:
+      "knight of faith":
+        substrate: "Troens Ridder"
+        gloss: "Kierkegaard's figure for the individual who has made the double movement: first infinite resignation (relinquishing the finite), then the leap of faith by which the finite is received back as gift — Abraham is the paradigm"
+      "fear and trembling":
+        substrate: "Frygt og Bæven"
+        gloss: "The existential condition of the individual standing before the absolute — not mere terror but the vertigo of a single self confronting a command that cannot be shared, justified to others, or grounded in universal reason"
+      "the exception":
+        substrate: "Undtagelsen"
+        gloss: "The individual who stands outside the universal ethical law by virtue of a direct relation to the absolute; for Kierkegaard, this exception is not mere lawlessness but the highest mode of existing, achieved only through infinite passion"
+
+  - id: "ft-teleological-suspension"
+    fingerprint: "In the end, Abraham by a grand resolve transgresses the law"
+    text: "In the end, Abraham by a grand resolve transgresses the law; and lo! because he has faith, against certainty, that he will keep Isaac, and does not merely resign him, as many a tragic hero would have done, he receives all again, in a new and higher sphere."
+    terms:
+      "teleological suspension of the ethical":
+        substrate: "teleologisk Suspension af det Ethiske"
+        gloss: "The paradox at the heart of Fear and Trembling: the ethical (universal moral law) can be suspended when the individual stands in absolute relation to the absolute — not abrogated but subordinated to a higher telos that ethics itself cannot comprehend"
+      "the universal":
+        substrate: "det Almene"
+        gloss: "Kierkegaard's term for the ethical domain — the sphere of general obligations, social duties, and rational law that governs the tragic hero; the knight of faith moves beyond it without cancelling it"
+      "infinite resignation":
+        substrate: "uendelig Resignation"
+        gloss: "The first movement of faith: the complete relinquishment of the finite, accepting that Isaac is lost — this movement the tragic hero can also make, but it stops here; faith adds the second movement, the impossible return"
+
+  - id: "ft-leap-of-faith"
+    fingerprint: "It is only by a decisive 'leap,' from objective thinking into subjective faith"
+    text: "It is only by a decisive 'leap,' from objective thinking into subjective faith, with the consciousness of sin as the driving power, that the individual may realize Christianity."
+    terms:
+      "the leap":
+        substrate: "Springet"
+        gloss: "Kierkegaard's name for the decisive transition that cannot be mediated by reason — the will to believe in the face of objective uncertainty; it is not irrational but supra-rational, the act that constitutes the religious individual"
+      "subjective faith":
+        substrate: "subjektiv Tro"
+        gloss: "Faith as inward appropriation rather than assent to objective doctrine — truth, for Kierkegaard, is subjectivity; the leap is precisely the movement from spectator to participant, from observer of possibility to existing individual"
+      "consciousness of sin":
+        substrate: "Syndsbevidsthed"
+        gloss: "The driving power of the leap — not abstract guilt but the first-person recognition of one's absolute distance from God; this recognition is itself the condition that makes the movement toward faith possible"
+
+  - id: "ft-absolute-paradox"
+    fingerprint: "Because this direct relation to the divinity necessarily can be certain"
+    text: "Because this direct relation to the divinity necessarily can be certain only to Abraham's self, his action is altogether incomprehensible to others. He cannot communicate it, he cannot 'be understood': he is 'alone with God.'"
+    terms:
+      "absolute paradox":
+        substrate: "det absolute Paradox"
+        gloss: "The collision between the eternal and the temporal in the single individual — most fully expressed in Abraham's situation, where faith requires what reason categorically cannot sanction; the paradox cannot be resolved, only lived"
+      "inwardness":
+        substrate: "Inderlighed"
+        gloss: "The intensely personal, non-communicable character of genuine faith; what cannot be externalized into gesture, argument, or social recognition — the mark of authentic religious existence as opposed to performed religiosity"
+      "repetition":
+        substrate: "Gjentagelse"
+        gloss: "The category by which the finite is received back after infinite resignation — not mere recollection (looking backward) but the forward movement by which what was surrendered is returned at a higher level; Abraham's reception of Isaac is the paradigm case"

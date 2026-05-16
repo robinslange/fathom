@@ -1,0 +1,78 @@
+source:
+  title: "The World as Will and Representation"
+  author: "Arthur Schopenhauer"
+  translation: "R. B. Haldane and J. Kemp (1883), public domain"
+  language: "German"
+  tradition: "German Idealism"
+
+passages:
+  - id: "www-world-as-representation"
+    fingerprint: "The world is my representation — this is a truth valid with reference to every living"
+    terms:
+      "representation":
+        substrate: "Vorstellung"
+        gloss: "The object as it appears to a knowing subject — the entire phenomenal world, insofar as it is known, is representation; Schopenhauer takes this Kantian starting point and radicalises it into the opening thesis of his system"
+      "subject":
+        substrate: "Subjekt"
+        gloss: "The knower who is the necessary correlate of every representation; never itself an object, it is the condition of the world as representation — 'the supporter of the world'"
+      "object":
+        substrate: "Objekt"
+        gloss: "Anything that can be known through the principle of sufficient reason; always stands over against a subject — Schopenhauer denies that anything can be object without a corresponding subject"
+      "principle of sufficient reason":
+        substrate: "Satz vom zureichenden Grunde"
+        gloss: "The principle that every object stands in a necessary relation of ground and consequent with other objects; it governs all representation and takes four forms (becoming, knowing, being, acting)"
+
+  - id: "www-world-as-will"
+    fingerprint: "What is the will? It is not a concept, not an abstraction; it is that which is nearest"
+    terms:
+      "will":
+        substrate: "Wille"
+        gloss: "The inner nature of all things — not the rational faculty of Kant's practical philosophy but a blind, striving, purposeless force that underlies every phenomenon; known most directly in one's own body as an immediate feeling of effort, desire, and drive"
+      "thing in itself":
+        substrate: "Ding an sich"
+        gloss: "What reality is independent of all representation; Kant declared it unknowable, but Schopenhauer claims we access it in the immediate felt certainty of willing — the body is will made visible"
+      "objectification":
+        substrate: "Objektivation"
+        gloss: "The process by which the will externalises itself into the representational world; each grade of nature — from gravity through plant life to human desire — is a distinct degree of will's self-objectification"
+
+  - id: "www-principium-individuationis"
+    fingerprint: "Time and space are the principium individuationis, the principle of individuation"
+    terms:
+      "principle of individuation":
+        substrate: "principium individuationis"
+        gloss: "The principle by which the one undivided will appears as a multiplicity of distinct individuals; time and space are its medium — remove them and all individuation collapses back into the one will"
+      "plurality":
+        substrate: "Vielheit"
+        gloss: "The apparent multiplicity of things and persons in the phenomenal world; for Schopenhauer this plurality is a product of the principle of individuation and masks the underlying unity of will"
+      "illusion":
+        substrate: "Illusion / Maya"
+        gloss: "Schopenhauer borrows the Vedantic term Maya to characterise individuation: the veil of plurality through which we mistake the will's many faces for genuinely separate beings — source of egoism and suffering"
+
+  - id: "www-aesthetic-contemplation"
+    fingerprint: "when we are devoted to the pure contemplation of a beautiful object, we forget ourselves entirely"
+    terms:
+      "pure knowing subject":
+        substrate: "reines, willenloses Subjekt des Erkennens"
+        gloss: "The subject momentarily stripped of willing and individuality in aesthetic experience; one becomes a 'clear mirror of the object' — the only mode of knowing that breaks the will's grip and affords temporary relief from suffering"
+      "Platonic Idea":
+        substrate: "Platonische Idee"
+        gloss: "The timeless, individual-independent archetype that art grasps and represents; standing between the will (thing in itself) and the particular phenomenon, Ideas are what aesthetic contemplation directly apprehends"
+      "genius":
+        substrate: "Genie"
+        gloss: "The person with an excess of cognitive power over willing — capable of sustained pure contemplation and of communicating Platonic Ideas through art; Schopenhauer regards this as a near-pathological detachment from the practical will"
+
+  - id: "www-denial-of-will"
+    fingerprint: "the will now turns away from life; it shudders at the pleasures in which it recognises the assertion of life"
+    terms:
+      "denial of the will":
+        substrate: "Verneinung des Willens"
+        gloss: "The supreme ethical act for Schopenhauer — the will's turning against itself after genuine recognition of universal suffering; manifested in asceticism, resignation, and saintliness; the only route out of the cycle of striving and pain"
+      "assertion of the will":
+        substrate: "Bejahung des Willens"
+        gloss: "The ordinary condition of conscious life — the will's affirmation of itself through desire, reproduction, and self-interest; the source of suffering since willing always outruns satisfaction"
+      "asceticism":
+        substrate: "Askese"
+        gloss: "The deliberate mortification of bodily desire as a means of quieting the will; Schopenhauer regards the ascetic traditions of Christianity, Hinduism, and Buddhism as practically converging on the same insight"
+      "compassion":
+        substrate: "Mitleid"
+        gloss: "Literally 'suffering-with'; for Schopenhauer the foundation of ethics — the direct recognition that another's suffering is one's own, made possible by seeing through the principium individuationis to the unity of will in all beings"

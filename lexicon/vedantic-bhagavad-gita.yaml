@@ -1,0 +1,78 @@
+source:
+  title: "Bhagavad Gītā"
+  author: "(anonymous, interpolated into Mahābhārata, c. 2nd century BCE – 2nd century CE)"
+  translation: "Edwin Arnold, The Song Celestial (1885), public domain"
+  language: "Sanskrit (IAST)"
+  tradition: "Vedantic / Vaishnava"
+
+passages:
+  - id: "gita-2-47-karma-yoga"
+    fingerprint: "Let right deeds be thy motive, not the fruit which comes from"
+    terms:
+      "right deeds":
+        substrate: "karma"
+        gloss: "Action; specifically here svadharma-governed action — the central teaching of karma-yoga is that action should be performed as duty without attachment to its fruits"
+      "fruit":
+        substrate: "phala"
+        gloss: "The result or consequence of action; Kṛṣṇa instructs Arjuna to renounce attachment to phala, not the action itself — the renunciation is internal, not a withdrawal from the world"
+      "work":
+        substrate: "karma-yoga"
+        gloss: "The path of action as spiritual discipline; one of the Gītā's three primary margas alongside jñāna-yoga (knowledge) and bhakti-yoga (devotion)"
+
+  - id: "gita-3-35-svadharma"
+    fingerprint: "Better thine own work is, though done with fault, than doing"
+    terms:
+      "thine own work":
+        substrate: "svadharma"
+        gloss: "One's own duty — the specific obligations arising from one's nature, station, and circumstances; distinct from sādhāraṇa-dharma (universal duty), svadharma must be performed even imperfectly rather than abandoned for another's"
+      "another's work":
+        substrate: "paradharma"
+        gloss: "The duty belonging to another — even if apparently superior or better executed, to perform paradharma is to abandon the internal coherence that dharma requires"
+      "duty":
+        substrate: "dharma"
+        gloss: "Cosmic and moral order; in the Gītā's framework, dharma is both the structure of reality and the individual's proper role within it — its observance sustains the world (loka-saṃgraha)"
+
+  - id: "gita-13-1-field-knower"
+    fingerprint: "This body, O son of Kuntī, is called the Field"
+    terms:
+      "Field":
+        substrate: "kṣetra"
+        gloss: "The body-mind complex — everything that is known, observed, or experienced; the entirety of psychophysical nature that constitutes the object of consciousness"
+      "Knower of the Field":
+        substrate: "kṣetrajña"
+        gloss: "The witnessing consciousness that knows the field without being identical to it; in the Gītā's Sāṃkhya-inflected framework, the kṣetrajña is ultimately identified with brahman, the universal knower"
+      "know":
+        substrate: "jñāna"
+        gloss: "Knowledge; in this passage specifically the liberating knowledge that distinguishes the knower from the field — the ontological discrimination that dissolves the false identification of ātman with body-mind"
+
+  - id: "gita-14-5-three-gunas"
+    fingerprint: "Matter hath three constituents — Sattva, Rajas, Tamas"
+    terms:
+      "constituents":
+        substrate: "guṇa"
+        gloss: "Strand or quality; the three guṇas are not attributes imposed on matter but the very fabric of prakṛti — all phenomenal existence is a fluctuating combination of the three"
+      "Sattva":
+        substrate: "sattva"
+        gloss: "The quality of luminosity, clarity, and harmony; binds through attachment to happiness and knowledge — even sattva is a bond when it is clung to as an end rather than a vehicle"
+      "Rajas":
+        substrate: "rajas"
+        gloss: "The quality of passion, activity, and restlessness; binds through attachment to action and its fruits — it is the energy that drives karma but also entangles in thirst (tṛṣṇā)"
+      "Tamas":
+        substrate: "tamas"
+        gloss: "The quality of inertia, obscuration, and heaviness; binds through heedlessness and sloth — it veils discriminative knowledge and produces torpor rather than rest"
+      "Nature":
+        substrate: "prakṛti"
+        gloss: "Primal matter or nature — the undifferentiated source of the manifest world; in Sāṃkhya-Yoga (which the Gītā draws on), it is the pole opposite to puruṣa (pure consciousness), entirely constituted by the play of the guṇas"
+
+  - id: "gita-18-54-bhakti"
+    fingerprint: "He who hath put away all selfish aims, achieved this eminence"
+    terms:
+      "devotion":
+        substrate: "bhakti"
+        gloss: "Loving devotion to the personal deity (Kṛṣṇa as Īśvara); in chapter 18 bhakti is presented as the culminating path, accessible where jñāna may not be — it is not sentiment but a total orientation of the self toward the divine"
+      "eminence":
+        substrate: "brahman-bhūta"
+        gloss: "Becoming brahman — the state of one who has realized identity with the ground of being; described here as the platform from which bhakti of the highest order arises, indicating the Gītā's non-dualistic resolution"
+      "supreme":
+        substrate: "parā bhakti"
+        gloss: "The highest form of devotion — distinguished in Gītā 18.54 as what emerges after brahman-realization; love of the divine that is no longer seeking something but is the natural overflow of the liberated self"

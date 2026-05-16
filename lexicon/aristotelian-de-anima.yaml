@@ -1,0 +1,59 @@
+source:
+  title: "De Anima"
+  author: "Aristotle"
+  translation: "J. A. Smith (1931), public domain"
+  language: "Greek"
+  tradition: "Aristotelian"
+
+passages:
+  - id: "da-2-1-soul-definition"
+    fingerprint: "the soul is the first grade of actuality of a natural body"
+    terms:
+      "soul":
+        substrate: "psychē"
+        gloss: "The form of a natural body that has life potentially; not a separate substance imprisoned in the body but the body's very actuality — what it is to be alive"
+      "first grade of actuality":
+        substrate: "entelecheia hē prōtē"
+        gloss: "Possessing-the-capacity without currently exercising it, as a sleeping person possesses knowledge — contrasted with second actuality, which is actively using it"
+      "natural body":
+        substrate: "phusikon sōma"
+        gloss: "An organic body with organs — a body that has life potentially; the soul is not in just any body but in one naturally equipped to be animated"
+
+  - id: "da-2-12-perception-form-without-matter"
+    fingerprint: "what has the power of receiving into itself the sensible forms"
+    terms:
+      "perception":
+        substrate: "aisthēsis"
+        gloss: "The faculty that receives sensible forms without the matter — as wax receives the seal's shape but not its gold or bronze; what distinguishes animals from plants"
+      "sensible forms":
+        substrate: "aisthēta eidē"
+        gloss: "The perceptible qualities (colour, sound, warmth) that sense organs are capable of receiving; distinct from intelligible forms, which only nous can receive"
+      "sense organ":
+        substrate: "aisthētērion"
+        gloss: "The bodily part that receives the sensible form; it must be of intermediate quality to detect both extremes of a sensory range"
+
+  - id: "da-3-4-nous-separable"
+    fingerprint: "Mind must be related to what is thinkable, as sense is to what is sensible"
+    terms:
+      "mind":
+        substrate: "nous"
+        gloss: "Intellect; the part of the soul by which it thinks and understands — unlike the sense organs, it has no determinate nature of its own so it can receive all intelligible forms"
+      "separable":
+        substrate: "chōristos"
+        gloss: "Capable of existing or functioning independently of the body; Aristotle calls nous separable and impassible, distinguishing it from all other parts of the soul"
+      "impassible":
+        substrate: "apathēs"
+        gloss: "Not subject to alteration by what it receives; unlike sense organs that can be overwhelmed, intellect is not damaged by thinking the highest objects"
+
+  - id: "da-3-5-active-intellect"
+    fingerprint: "mind as we have described it is what it is by virtue of becoming all things"
+    terms:
+      "passive intellect":
+        substrate: "nous pathetikos"
+        gloss: "The intellect that becomes all things — the receptive capacity that takes on intelligible forms without matter, analogous to matter in the hylomorphic scheme"
+      "active intellect":
+        substrate: "nous poiētikos"
+        gloss: "The intellect that makes all things, compared by Aristotle to light; the most contested passage in the corpus — later interpreted as God, as the agent intellect of Avicenna and Aquinas, or as a function of the individual soul"
+      "imagination":
+        substrate: "phantasia"
+        gloss: "A movement arising from actual perception that lingers after the percept is gone; intermediary between perception and thought — necessary for animals to act and for humans to think"

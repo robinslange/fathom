@@ -1,0 +1,72 @@
+source:
+  title: "Dhammapada"
+  author: "(anonymous, Pali canon, c. 3rd century BCE)"
+  translation: "F. Max Müller, Sacred Books of the East vol. 10 (1881), public domain"
+  language: "Pali"
+  tradition: "Theravāda"
+
+passages:
+  - id: "dhp-1-mind-forerunner"
+    fingerprint: "All that we are is the result of what we have thought"
+    terms:
+      "what we have thought":
+        substrate: "mano"
+        gloss: "Mind — specifically the volitional-cognitive faculty that precedes and shapes all action; Theravāda psychology identifies mano as the sixth sense-base alongside the five physical senses"
+      "thought":
+        substrate: "citta"
+        gloss: "Mind or heart in its experiential totality; distinct from mano (the cognitive faculty) and viññāṇa (sense-consciousness), citta refers to the stream of mental events — what is being expressed here is that mental intention (cetanā) determines the quality of experience"
+      "evil":
+        substrate: "akusala"
+        gloss: "Unwholesome — actions rooted in greed (lobha), hatred (dosa), or delusion (moha); not morally evil in an absolute sense but actions that produce suffering and bind one further in saṃsāra"
+      "suffering":
+        substrate: "dukkha"
+        gloss: "The unsatisfactoriness pervasive in conditioned existence; not simply pain but the structural gap between impermanent phenomena and the mind's craving for permanence — the First Noble Truth"
+
+  - id: "dhp-1-2-mind-master"
+    fingerprint: "If a man speaks or acts with a pure thought, happiness follows"
+    terms:
+      "pure thought":
+        substrate: "kusala-citta"
+        gloss: "Wholesome mind — mental events rooted in non-greed (alobha), non-hatred (adosa), and non-delusion (amoha); their cultivation constitutes the positive side of the Eightfold Path"
+      "happiness":
+        substrate: "sukha"
+        gloss: "Ease, well-being; used here as the experiential counterpart to dukkha — arising from wholesome mental action, not from external conditions; in the path's higher registers it shades into pīti (rapture) and then equanimity (upekkhā)"
+
+  - id: "dhp-183-nibbana"
+    fingerprint: "Not to commit any sin, to do good, and to purify one's mind"
+    terms:
+      "purify one's mind":
+        substrate: "sacitta-pariyodapanaṃ"
+        gloss: "Purification of one's own mind; the third member of the ovāda-pātimokkha (the summary of the Teaching) — the point of non-harm and positive virtue is to enable this mental clarification, which is the proximate condition for liberation"
+      "Teaching":
+        substrate: "dhamma"
+        gloss: "In Pali, dhamma covers the Buddha's teaching, the truth of how things are, and the phenomena themselves; here it denotes the path-teaching that, when followed, leads to nibbāna"
+      "nibbāna":
+        substrate: "nibbāna"
+        gloss: "The unconditioned; the cessation of craving (taṇhā), aversion, and delusion — not annihilation but the extinguishing of the fires that sustain suffering; the goal of the Theravāda path; cognate with Sanskrit nirvāṇa but the Pali form is proper here"
+
+  - id: "dhp-277-anicca"
+    fingerprint: "All created things are impermanent"
+    terms:
+      "impermanent":
+        substrate: "anicca"
+        gloss: "Impermanence — the first of the three marks of conditioned existence (tilakkhaṇa); all compounded phenomena arise and pass away; clear seeing of anicca is said to lead directly to disenchantment (nibbidā) and liberation"
+      "created things":
+        substrate: "saṅkhārā"
+        gloss: "Conditioned formations — all compounded phenomena, including mental and physical; one of the five aggregates (khandhas); in this context emphasizes that everything conditioned is subject to the three marks"
+      "who perceives this":
+        substrate: "paññā"
+        gloss: "Wisdom — the direct, non-conceptual seeing of impermanence as it is; paññā is the third element of the threefold training (sīla, samādhi, paññā) and the faculty by which the marks are penetrated rather than merely believed"
+
+  - id: "dhp-279-anatta"
+    fingerprint: "All created things are suffering; all existing things are without self"
+    terms:
+      "without self":
+        substrate: "anattā"
+        gloss: "Non-self — the third mark, and in some ways the most radical; no phenomenon, inner or outer, constitutes or belongs to a fixed, substantial self; anattā (Pali) is cognate with Sanskrit anātman but distinct — Theravāda analysis proceeds through the five aggregates, none of which is a self"
+      "suffering":
+        substrate: "dukkha"
+        gloss: "Pervasive unsatisfactoriness; here as the second mark (dukkha-lakkhaṇa) — not just acute pain but the subtle instability of all conditioned states, including pleasant ones"
+      "existing things":
+        substrate: "dhammā"
+        gloss: "Phenomena — all the elementary constituents of experience as catalogued in Abhidhamma analysis; the claim of anattā applies to dhammā in every category, not only to gross objects"

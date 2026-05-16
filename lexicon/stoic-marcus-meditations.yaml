@@ -1,0 +1,59 @@
+source:
+  title: "Meditations"
+  author: "Marcus Aurelius"
+  translation: "Meric Casaubon (1634), text as revised by Boulton/Widger (Project Gutenberg #2680), public domain"
+  language: "Greek"
+  tradition: "Stoic"
+
+passages:
+  - id: "meditations-2-1"
+    fingerprint: "Remember how long thou hast already put off these things,"
+    terms:
+      "put off":
+        substrate: "prokrastinō"
+        gloss: "Procrastination of the philosophical life — Marcus writes as a self-admonition; the Meditations are addressed to himself, not a reader"
+      "day and hour as it were, having been set unto thee by the gods":
+        substrate: "heimarmenē"
+        gloss: "Fate or destiny — the providential causal order; for Marcus, the gods have already assigned the moment; delay is a failure to work with the logos"
+
+  - id: "meditations-2-4"
+    fingerprint: "Why should any of these things that happen externally, so"
+    terms:
+      "happen externally":
+        substrate: "ektos"
+        gloss: "Outside — that which falls beyond the hēgemonikon's domain; Marcus consistently distinguishes between external happenings and the inner ruling faculty's response"
+      "distract":
+        substrate: "tarattō"
+        gloss: "Throw into disorder — the same verb Epictetus uses; for Marcus it names the failure mode of allowing externals to invade the hēgemonikon"
+      "learn some good thing":
+        substrate: "philosophia"
+        gloss: "Philosophy literally understood as love of wisdom — the activity Marcus urges instead of restless attention to externals"
+
+  - id: "meditations-4-3"
+    fingerprint: "They seek for themselves private retiring places, as count"
+    terms:
+      "private retiring places":
+        substrate: "anachōrēsis"
+        gloss: "Retreat or withdrawal — Marcus's point is that external anachōrēsis is unnecessary and unstable; the genuine retreat is into the hēgemonikon"
+      "retire into thyself":
+        substrate: "hēgemonikon"
+        gloss: "The ruling or commanding faculty — the Stoic name for the rational, governing part of the soul; the only place where the truly self-directed life can be found"
+      "be at rest":
+        substrate: "hēsychia"
+        gloss: "Quietude or stillness; available at any moment through the hēgemonikon regardless of external circumstances"
+
+  - id: "meditations-2-14"
+    fingerprint: "A man's soul doth wrong and disrespect itself first and esp"
+    terms:
+      "aposteme":
+        substrate: "apostēma"
+        gloss: "An abscess or tumour — Marcus's metaphor for the soul that becomes estranged from the rational whole; to be displeased with what happens is to cut oneself off from the logos that orders events"
+      "displeased with anything that happens in the world":
+        substrate: "pathē"
+        gloss: "Passions — here the passion of grief or displeasure directed at externals; Marcus frames it as a form of desertion from the nature of the universe"
+      "apostacy from the nature of the universe":
+        substrate: "homologia tēi phusei"
+        gloss: "Living in agreement with nature — the Stoic telos; violation of it is apostasy in the strong sense, a turning away from the logos that constitutes the whole"
+      "averse from any man":
+        substrate: "ekklisis"
+        gloss: "Aversion — when directed at persons rather than at false judgments, it violates oikeiōsis, the natural kinship that binds rational beings"

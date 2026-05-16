@@ -1,0 +1,72 @@
+source:
+  title: "Either/Or (selections)"
+  author: "Søren Kierkegaard"
+  translation: "Lee M. Hollander (1919), public domain — Diapsalmata text from Selections from the Writings of Kierkegaard (University of Texas, 1923)"
+  language: "Danish"
+  tradition: "Existentialism"
+  note: "The Swenson/Lowrie translation of Either/Or (1944) remains in copyright. The Hollander anthology (1919, PD) contains the Diapsalmata verbatim. The introduction's attributed passages about the stages and Either/Or's structure are also PD. Stage theory passages below are from Hollander's introductory framing, which quotes and characterises the text."
+
+passages:
+  - id: "eo-diapsalmata-poet"
+    fingerprint: "What is a poet? An unhappy man who conceals profound anguish"
+    text: "What is a poet? An unhappy man who conceals profound anguish in his heart, but whose lips are so fashioned that when sighs and groans pass over them they sound like beautiful music."
+    terms:
+      "the aesthetic stage":
+        substrate: "det æstetiske Stadium"
+        gloss: "The first of Kierkegaard's three existence-spheres — the mode of life organised around immediacy, sensation, and the avoidance of boredom; the aesthete has no fixed principle except not to be bound; the Diapsalmata are its literary expression"
+      "despair":
+        substrate: "Fortvivlelse"
+        gloss: "For Kierkegaard, the fundamental spiritual condition of the aesthetic individual who has not chosen himself — the poet's concealed anguish is an avatar of the despair that beautiful form papers over without resolving"
+
+  - id: "eo-diapsalmata-passion"
+    fingerprint: "Let others complain that the times are wicked. I complain that they are paltry"
+    text: "Let others complain that the times are wicked. I complain that they are paltry; for they are without passion. The thoughts of men are thin and frail like lace, and they themselves are feeble like girl lace-makers."
+    terms:
+      "passion":
+        substrate: "Lidenskab"
+        gloss: "For Kierkegaard, the measure of a person's inner life and the medium of genuine existence; without passion there can be no faith, no ethical commitment, and no authentic selfhood — its absence is the signature of the levelled, bourgeois age"
+      "the present age":
+        substrate: "Nutiden"
+        gloss: "Kierkegaard's diagnosis of modernity as characterised by reflection without resolution, comparison without commitment, and public opinion without individual passion — the age of the crowd rather than the single individual"
+
+  - id: "eo-aesthetic-ethical-stages"
+    fingerprint: "the æsthetic individual has no fixed principle except that he means not to be bound"
+    text: "The æsthetic individual has no fixed principle except that he means not to be bound to anything or anybody. Conversely, the ethical life demands that one elect a definite calling, marry, if possible, and thus subject himself to the 'general law.'"
+    terms:
+      "the ethical stage":
+        substrate: "det etiske Stadium"
+        gloss: "The second existence-sphere — the mode of life organised around duty, self-choice, and universal moral obligation; the ethical individual chooses himself as a self with continuity across time, committing to marriage, vocation, and law"
+      "the general law":
+        substrate: "det Almene"
+        gloss: "Universal ethical obligation — the sphere of duty that binds all rational agents equally; in the ethical stage this is the highest authority; only in the religious stage is it suspended in favour of the absolute"
+      "self-choice":
+        substrate: "Selvvalg"
+        gloss: "The fundamental act of the ethical stage — choosing oneself as a concrete, responsible self rather than fleeing into aesthetic immediacy; not a choice of what to be but the act of owning what one already is"
+
+  - id: "eo-stages-on-lifes-way"
+    fingerprint: "In the splendidly written Gjentagelse 'Repetition' we are shown"
+    text: "In the splendidly written Gjentagelse 'Repetition' we are shown an abortive transition into the religious sphere."
+    terms:
+      "repetition":
+        substrate: "Gjentagelse"
+        gloss: "Kierkegaard's alternative to Hegelian mediation and Platonic recollection — not the backward movement of remembering the eternal but the forward leap by which what was lost in time is received back; the category of freedom rather than necessity"
+      "the religious stage":
+        substrate: "det religiøse Stadium"
+        gloss: "The third and highest existence-sphere — the individual's absolute relation to the absolute, transcending the universal ethical; it requires the paradox of faith and cannot be communicated in the categories of reason or ethics"
+      "the three stages":
+        substrate: "de tre Stadier / Stadier paa Livets Vej"
+        gloss: "Kierkegaard's map of human existence: aesthetic (immediacy, enjoyment, despair), ethical (duty, self-choice, the universal), religious (faith, the absolute paradox, the single individual before God) — not a dialectical progression but existential options requiring a leap between them"
+
+  - id: "eo-either-or-choice"
+    fingerprint: "Either/Or is the word before which the floodgates of subjectivity are opened"
+    text: "Either/Or is the word before which the floodgates of subjectivity are opened."
+    terms:
+      "either/or":
+        substrate: "Enten–Eller"
+        gloss: "The fundamental structure of genuine choice as Kierkegaard understands it — not a Both/And mediation (as in Hegel) but an irreducible disjunction that calls the individual to commit; the title names the form of freedom itself"
+      "subjectivity":
+        substrate: "Subjektivitet"
+        gloss: "For Kierkegaard, the medium of truth — truth is not a correspondence relation between propositions and facts but the mode of appropriation in which an existing individual stands related to something with infinite personal concern; 'subjectivity is truth'"
+      "the single individual":
+        substrate: "den Enkelte"
+        gloss: "Kierkegaard's central category — the individual in their irreducible singularity, who cannot be subsumed under a universal without existential remainder; the category that stands against Hegelian system and mass politics alike"

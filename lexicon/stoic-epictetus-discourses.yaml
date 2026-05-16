@@ -1,0 +1,53 @@
+source:
+  title: "Discourses"
+  author: "Epictetus"
+  translation: "George Long (1877), public domain"
+  language: "Greek"
+  tradition: "Stoic"
+
+passages:
+  - id: "discourses-on-power-a"
+    fingerprint: "Of all the faculties (except that which I shall soon mention"
+    terms:
+      "capable of contemplating itself":
+        substrate: "prohairesis"
+        gloss: "The faculty of moral choice — uniquely self-examining; unlike grammar or music, it alone can assess its own outputs and approve or disapprove of them"
+      "approving or disapproving":
+        substrate: "synkatathesis"
+        gloss: "Assent — the act by which the rational faculty endorses or withholds endorsement of an impression; the pivot of Stoic ethics"
+
+  - id: "discourses-on-power-b"
+    fingerprint: "I must die. Must I then die lamenting? I must be put in ch"
+    terms:
+      "die lamenting":
+        substrate: "pathē"
+        gloss: "Passions — excessive impulses arising from false value-judgments; lamenting death treats it as a genuine evil rather than an adiaphoron"
+      "go into exile":
+        substrate: "adiaphoron"
+        gloss: "An indifferent — exile is neither good nor bad in itself; only our prohairesis in response to it has moral valence"
+      "smiles and cheerfulness and contentment":
+        substrate: "eupatheiai"
+        gloss: "The well-reasoned feelings of the progressor — not suppression of affect but affect that tracks what is genuinely good rather than apparent goods"
+
+  - id: "discourses-on-character"
+    fingerprint: "To the rational animal only is the irrational intolerable"
+    terms:
+      "rational animal":
+        substrate: "zōon logikon"
+        gloss: "The Stoic definition of the human being — the animal whose defining characteristic is logos; this is what distinguishes our obligations from those of other creatures"
+      "irrational":
+        substrate: "alogon"
+        gloss: "Without logos — for a rational being, the alogon is the one thing genuinely contrary to nature and therefore genuinely intolerable"
+      "blows are not naturally intolerable":
+        substrate: "adiaphora"
+        gloss: "Physical pain is an indifferent; the Lacedaemonians demonstrate that enduring blows can be consistent with reason and therefore not contrary to nature"
+
+  - id: "discourses-on-god-and-man"
+    fingerprint: "God has introduced man to be a spectator of God and of his"
+    terms:
+      "appearances":
+        substrate: "phantasiai"
+        gloss: "Impressions — animals use phantasiai unreflectively; the human task is to examine them before granting assent; this is what makes humans interpreters rather than mere spectators"
+      "spectator … and interpreter":
+        substrate: "logos"
+        gloss: "Reason — the faculty that makes humans not merely passive receivers of impressions but active interpreters; logos is what distinguishes the human being's relation to the divine order from that of other animals"

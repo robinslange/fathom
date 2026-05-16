@@ -1,0 +1,111 @@
+source:
+  title: "Tao Te Ching"
+  author: "Laozi"
+  translation: "James Legge (1891), Sacred Books of the East vol. 39, public domain"
+  language: "Classical Chinese (pinyin)"
+  tradition: "Daoist"
+
+passages:
+  - id: "ttc-1-the-way"
+    fingerprint: "The Tao that can be trodden is not the enduring"
+    text: |
+      The Tao that can be trodden is not the enduring and unchanging Tao.
+      The name that can be named is not the enduring and unchanging name.
+      (Conceived of as) having no name, it is the Originator of heaven and earth;
+      (conceived of as) having a name, it is the Mother of all things.
+    terms:
+      "Tao":
+        substrate: "dào"
+        gloss: "The Way; the ultimate, ineffable principle underlying all existence — neither a god nor a force but the ground from which heaven, earth, and all things arise"
+      "the enduring and unchanging Tao":
+        substrate: "cháng dào"
+        gloss: "The constant or eternal Dao that lies beyond any name or linguistic capture; what can be named is already a particular manifestation, not the Dao itself"
+      "Originator of heaven and earth":
+        substrate: "tiān dì zhī shǐ"
+        gloss: "The nameless beginning-point of heaven and earth; in this aspect the Dao is apprehended as prior to all distinction and form"
+      "Mother of all things":
+        substrate: "wàn wù zhī mǔ"
+        gloss: "The named, generative aspect of the Dao from which the ten-thousand things issue; naming is a practical handle, not the thing itself"
+      "having no name":
+        substrate: "wú míng"
+        gloss: "The nameless; Laozi pairs this with yǒu míng (having a name) to mark the two ways of approaching the Dao — through its formless source or through its manifest products"
+
+  - id: "ttc-11-emptiness"
+    fingerprint: "The thirty spokes unite in the one nave"
+    text: |
+      The thirty spokes unite in the one nave; but it is on the empty space (for the axle),
+      that the use of the wheel depends.
+      Clay is fashioned into vessels; but it is on their empty hollowness, that their use depends.
+      The door and windows are cut out (from the walls) to form an apartment; but it is on the empty space (within), that its use depends.
+      Therefore, what has a (positive) existence serves for profitable adaptation, and what has not that for (actual) usefulness.
+    terms:
+      "empty space":
+        substrate: "wú"
+        gloss: "Non-being or emptiness; the passage demonstrates that absence and void are not deficiencies but the very source of utility — a Daoist inversion of ordinary value"
+      "positive existence":
+        substrate: "yǒu"
+        gloss: "Being or presence; the material substance of the wheel, pot, or wall — useful as scaffolding but not the locus of function itself"
+      "usefulness":
+        substrate: "yòng"
+        gloss: "Use or function; Laozi's paradox is that the usefulness of any vessel lies in what it lacks, not what it has"
+
+  - id: "ttc-25-great-and-returning"
+    fingerprint: "There was something undefined and complete, coming into existence"
+    text: |
+      There was something undefined and complete, coming into existence before Heaven and Earth.
+      How still it was and formless, standing alone, and undergoing no change, reaching everywhere and in no danger (of being exhausted)!
+      It may be regarded as the Mother of all things.
+      I do not know its name, and I give it the designation of the Tao (the Way or Course).
+      Making an effort (further) to give it a name I call it The Great.
+    terms:
+      "undefined and complete":
+        substrate: "hùn chéng"
+        gloss: "Undifferentiated wholeness; the Dao before any distinctions arise — not chaotic but primordially integral, lacking the divisions that characterise formed things"
+      "The Great":
+        substrate: "dà"
+        gloss: "Greatness; one of four secondary designations Laozi assigns — the Dao is great because it passes on, becomes remote, and returns, completing a cycle that encompasses all"
+      "Tao":
+        substrate: "dào"
+        gloss: "The Way; here Laozi acknowledges the name is a convenience ('I give it the designation') — the Dao precedes and exceeds any label"
+      "zì rán":
+        substrate: "zì rán"
+        gloss: "Self-so; spontaneity or naturalness — the Dao 'follows its own nature' without external model or constraint; the culminating principle in the chapter's hierarchy (humanity follows earth, earth follows heaven, heaven follows Dao, Dao follows zì rán)"
+
+  - id: "ttc-48-diminishing"
+    fingerprint: "He who devotes himself to learning (seeks) from day to day"
+    text: |
+      He who devotes himself to learning (seeks) from day to day to increase (his knowledge);
+      he who devotes himself to the Tao (seeks) from day to day to diminish (his doing).
+      He diminishes it and again diminishes it, till he arrives at doing nothing (on purpose).
+      Having arrived at this point of non-action, there is nothing which he does not do.
+    terms:
+      "diminish":
+        substrate: "sǔn"
+        gloss: "Reduction or lessening; the Daoist path moves against the grain of accumulation — each day's practice involves shedding artificial intention, convention, and striving rather than adding"
+      "doing nothing":
+        substrate: "wú wéi"
+        gloss: "Non-coercive, effortless action; not passivity or withdrawal but the absence of forced, self-serving intervention — when striving ceases, natural efficacy becomes total ('there is nothing which he does not do')"
+      "learning":
+        substrate: "wéi xué"
+        gloss: "Pursuit of conventional knowledge; Laozi contrasts this with wéi dào (pursuing the Dao) — the former adds, the latter subtracts, pointing to opposed epistemologies of self-cultivation"
+
+  - id: "ttc-81-sincere-words"
+    fingerprint: "Sincere words are not fine; fine words are not sincere"
+    text: |
+      Sincere words are not fine; fine words are not sincere.
+      Those who are skilled (in the Tao) do not dispute (about it); the disputatious are not skilled in it.
+      Those who know (the Tao) are not extensively learned; the extensively learned do not know it.
+      The sage does not accumulate (for himself). The more that he expends for others, the more does he possess of his own; the more that he gives to others, the more does he himself have.
+    terms:
+      "sincere words":
+        substrate: "xìn yán"
+        gloss: "Trustworthy or genuine speech; Laozi's paradox is that authentic expression of the Dao is plain and unadorned — refinement signals performed persuasion rather than truth"
+      "skilled in the Tao":
+        substrate: "shàn zhě"
+        gloss: "Those who are good or accomplished in the Way; mastery of the Dao is shown by not arguing about it — the Dao cannot be won in disputation"
+      "the sage":
+        substrate: "shèng rén"
+        gloss: "The sage or holy person; the exemplar who embodies the Dao's paradoxical logic — giving increases possession, non-accumulation produces abundance, in alignment with heaven's way of benefiting without harming"
+      "heaven's Tao":
+        substrate: "tiān zhī dào"
+        gloss: "The way of heaven; the closing chapter frames the sage's generosity as a mirror of how heaven and earth operate — benefiting all without competing"

@@ -1,0 +1,81 @@
+source:
+  title: "Groundwork of the Metaphysics of Morals"
+  author: "Immanuel Kant"
+  translation: "Thomas Kingsmill Abbott (1879), public domain"
+  language: "German"
+  tradition: "German Idealism"
+
+passages:
+  - id: "groundwork-categorical-imperative"
+    fingerprint: "Act only according to that maxim whereby thou canst at the same time will"
+    terms:
+      "maxim":
+        substrate: "Maxime"
+        gloss: "The subjective principle of action — the rule the agent in fact acts on in a given case, as opposed to the objective law that ought to govern all rational beings"
+      "categorical imperative":
+        substrate: "kategorischer Imperativ"
+        gloss: "A moral command that holds unconditionally, regardless of what the agent happens to desire; contrasted with hypothetical imperatives, which are binding only if one has a given end"
+      "universal law":
+        substrate: "allgemeines Gesetz"
+        gloss: "A rule binding on all rational beings without exception; the first formula of the categorical imperative requires that one's maxim be universalisable in this sense"
+      "will":
+        substrate: "Wille"
+        gloss: "The faculty of rational self-determination; for Kant, the morally relevant seat of agency — action has moral worth only when the will acts from duty, not inclination"
+
+  - id: "groundwork-humanity-formula"
+    fingerprint: "Act so that thou treat humanity, whether in thine own person or in that of any other"
+    terms:
+      "humanity":
+        substrate: "Menschheit"
+        gloss: "The rational nature in persons — what distinguishes human beings as ends in themselves rather than merely useful instruments"
+      "end in itself":
+        substrate: "Zweck an sich selbst"
+        gloss: "That which has absolute worth, not merely a price; persons have this status and must never be treated as mere means to another's ends"
+      "mere means":
+        substrate: "bloßes Mittel"
+        gloss: "Using a person solely as an instrument for one's own purposes without respect for their rational agency; the paradigmatic moral wrong in Kant's framework"
+      "person":
+        substrate: "Person"
+        gloss: "A rational being capable of self-legislation; personhood grounds dignity and is what makes beings subjects of moral obligation rather than objects of use"
+
+  - id: "groundwork-autonomy"
+    fingerprint: "the will is therefore not merely subject to the law, but subject to it in such a way"
+    terms:
+      "autonomy":
+        substrate: "Autonomie"
+        gloss: "Self-legislation; the will's capacity to give the moral law to itself through reason alone, without dependence on external authority or inclination — the ground of dignity"
+      "heteronomy":
+        substrate: "Heteronomie"
+        gloss: "Law-giving from outside the will — when action is determined by inclination, desire, or external command rather than by reason's own principle; the source of all spurious moral systems for Kant"
+      "rational being":
+        substrate: "vernünftiges Wesen"
+        gloss: "Any being that possesses reason and is therefore capable of moral legislation; includes but is not limited to human beings"
+      "duty":
+        substrate: "Pflicht"
+        gloss: "Moral obligation as apprehended by a finite rational being; acting from duty means acting because the law requires it, not merely in conformity with it"
+
+  - id: "groundwork-kingdom-of-ends"
+    fingerprint: "a kingdom of ends is possible only on the analogy of a kingdom of nature"
+    terms:
+      "kingdom of ends":
+        substrate: "Reich der Zwecke"
+        gloss: "A systematic union of all rational beings under common self-legislated moral laws, in which each is treated as an end and never merely as a means; the social ideal implicit in the categorical imperative"
+      "dignity":
+        substrate: "Würde"
+        gloss: "The unconditional, incomparable worth of rational beings — above all price and admitting no equivalent; the basis on which persons must be respected"
+      "price":
+        substrate: "Preis"
+        gloss: "Relative, exchangeable value; things with a price can be replaced by equivalents, whereas persons with dignity cannot — this distinction grounds the humanity formula"
+
+  - id: "groundwork-good-will"
+    fingerprint: "Nothing in the world — indeed nothing even beyond the world — can possibly be conceived"
+    terms:
+      "good will":
+        substrate: "guter Wille"
+        gloss: "The only thing good without qualification; a will that acts solely from duty and respect for the moral law, independent of its consequences or the talents it commands"
+      "inclination":
+        substrate: "Neigung"
+        gloss: "Sensuous desire or emotional tendency; morally relevant only insofar as acting from inclination must be distinguished from acting from duty — the latter alone has moral worth"
+      "reason":
+        substrate: "Vernunft"
+        gloss: "The highest cognitive faculty; in the practical sphere it legislates the moral law and grounds the categorical imperative — distinct from understanding (Verstand) and sensibility (Sinnlichkeit)"

@@ -1,0 +1,84 @@
+source:
+  title: "Principal Upanishads (selections)"
+  author: "(anonymous, c. 7th–3rd century BCE)"
+  translation: "F. Max Müller, Sacred Books of the East vols. 1 & 15 (1879–1884), public domain"
+  language: "Sanskrit (IAST)"
+  tradition: "Vedantic"
+
+passages:
+  - id: "chandogya-6-8-7-tat-tvam-asi"
+    fingerprint: "That which is the subtile essence, in it all that exists has"
+    terms:
+      "subtile essence":
+        substrate: "sat"
+        gloss: "Pure being; the undifferentiated ground of existence from which all things arise and to which they return — the topic of Uddālaka's instruction to Śvetaketu in Chāndogya 6"
+      "that thou art":
+        substrate: "tat tvam asi"
+        gloss: "One of the four great sayings (mahāvākya) of Vedānta: the identity of the individual self (ātman) with the ground of all being (brahman); not a moral imperative but an ontological declaration"
+      "self":
+        substrate: "ātman"
+        gloss: "The innermost self — not the empirical ego or the body-mind composite, but the witnessing awareness that underlies all experience; in Advaita Vedānta, ultimately non-different from brahman"
+      "brahman":
+        substrate: "brahman"
+        gloss: "The infinite, self-subsistent ground of all being; without qualities (nirguṇa) in its ultimate nature, yet the source from which the manifest world unfolds"
+
+  - id: "brihadaranyaka-2-3-6-neti-neti"
+    fingerprint: "Now therefore the description of brahman: Not so, not so"
+    terms:
+      "not so, not so":
+        substrate: "neti neti"
+        gloss: "The via negativa of Vedānta: brahman cannot be positively characterized because all characterizations are finite; the method systematically negates every predicate to point beyond the nameable"
+      "brahman":
+        substrate: "brahman"
+        gloss: "The infinite ground of being, here approached through negation because no finite description captures it; the point of neti neti is not agnosticism but the inadequacy of language to the infinite"
+      "imperishable":
+        substrate: "akṣara"
+        gloss: "The indestructible, the syllable, the unperishing; a name for brahman in its aspect as the unchanging substratum beneath all flux"
+
+  - id: "mandukya-2-consciousness"
+    fingerprint: "All this is brahman. This self is brahman."
+    terms:
+      "self":
+        substrate: "ātman"
+        gloss: "The innermost self, here declared identical to brahman — the central equation of Advaita Vedānta; the Māṇḍūkya explores this identity through the four states of consciousness"
+      "brahman":
+        substrate: "brahman"
+        gloss: "The self-luminous ground of all being; in the Māṇḍūkya, realized as identical with the ātman that witnesses waking, dream, and deep sleep alike"
+      "waking":
+        substrate: "jāgrat"
+        gloss: "The waking state; the first of the four avasthās (states) in the Māṇḍūkya's analysis — characterized by outward cognition through the fourteen organs"
+      "turīya":
+        substrate: "turīya"
+        gloss: "The fourth — not a state among the other three but the witnessing awareness underlying all states; pure consciousness without object, identified with ātman and brahman"
+
+  - id: "taittiriya-2-1-five-sheaths"
+    fingerprint: "Different from and within that which consists of the essence of food"
+    terms:
+      "sheath":
+        substrate: "kośa"
+        gloss: "Literally a sheath or scabbard; the Taittirīya identifies five nested kośas (food, breath, mind, intellect, bliss) that appear to constitute the self but are each superseded as the inquiry deepens"
+      "food":
+        substrate: "anna"
+        gloss: "The gross physical body, sustained by food — the outermost kośa; anna-maya-kośa designates the body as the 'sheath made of food'"
+      "breath":
+        substrate: "prāṇa"
+        gloss: "Vital breath or life-force; the prāṇa-maya-kośa is the energetic body animating the physical — here not simply respiration but the animating power behind biological life"
+      "bliss":
+        substrate: "ānanda"
+        gloss: "The bliss sheath (ānanda-maya-kośa) is the subtlest of the five, associated with deep sleep and causal experience; beyond it lies the ātman proper, which is not itself a kośa"
+      "brahman":
+        substrate: "brahman"
+        gloss: "Declared here as ānanda — bliss, being, consciousness (sat-cit-ānanda); the point of the sheath analysis is that the ātman cannot be any of the five kośas, since awareness itself cannot be an object"
+
+  - id: "mandukya-upanishad-om"
+    fingerprint: "Om — this syllable is all this."
+    terms:
+      "Om":
+        substrate: "oṃ / praṇava"
+        gloss: "The primordial sound-symbol from which all manifest speech is held to arise; in the Māṇḍūkya's analysis, its three phonemes (a-u-m) and the silence after correspond to the four states of consciousness; also called praṇava"
+      "all this":
+        substrate: "sarvam"
+        gloss: "The totality of existence — past, present, and future; the Māṇḍūkya opens by asserting that oṃ encompasses everything, including what is beyond time"
+      "syllable":
+        substrate: "akṣara"
+        gloss: "Syllable and also the imperishable; the double meaning is deliberate — oṃ is both the audible symbol and a name for the indestructible brahman it symbolizes"

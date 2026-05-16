@@ -1,0 +1,78 @@
+source:
+  title: "Ethics Demonstrated in Geometrical Order"
+  author: "Benedict de Spinoza"
+  translation: "R. H. M. Elwes (1883), public domain"
+  language: "Latin"
+  tradition: "Rationalist"
+
+passages:
+  - id: "eth-1-def-substance-attribute-mode"
+    fingerprint: "By substance I understand that which is in itself"
+    terms:
+      "substance":
+        substrate: "substantia"
+        gloss: "That which is in itself and is conceived through itself — 'id quod in se est, et per se concipitur'; its concept requires no other concept from which it must be formed; in the Ethics ultimately there is only one substance: God or Nature"
+      "attribute":
+        substrate: "attributum"
+        gloss: "That which the intellect perceives as constituting the essence of substance — 'id quod intellectus de substantia percipit, tanquam ejusdem essentiam constituens'; Spinoza recognises infinitely many attributes of the one substance, of which humans know only thought and extension"
+      "mode":
+        substrate: "modus"
+        gloss: "The modifications of substance, or that which exists in and is conceived through something other than itself — 'substantiae affectiones'; all finite, particular things are modes, not independent substances"
+
+  - id: "eth-1-def6-god"
+    fingerprint: "By God, I mean a being absolutely infinite"
+    terms:
+      "God":
+        substrate: "Deus"
+        gloss: "A being absolutely infinite — 'ens absolute infinitum' — consisting of an infinity of attributes each of which expresses an eternal and infinite essence; Spinoza's God is not a transcendent creator but the one immanent substance of which all things are modes"
+      "absolutely infinite":
+        substrate: "absolute infinitum"
+        gloss: "Unlimited in every respect, lacking no perfection — contrasted with 'infinite in its kind,' which would have limits across other kinds; God's absolute infinity means every attribute expressing eternal essence belongs to God"
+      "attribute":
+        substrate: "attributum"
+        gloss: "Each of the infinitely many aspects under which the one substance is constituted; within E1D6, it is the expression of an eternal and infinite essence — thought and extension being the two accessible to human intellect"
+
+  - id: "eth-3-conatus"
+    fingerprint: "Each thing, as far as it can by its own power, strives"
+    terms:
+      "conatus":
+        substrate: "conatus"
+        gloss: "The striving by which each thing endeavours to persevere in its being — 'conatus quo unaquaeque res in suo esse perseverare conatur'; Spinoza identifies this with the actual essence of the thing (E3p7), making self-preservation not a contingent drive but a metaphysical necessity"
+      "persevere in being":
+        substrate: "in suo esse perseverare"
+        gloss: "To continue to exist; the aim of the conatus — Spinoza's formulation in E3p6 is 'unaquaeque res, quantum in se est, in suo esse perseverare conatur'; the phrase marks a break from Aristotelian natural teleology by grounding striving in essence rather than external end"
+      "actual essence":
+        substrate: "actualis essentia"
+        gloss: "The essence of a thing considered as actively existing and exercising force; E3p7 identifies conatus with actual essence — the striving is not accidental to the thing but constitutes what that thing fundamentally is"
+
+  - id: "eth-3-affects-primary"
+    fingerprint: "By emotion I understand the modifications of the body"
+    terms:
+      "affect":
+        substrate: "affectus"
+        gloss: "A modification of the body that increases or diminishes its power of acting, together with the idea of that modification; Spinoza's account of the passions is part of his physics of power — affects are real changes in the body's capacity, not merely mental states"
+      "joy":
+        substrate: "laetitia"
+        gloss: "The passive state wherein the mind passes to a greater perfection — a transition to higher power of acting; in the Elwes translation rendered as 'pleasure'; paired with tristitia as one of the two primary affects from which all others derive (with cupiditas)"
+      "sorrow":
+        substrate: "tristitia"
+        gloss: "The passive state wherein the mind passes to a lesser perfection — a transition to lower power of acting; in the Elwes translation rendered as 'pain'; with laetitia and cupiditas it forms the triad of primitive affects from which Spinoza derives the full taxonomy"
+      "desire":
+        substrate: "cupiditas"
+        gloss: "Appetite together with consciousness of itself — 'appetitus cum ejusdem conscientia'; the basic drive of self-preservation as experienced from the inside; in humans, appetite becomes desire precisely through self-awareness, making cupiditas the affective face of conatus"
+
+  - id: "eth-5-sub-specie-aeternitatis"
+    fingerprint: "We conceive things as actual in two ways"
+    terms:
+      "under the form of eternity":
+        substrate: "sub specie aeternitatis"
+        gloss: "The mode of conceiving things not in relation to time and place but as contained in God and following from the necessity of the divine nature (E5p29); to conceive adequately is always to conceive sub specie aeternitatis — this is the perspective of reason and intuitive knowledge, not of imagination"
+      "adequate idea":
+        substrate: "idea adaequata"
+        gloss: "An idea that, considered in itself without relation to its object, has all the properties of a true idea — internal completeness; adequate ideas grasp things under the form of eternity and constitute the active rather than passive aspect of the mind"
+      "eternity":
+        substrate: "aeternitas"
+        gloss: "Existence itself insofar as it is conceived to follow necessarily from the definition of an eternal thing; Spinoza is explicit that eternity is not everlastingness in time — it is timeless necessity, the mode of God's existence and of whatever is conceived adequately"
+      "intuitive knowledge":
+        substrate: "scientia intuitiva"
+        gloss: "The third and highest kind of knowledge — knowledge of particular things under the form of eternity, proceeding from an adequate idea of God's attributes to adequate knowledge of the essence of things; it produces the highest satisfaction of mind and, for Spinoza, what endures of the mind after death"

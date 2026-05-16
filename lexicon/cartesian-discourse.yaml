@@ -1,0 +1,72 @@
+source:
+  title: "Discourse on the Method"
+  author: "René Descartes"
+  translation: "John Veitch (1901), public domain"
+  language: "French (original); Latin version prepared by Descartes (1644)"
+  tradition: "Rationalist"
+
+passages:
+  - id: "disc-1-good-sense"
+    fingerprint: "Good sense is of all things in the world the most equally"
+    terms:
+      "good sense":
+        substrate: "bon sens / bona mens"
+        gloss: "The capacity to judge well and to distinguish truth from error — what Descartes equates with reason (raison); the Discourse opens by declaring it equally distributed among all people, making method rather than native talent the key variable"
+      "reason":
+        substrate: "ratio"
+        gloss: "The faculty of right judgment; identical with good sense in Descartes' usage here — its universality among humans is what makes the failure to use it correctly a question of method, not of unequal endowment"
+
+  - id: "disc-2-four-rules"
+    fingerprint: "never to accept anything for true which I did not clearly"
+    terms:
+      "evidence":
+        substrate: "évidence / evidentia"
+        gloss: "The first rule of method: accept only what is manifest to careful attention as clear and distinct, avoiding all precipitancy and prejudice; the term carries Descartes' full criterion of epistemic warrant"
+      "analysis":
+        substrate: "analyse / analysis"
+        gloss: "The second rule: divide each problem into as many parts as possible for its adequate resolution; the methodical decomposition of complexity into simpler, manageable elements"
+      "synthesis":
+        substrate: "synthèse / synthesis"
+        gloss: "The third rule: proceed from the simplest and most easily known objects upward step by step to the more complex; the ordered ascent from clear foundations"
+      "enumeration":
+        substrate: "dénombrement / enumeratio"
+        gloss: "The fourth rule: make enumerations so complete and reviews so general that nothing is omitted; ensures the preceding three rules have been exhaustively applied"
+
+  - id: "disc-4-cogito"
+    fingerprint: "whilst I thus wished to think that all was false"
+    terms:
+      "I think therefore I am":
+        substrate: "cogito ergo sum"
+        gloss: "The first principle of Descartes' philosophy, as formulated in the Discourse (originally in French: je pense, donc je suis); because the act of doubting is itself a form of thinking, the doubter cannot doubt their own existence as a thinking thing"
+      "soul":
+        substrate: "âme / anima"
+        gloss: "The thinking subject whose existence the cogito establishes; in the Discourse Descartes uses 'soul' interchangeably with 'mind' — its essence is thought alone, wholly distinct from any bodily substance"
+      "sceptics":
+        substrate: "sceptiques"
+        gloss: "Those who deny the possibility of certain knowledge; Descartes invokes them as the extreme case — even their most extravagant doubts cannot undermine the cogito, which stands as bedrock against universal sceptical challenge"
+
+  - id: "disc-4-god-soul"
+    fingerprint: "After this I reflected upon the fact that I doubted"
+    terms:
+      "perfection":
+        substrate: "perfection / perfectio"
+        gloss: "Positive reality or completeness without privation; Descartes argues that because he clearly conceives of a being more perfect than himself, and such a being must exist (non-existence being an imperfection), God must exist"
+      "innate idea":
+        substrate: "idée innée / idea innata"
+        gloss: "A representation placed in the mind by God from birth rather than derived from experience or the imagination; the idea of God is the chief example — it could not have been fabricated from finite materials"
+      "veracity":
+        substrate: "véracité / veracitas"
+        gloss: "The divine guarantee that clear and distinct perceptions are true; because God is supremely perfect and therefore not a deceiver, everything Descartes perceives clearly and distinctly is guaranteed to correspond to reality"
+
+  - id: "disc-5-mechanism"
+    fingerprint: "I had described the rational soul, and shown that it cannot"
+    terms:
+      "rational soul":
+        substrate: "âme raisonnable / anima rationalis"
+        gloss: "The immaterial principle of thought that distinguishes humans from brutes; Descartes argues it cannot be derived from the potentiality of matter — unlike the animal spirits that explain sensation and movement in beasts, it must be specially created by God"
+      "animal spirits":
+        substrate: "esprits animaux / spiritus animales"
+        gloss: "The subtlest parts of the blood refined by the heart and circulated through the nerves; Descartes' mechanistic explanation of sensation, movement, and non-rational animal behaviour — a physiological rather than immaterial principle"
+      "machine":
+        substrate: "machine"
+        gloss: "The body considered as an automaton governed entirely by mechanical laws; Descartes extends Galilean mechanism to the body while insisting the rational soul cannot be captured by mechanical explanation"

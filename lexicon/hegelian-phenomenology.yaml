@@ -1,0 +1,75 @@
+source:
+  title: "Phenomenology of Spirit"
+  author: "G. W. F. Hegel"
+  translation: "J. B. Baillie (1910), public domain"
+  language: "German"
+  tradition: "German Idealism"
+
+passages:
+  - id: "phenom-geist-intro"
+    fingerprint: "The True is the whole. But the whole is nothing other than the essence consummating itself"
+    terms:
+      "spirit":
+        substrate: "Geist"
+        gloss: "Mind or Spirit in its most encompassing sense — the self-developing rational whole that unfolds through history, consciousness, and culture; neither a supernatural entity nor merely individual mind, but the collective self-realisation of reason"
+      "substance":
+        substrate: "Substanz"
+        gloss: "That which underlies and supports all determinations; Hegel's dialectical move is to show that substance must also be grasped as Subject — the whole is not a static ground but a self-actualising process"
+      "subject":
+        substrate: "Subjekt"
+        gloss: "The self-relating, self-determining activity that substance must be shown to be; truth is not an inert given but something spirit achieves by working through its own contradictions"
+
+  - id: "phenom-aufhebung"
+    fingerprint: "To supersede is at once to negate and to preserve"
+    terms:
+      "supersession":
+        substrate: "Aufhebung"
+        gloss: "Sublation — Hegel's signature term of art, irreducible in English: simultaneously to cancel (negate), to preserve (retain), and to elevate (raise to a higher level); the triple movement is essential, not optional"
+      "negation":
+        substrate: "Negation"
+        gloss: "The logical and dialectical moment of opposition or contradiction through which a determination undermines itself; the engine of Hegelian development — negation is not mere absence but productive contradiction"
+      "moment":
+        substrate: "Moment"
+        gloss: "A phase or structural component within a dialectical development that is both essential and incomplete in itself; each moment is preserved even as it is cancelled in the Aufhebung"
+
+  - id: "phenom-consciousness-sense-certainty"
+    fingerprint: "The knowledge or knowing which is at the start or is immediately our object cannot be anything else"
+    terms:
+      "sense-certainty":
+        substrate: "sinnliche Gewissheit"
+        gloss: "The most immediate and apparently richest form of consciousness — direct acquaintance with the singular here and now; Hegel shows it is in fact the poorest, since the 'this' it grasps dissolves into universal terms the moment one tries to say it"
+      "immediacy":
+        substrate: "Unmittelbarkeit"
+        gloss: "The condition of being given without mediation by concepts or relations; phenomenology begins here and shows that nothing is truly immediate — all content is mediated by language, thought, and intersubjective recognition"
+      "mediation":
+        substrate: "Vermittlung"
+        gloss: "The relational, conceptual, or historical conditioning through which all content is constituted; the counterpart to immediacy — genuine knowledge is always mediated, though it may appear immediate"
+
+  - id: "phenom-lord-bondsman"
+    fingerprint: "Self-consciousness exists in and for itself when, and by reason of the fact that, it so exists for another"
+    terms:
+      "recognition":
+        substrate: "Anerkennung"
+        gloss: "The mutual acknowledgement through which self-consciousness achieves its reality; a self-consciousness that is not recognised by another remains incomplete — the demand for recognition drives the lord-bondsman dialectic"
+      "lord":
+        substrate: "Herr"
+        gloss: "The dominant consciousness that has risked its life and secured recognition from the bondsman; it appears to be independent but is revealed to be parasitically dependent on the bondsman's labour and recognition"
+      "bondsman":
+        substrate: "Knecht"
+        gloss: "The subordinate consciousness that submitted in the life-and-death struggle; through formative labour on the world, the bondsman comes to see itself in what it has made — and thereby achieves a more genuine self-certainty than the lord"
+      "labour":
+        substrate: "Arbeit"
+        gloss: "The transforming activity through which the bondsman externalises itself into the object; Hegel's analysis anticipates later accounts of alienation and self-realisation through productive work"
+
+  - id: "phenom-unhappy-consciousness"
+    fingerprint: "The Unhappy Consciousness is the consciousness of self as a dual-natured, merely contradictory being"
+    terms:
+      "unhappy consciousness":
+        substrate: "das unglückliche Bewusstsein"
+        gloss: "A shape of spirit that is internally split — it identifies with the unchangeable infinite while experiencing itself as the changeable finite, and cannot unite the two; Hegel sees medieval religiosity as the historical embodiment of this structure"
+      "the unchangeable":
+        substrate: "das Unveränderliche"
+        gloss: "The infinite, divine, or ideal pole with which the unhappy consciousness tries to identify but from which it always falls back into finitude; the internal split is constitutive of this shape"
+      "alienation":
+        substrate: "Entfremdung"
+        gloss: "The condition in which spirit confronts its own productions as an alien, independent power; in the Phenomenology it characterises both the unhappy consciousness and later the culture-world (Bildung) where spirit has externalised itself into social forms it no longer recognises as its own"

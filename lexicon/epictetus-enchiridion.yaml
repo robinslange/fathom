@@ -1,0 +1,81 @@
+source:
+  title: "Enchiridion"
+  author: "Epictetus"
+  translation: "George Long (1890), public domain; sections 5, 8, 20, 43 verified against T.W. Higginson (1865), public domain"
+  language: "Greek"
+  tradition: "Stoic"
+
+passages:
+  - id: "enchiridion-1"
+    fingerprint: "Of things some are in our power, and others are not"
+    terms:
+      "in our power":
+        substrate: "eph' hēmin"
+        gloss: "What is genuinely up to us; the only proper domain of moral concern"
+      "opinion":
+        substrate: "hypolēpsis"
+        gloss: "The judgment we form about what happens; for Stoics, this is what makes events good or bad, not the events themselves"
+      "movement towards a thing":
+        substrate: "hormē"
+        gloss: "Impulse — the inclination that initiates action"
+      "desire":
+        substrate: "orexis"
+        gloss: "Reaching toward what one judges good"
+      "aversion":
+        substrate: "ekklisis"
+        gloss: "Turning away from what one judges bad"
+      "our own acts":
+        substrate: "prohairesis"
+        gloss: "The faculty of moral choice that defines who we are"
+      "body, property, reputation, offices":
+        substrate: "adiaphora"
+        gloss: "Indifferents — things that affect us but not our virtue, neither good nor bad in themselves"
+
+  - id: "enchiridion-5"
+    fingerprint: "Men are disturbed not by things, but by the views which they"
+    terms:
+      "views":
+        substrate: "hypolēpseis"
+        gloss: "Plural of hypolēpsis — the judgments or opinions through which we interpret events; the site where disturbance originates"
+      "disturbed":
+        substrate: "tarattō"
+        gloss: "To be thrown into disorder; the Stoic claim is that tarattō has its seat in our assent, not in external happenings"
+      "uninstructed person":
+        substrate: "idiōtēs"
+        gloss: "One who has not begun philosophical training; literally a private person, here meaning philosophically untutored"
+      "entering upon instruction":
+        substrate: "prokoptōn"
+        gloss: "The progressor — someone actively advancing toward virtue though not yet a sage"
+
+  - id: "enchiridion-8"
+    fingerprint: "Demand not that events should happen as you wish; but wish"
+    terms:
+      "events should happen as you wish":
+        substrate: "orexis"
+        gloss: "Desire directed at externals — the source of frustration when reality does not comply; Epictetus urges redirecting desire toward what is eph' hēmin"
+      "wish them to happen as they do happen":
+        substrate: "homologia tēi phusei"
+        gloss: "Living in agreement with nature — the Stoic telos; here expressed as the practical stance of consenting to the logos as it unfolds rather than opposing it"
+
+  - id: "enchiridion-20"
+    fingerprint: "Remember that it is not he who gives abuse or blows, who"
+    terms:
+      "view we take":
+        substrate: "hypolēpsis"
+        gloss: "The evaluative judgment that converts a neutral event into an affront; without our assent the blow is merely physical"
+      "bewildered by appearances":
+        substrate: "phantasia"
+        gloss: "The impression that presents itself to the mind; the danger is assenting to a phantasia before examining it"
+      "provokes you":
+        substrate: "synkatathesis"
+        gloss: "Assent — here the implicit point that provocation only succeeds when we grant assent to the impression of being wronged"
+
+  - id: "enchiridion-43"
+    fingerprint: "Everything has two handles: one by which it may be borne,"
+    terms:
+      "by which it may be borne":
+        substrate: "eph' hēmin"
+        gloss: "The handle that is ours to grasp — the aspect of any situation that falls within our prohairesis; contrasted with the handle of injustice, which falls outside it"
+      "brother acts unjustly":
+        substrate: "adiaphoron"
+        gloss: "His injustice is an indifferent — not within our power to control; grasping it as if it were an evil is what makes the situation unbearable"

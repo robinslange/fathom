@@ -1,0 +1,52 @@
+source:
+  title: "Prajñāpāramitā-hṛdaya (Heart Sutra)"
+  author: "(anonymous, Sanskrit, c. 1st–2nd century CE; Chinese recension attributed to Xuanzang, 7th century)"
+  translation: "Edward Conze, Buddhist Wisdom Books (1958) — NOTE: Conze's translation remains in copyright. This file uses Max Müller's rendering of the short recension published in the Journal of the Royal Asiatic Society (1881), public domain."
+  language: "Sanskrit (IAST)"
+  tradition: "Mahāyāna / Prajñāpāramitā"
+
+passages:
+  - id: "heart-sutra-form-emptiness"
+    fingerprint: "Form is emptiness, emptiness is form"
+    terms:
+      "form":
+        substrate: "rūpa"
+        gloss: "The first of the five aggregates (skandhas) — material or bodily form; in the Heart Sūtra the equivalence of rūpa with śūnyatā demolishes the intuition that material things have inherent, independent existence"
+      "emptiness":
+        substrate: "śūnyatā"
+        gloss: "The emptiness of inherent self-existence; phenomena are not non-existent, but they exist only dependently (pratītyasamutpāda), never from their own side — śūnyatā is the mode of being of all phenomena, not a void behind them"
+      "skandha":
+        substrate: "skandha"
+        gloss: "Aggregate or heap; the five skandhas (rūpa, vedanā, saṃjñā, saṃskāra, vijñāna) are the constituents into which Abhidharma analysis dissolves what is conventionally called a 'person' — the Heart Sūtra's claim is that none of these aggregates has svabhāva"
+
+  - id: "heart-sutra-no-marks"
+    fingerprint: "All phenomena are marked with emptiness; they are not produced"
+    terms:
+      "marked with emptiness":
+        substrate: "sarva-dharmāḥ śūnyatā-lakṣaṇāḥ"
+        gloss: "All phenomena have emptiness as their characteristic mark; lakṣaṇa (mark, characteristic) is the same term used in the 'three marks' of Theravāda — the Prajñāpāramitā generalizes the insight to the ontological status of all dharmas, not only conditioned ones"
+      "not produced":
+        substrate: "anutpanna"
+        gloss: "Unproduced; in Madhyamaka analysis, phenomena lack a real moment of arising because nothing arises from its own side — anutpanna does not deny conventional arising but denies ultimate, inherent origination"
+      "phenomena":
+        substrate: "dharmāḥ"
+        gloss: "All the elementary constituents of experience — in Mahāyāna usage, dharmāḥ includes both conditioned (saṃskṛta) and unconditioned (asaṃskṛta) dharmas; the Heart Sūtra's radicalism is that even the unconditioned is empty of svabhāva"
+      "svabhāva":
+        substrate: "svabhāva"
+        gloss: "Own-nature or inherent existence; what Madhyamaka denies of all dharmas — to exist by svabhāva would be to exist independently, non-relationally, and unchangingly; the emptiness of svabhāva is what śūnyatā means"
+
+  - id: "heart-sutra-no-attainment"
+    fingerprint: "There is no knowledge, no attainment, and no non-attainment"
+    terms:
+      "knowledge":
+        substrate: "jñāna"
+        gloss: "Here negated in the ultimate register: in emptiness, there is no jñāna that stands apart as a subject grasping an object — the wisdom of the prajñāpāramitā does not add something to a self that possesses it"
+      "attainment":
+        substrate: "prāpti"
+        gloss: "Attainment or acquisition; negated to forestall the reification of nirvāṇa as a prize to be obtained — in Madhyamaka, nirvāṇa is itself śūnya; grasping at attainment is a subtle form of the craving that perpetuates suffering"
+      "wisdom":
+        substrate: "prajñā"
+        gloss: "Insight-wisdom; prajñāpāramitā is 'the perfection of wisdom' — the direct seeing of śūnyatā; in Mahāyāna soteriology it is paired with karuṇā (compassion) as the two wings of the bodhisattva path; cognate with Pali paññā but used in a distinctively Mahāyāna conceptual register"
+      "bodhisattva":
+        substrate: "bodhisattva"
+        gloss: "A being oriented toward awakening for the sake of all sentient beings; the Prajñāpāramitā sūtras are addressed to and practised by bodhisattvas — the Heart Sūtra's speaker, Avalokiteśvara, exemplifies the prajñā that the bodhisattva path cultivates"

@@ -1,0 +1,61 @@
+source:
+  title: "Thus Spake Zarathustra"
+  author: "Friedrich Nietzsche"
+  translation: "Thomas Common (1909), public domain"
+  language: "German"
+  tradition: "Existentialism (proto)"
+
+passages:
+  - id: "zarathustra-prologue-3-overman"
+    fingerprint: "I TEACH YOU THE SUPERMAN. Man is something that is to be surpassed."
+    text: "I TEACH YOU THE SUPERMAN. Man is something that is to be surpassed. What have ye done to surpass man? All beings hitherto have created something beyond themselves: and ye want to be the ebb of that great tide, and would rather go back to the beast than surpass man?"
+    terms:
+      "Superman":
+        substrate: "Übermensch"
+        gloss: "The Overman — not a racial or political ideal but the symbol of humanity's self-overcoming; the being who creates values rather than inheriting them, who affirms life in its full tragic character without recourse to otherworldly consolation"
+      "surpassing":
+        substrate: "Überwindung"
+        gloss: "Self-overcoming — the core movement Nietzsche assigns to all genuine life; not domination of others but the continual creative transcendence of one's present form; the Overman is its highest expression"
+
+  - id: "zarathustra-prologue-5-last-man"
+    fingerprint: "What is love? What is creation? What is longing? What is a star?"
+    text: "\"What is love? What is creation? What is longing? What is a star?\"--so asketh the last man and blinketh. The earth hath then become small, and on it there hoppeth the last man who maketh everything small. His species is ineradicable like that of the ground-flea; the last man liveth longest."
+    terms:
+      "the last man":
+        substrate: "der letzte Mensch"
+        gloss: "Nietzsche's counter-image to the Overman — the person who has renounced all striving, creativity, and danger in favour of comfort, equality, and small pleasures; the terminus of the herd instinct, presented as the greatest danger to human greatness"
+      "making everything small":
+        substrate: "Alles-kleiner-Machen"
+        gloss: "The levelling tendency of the last man — reducing every distinction of excellence to mediocrity, every aspiration to utility, every nobility to resentment; the cultural logic of mass modernity as Nietzsche diagnoses it"
+
+  - id: "zarathustra-1-three-metamorphoses"
+    fingerprint: "Three metamorphoses of the spirit do I designate to you"
+    text: "Three metamorphoses of the spirit do I designate to you: how the spirit becometh a camel, the camel a lion, and the lion at last a child. Innocence is the child, and forgetfulness, a new beginning, a game, a self-rolling wheel, a first movement, a holy Yea."
+    terms:
+      "the camel":
+        substrate: "das Kamel"
+        gloss: "The first metamorphosis — the reverent spirit that takes on the heaviest burdens (duty, tradition, humility) and bears them into the desert; represents the 'thou shalt' of inherited morality, including the ascetic ideal"
+      "the lion":
+        substrate: "der Löwe"
+        gloss: "The second metamorphosis — the spirit that seizes freedom by negating the 'thou shalt'; it can destroy old values and claim sovereignty but cannot yet create new ones; its 'I will' is still reactive"
+      "the child":
+        substrate: "das Kind"
+        gloss: "The third metamorphosis — the creative spirit that says a holy Yes; innocence and forgetfulness enable a new beginning, creation ex nihilo from abundance rather than negation; the figure of the Overman's creative capacity"
+      "self-rolling wheel":
+        substrate: "sich selbst rollendes Rad"
+        gloss: "Nietzsche's image for self-propelled creation — the child/creator who moves from intrinsic vitality rather than external command or reactive negation; autonomous self-legislation rather than heteronomy"
+
+  - id: "zarathustra-eternal-recurrence"
+    fingerprint: "Everything goeth, everything returneth; eternally rolleth the wheel of existence."
+    text: "Everything goeth, everything returneth; eternally rolleth the wheel of existence. Everything dieth, everything blossometh forth again; eternally runneth on the year of existence. Everything breaketh, everything is integrated anew; eternally buildeth itself the same house of existence."
+    source_note: "From 'The Convalescent,' Part III — Zarathustra's animals recite the doctrine back to him. Thomas Common translation (1909), public domain. Gutenberg pg1998.txt is Part I only; this passage from Part III should be verified against the complete Common translation before production use."
+    terms:
+      "eternal recurrence":
+        substrate: "ewige Wiederkunft des Gleichen"
+        gloss: "The thought that each moment of existence recurs eternally and identically — Nietzsche's 'most abysmal thought'; not a cosmological thesis but an existential test: can you will your life such that you would will its eternal return without alteration?"
+      "wheel of existence":
+        substrate: "Rad des Seins"
+        gloss: "Nietzsche's image for the cyclical self-return of all things; the wheel recurs but also rolls — combining eternal sameness with perpetual motion; to affirm it is to affirm necessity without escape"
+      "amor fati":
+        substrate: "amor fati"
+        gloss: "Love of fate — the unconditional affirmation of existence including its suffering and necessity; the attitude that redeems eternal recurrence from nihilism by transforming 'it was' into 'thus I willed it'; the will to power's highest expression"

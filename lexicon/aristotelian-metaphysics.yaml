@@ -1,0 +1,72 @@
+source:
+  title: "Metaphysics"
+  author: "Aristotle"
+  translation: "W. D. Ross (1924), public domain"
+  language: "Greek"
+  tradition: "Aristotelian"
+
+passages:
+  - id: "meta-1-1-desire-to-know"
+    fingerprint: "ALL men by nature desire to know. An indication of this"
+    terms:
+      "desire to know":
+        substrate: "oregontai tou eidenai"
+        gloss: "The natural inclination toward knowledge and understanding; Aristotle opens with this to establish wisdom (sophia) as the culmination of a drive present in all living things"
+      "senses":
+        substrate: "aisthēseis"
+        gloss: "Perceptual capacities; loved for themselves, not only for their utility — they are the first stage in the ascent from sensation through memory, experience, and art to epistēmē"
+
+  - id: "meta-7-1-substance-primary"
+    fingerprint: "the question which was raised of old and is raised now and always"
+    terms:
+      "being":
+        substrate: "to on"
+        gloss: "That which is; the question of what being is reduces, for Aristotle, to the question of what substance is"
+      "substance":
+        substrate: "ousia"
+        gloss: "The primary sense of being; that which exists independently and is neither predicated of a subject nor present in one — the bedrock on which all other categories depend"
+
+  - id: "meta-7-3-matter-form-composite"
+    fingerprint: "By the matter I mean, for instance, the bronze, by the shape"
+    terms:
+      "matter":
+        substrate: "hylē"
+        gloss: "The material substratum — what persists through change and from which a thing is made, but which is indefinite in itself until given form"
+      "form":
+        substrate: "morphē / eidos"
+        gloss: "The actualized structure or essence that makes a lump of matter into a determinate thing; more real and prior to matter in substance, definition, and knowledge"
+      "compound":
+        substrate: "to synolon"
+        gloss: "The concrete composite of matter and form — the particular statue or organism that exists in the world; ontologically posterior to its form"
+      "essence":
+        substrate: "to ti ēn einai"
+        gloss: "Literally 'the what it was to be' for a thing — the definition that captures what makes something the kind of thing it is; Aristotle's technical term for the formal cause considered as identity"
+
+  - id: "meta-5-2-four-causes"
+    fingerprint: "causes are spoken of in four senses"
+    terms:
+      "material cause":
+        substrate: "hylikon aition"
+        gloss: "That from which a thing comes to be and which persists in it — the bronze of a statue, the letters of a syllable"
+      "formal cause":
+        substrate: "eidikon aition"
+        gloss: "The form or pattern; the definition of the essence — what makes the matter into this kind of thing rather than another"
+      "efficient cause":
+        substrate: "kinētikon aition"
+        gloss: "The primary source of change or rest; the agent or producer — what Aristotle also calls the moving cause"
+      "final cause":
+        substrate: "telikon aition"
+        gloss: "The end (telos) — that for the sake of which something is done or comes to be; purpose governs and explains the other causes"
+
+  - id: "meta-9-6-potency-actuality"
+    fingerprint: "Actuality, then, is the existence of a thing not in the way which we express by 'potentially'"
+    terms:
+      "potentiality":
+        substrate: "dynamis"
+        gloss: "A capacity or power to be otherwise; the primary sense is a source of change in another thing, or in the same thing insofar as it is other"
+      "actuality":
+        substrate: "energeia"
+        gloss: "Being-at-work; the exercise of a capacity, as distinct from merely having it — waking vs. sleeping, seeing vs. having eyes"
+      "complete actuality":
+        substrate: "entelecheia"
+        gloss: "Full realization; having-reached-one's-end — often used by Aristotle interchangeably with energeia but emphasizing the state of completion rather than the activity"

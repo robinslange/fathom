@@ -1,0 +1,18 @@
+[package]
+name = "fathom-engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+description = "Fathom backend abstraction: llama.cpp (bundled), Ollama (connector), HTTP (cloud)"
+
+[dependencies]
+anyhow.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+reqwest.workspace = true
+async-trait.workspace = true
+tokio.workspace = true

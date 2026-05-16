@@ -1,0 +1,68 @@
+source:
+  title: "Beyond Good and Evil"
+  author: "Friedrich Nietzsche"
+  translation: "Helen Zimmern (1907), public domain"
+  language: "German"
+  tradition: "Existentialism (proto)"
+
+passages:
+  - id: "bge-13-will-to-power"
+    fingerprint: "Psychologists should bethink themselves before putting down"
+    text: "Psychologists should bethink themselves before putting down the instinct of self-preservation as the cardinal instinct of an organic being. A living thing seeks above all to DISCHARGE its strength--life itself is WILL TO POWER; self-preservation is only one of the indirect and most frequent RESULTS thereof."
+    terms:
+      "will to power":
+        substrate: "Wille zur Macht"
+        gloss: "The fundamental drive of all life — not a lust for domination over others but the basic tendency to overcome, expand, express, and create; self-preservation is merely a derivative consequence, not the root"
+      "discharge":
+        substrate: "Auslassen / Entladung"
+        gloss: "The outward expression or expenditure of force; Nietzsche's physiology conceives of living things as systems of accumulated force seeking release, not conservative systems seeking equilibrium"
+
+  - id: "bge-36-world-as-will"
+    fingerprint: "Supposing that nothing else is 'given' as real but our world of desires"
+    text: "Supposing that nothing else is 'given' as real but our world of desires and passions, that we cannot sink or rise to any other 'reality' but just that of our impulses--for thinking is only a relation of these impulses to one another:--are we not permitted to make the attempt and to ask the question whether this which is 'given' does not SUFFICE, by means of our counterparts, for the understanding even of the so-called mechanical (or 'material') world?"
+    terms:
+      "impulses":
+        substrate: "Triebe"
+        gloss: "Drives or instincts; for Nietzsche, the actual matter of mental life — thinking is a surface relation among drives, not an independent faculty that governs them"
+      "mechanical world":
+        substrate: "mechanische Welt"
+        gloss: "The materialist-scientific picture of reality as matter in motion; Nietzsche proposes that this picture may itself be a simplified projection from the inner world of will and drive, not its foundation"
+
+  - id: "bge-260-master-slave-morality"
+    fingerprint: "In a tour through the many finer and coarser moralities which have"
+    text: "In a tour through the many finer and coarser moralities which have hitherto prevailed or still prevail on the earth, I found certain traits recurring regularly together and connected with one another, until finally two primary types revealed themselves to me, and a radical distinction was brought to light. There is MASTER-MORALITY and SLAVE-MORALITY."
+    terms:
+      "master morality":
+        substrate: "Herren-Moral"
+        gloss: "The morality of the noble type — values originate in self-affirmation; 'good' is defined first as the qualities the noble person finds in itself (strength, courage, generosity), and 'bad' is the merely contemptible, the low, without rancour"
+      "slave morality":
+        substrate: "Sklaven-Moral"
+        gloss: "The morality that originates in the reaction of the oppressed — 'good' is defined negatively against the 'evil' of the powerful; its characteristic virtues (pity, patience, humility) are the qualities useful to the suffering"
+      "noble type":
+        substrate: "vornehme Mensch"
+        gloss: "The self-determining individual who creates values out of abundance rather than need; characterised by pathos of distance — a felt difference of rank that makes comparison with the herd irrelevant"
+
+  - id: "bge-2-perspectivism"
+    fingerprint: "The falseness of an opinion is not for us any objection to it"
+    text: "The falseness of an opinion is not for us any objection to it: it is here, perhaps, that our new language sounds most strangely. The question is, how far an opinion is life-furthering, life-preserving, species-preserving, perhaps species-rearing; and we are fundamentally inclined to maintain that the falsest opinions (to which the synthetic judgments a priori belong) are the most indispensable to us."
+    terms:
+      "life-furthering":
+        substrate: "lebensfördernd"
+        gloss: "That which promotes the conditions for life and its enhancement; Nietzsche's criterion for evaluating beliefs is not their correspondence to fact but their value for living — a strongly perspectivist and anti-foundationalist standard"
+      "synthetic judgments a priori":
+        substrate: "synthetische Urteile a priori"
+        gloss: "Kant's category of necessary, substantive judgments that go beyond experience; Nietzsche treats these not as transcendental truths but as useful fictions — errors that have proved indispensable for the preservation of a certain type of life"
+      "perspectivism":
+        substrate: "Perspektivismus"
+        gloss: "The view that all knowing is interpretation from a particular standpoint; there is no view from nowhere, only perspectives — more or fewer, better or worse for life, but never simply true or false in a correspondence sense"
+
+  - id: "bge-257-aristocratic-order"
+    fingerprint: "Every elevation of the type 'man,' has hitherto been the work"
+    text: "Every elevation of the type 'man,' has hitherto been the work of an aristocratic society--and so will it always be: a society which believes in a long scale of gradations of rank and differences of worth among human beings, and which needs slavery in some sense or other."
+    terms:
+      "pathos of distance":
+        substrate: "Pathos der Distanz"
+        gloss: "The felt sense of rank-difference that characterises the noble type — the aristocratic consciousness of being qualitatively different from the herd; this distance is the psychological precondition for creating new values"
+      "gradations of rank":
+        substrate: "Rangordnung"
+        gloss: "The order of rank — Nietzsche's vision of a natural hierarchy of human types based on power, creativity, and self-mastery, not birth or social convention; the project of establishing Rangordnung is central to his positive ethics"

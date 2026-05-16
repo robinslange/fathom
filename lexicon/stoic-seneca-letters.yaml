@@ -1,0 +1,62 @@
+source:
+  title: "Epistulae Morales ad Lucilium"
+  author: "Seneca"
+  translation: "Richard Mott Gummere (1917), public domain"
+  language: "Latin"
+  tradition: "Stoic"
+
+passages:
+  - id: "epistulae-1-3"
+    fingerprint: "Nothing, Lucilius, is ours, except time. We were entrusted"
+    terms:
+      "ours":
+        substrate: "nostrum"
+        gloss: "What is truly ours — Seneca's Latin equivalent of Epictetus's eph' hēmin; time is the singular possession that cannot be taken without our complicity"
+      "fleeting and slippery":
+        substrate: "fugax ac lubricus"
+        gloss: "Fleeting and slippery (fugacis ac lubricae in the Latin) — Seneca's characterisation of time as a substance that eludes possession; the point is not to hoard it but to inhabit each moment deliberately"
+      "the one loan which even a grateful recipient cannot repay":
+        substrate: "tempus"
+        gloss: "Time — Seneca treats it as the foundational resource for the philosophical life; squandering it is the cardinal waste, worse than any financial extravagance"
+
+  - id: "epistulae-1-2"
+    fingerprint: "Whatever years lie behind us are in death's hands. Therefore"
+    terms:
+      "dying daily":
+        substrate: "intellegant se cotidie mori"
+        gloss: "They understand that they die daily — the Latin of this passage (Ep. 1.2); death is not a future event but a continuous process; each passing day belongs to death's dominion"
+      "hold every hour in your grasp":
+        substrate: "omnes horas complectere"
+        gloss: "Embrace all the hours — Seneca's imperative; complectere (embrace, enfold) implies active possession rather than passive receipt; the counterpart to the passive loss described by differtur"
+      "while we are postponing, life speeds by":
+        substrate: "dum differtur vita transcurrit"
+        gloss: "Seneca's epigram on procrastination — the direct Latin of this passage; differtur (passive: 'is deferred') locates the agency in habit and inattention rather than deliberate choice"
+
+  - id: "epistulae-7"
+    fingerprint: "To consort with the crowd is harmful; there is no person wh"
+    terms:
+      "crowd":
+        substrate: "turba"
+        gloss: "The crowd or mob — for Seneca, contact with the turba is morally dangerous not because of physical risk but because vices are contagious; bad character impresses itself on our own"
+      "vice attractive to us":
+        substrate: "vitium"
+        gloss: "Vice — the Latin equivalent of kakía; Seneca's claim is that turba transmits vitia by habituation and imitation before we notice the infection"
+      "withdraw into yourself":
+        substrate: "recede in te ipse quantum potes"
+        gloss: "Withdraw into yourself as much as you can — Seneca's direct imperative in Letter 7; parallels Marcus's anachōrēsis into the hēgemonikon; philosophical self-possession as the only reliable protection against moral contagion"
+
+  - id: "epistulae-47"
+    fingerprint: "They are slaves. Nay, rather they are men. Slaves! No, com"
+    terms:
+      "slaves":
+        substrate: "servi"
+        gloss: "Slaves — Seneca interrogates the word itself; servi denotes legal status, but Fortune has equal rights over the legally free; the moral category cuts across the legal one"
+      "comrades":
+        substrate: "contubernales"
+        gloss: "Tent-companions or comrades — military term for those who share a billet; Seneca's deliberate choice elevates slaves to the solidarity of soldiers, not the deference of subordinates"
+      "Fortune has equal rights over slaves and free men alike":
+        substrate: "fortuna"
+        gloss: "Fortune — the Stoic adiaphoron par excellence; external status is a fortuna-assignment, not a nature-assignment; this is the philosophical basis for Seneca's egalitarian ethics"
+      "no servitude is more disgraceful than that which is self-imposed":
+        substrate: "nulla servitus turpior est quam voluntaria"
+        gloss: "No servitude is more shameful than the voluntary kind — Seneca's culminating irony; the legally free man enslaved to lust or ambition is in a worse condition than the legal slave, because his chains are self-forged"
