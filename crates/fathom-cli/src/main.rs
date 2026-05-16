@@ -198,7 +198,30 @@ fn read_input(file: &str) -> Result<String> {
 
 fn stderr_progress() -> bootstrap::ProgressCallback {
     use std::io::Write;
-    Box::new(|bytes, total| {
+    use std::sync::Mutex;
+    use std::time::{Duration, Instant};
+
+    struct Throttle {
+        last_drawn_bytes: u64,
+        last_draw_at: Instant,
+    }
+
+    let state = Mutex::new(Throttle {
+        last_drawn_bytes: 0,
+        last_draw_at: Instant::now() - Duration::from_secs(60),
+    });
+
+    Box::new(move |bytes, total| {
+        let mut s = state.lock().expect("progress mutex poisoned");
+        let is_final = total.is_some_and(|t| bytes >= t);
+        let bytes_since = bytes.saturating_sub(s.last_drawn_bytes);
+        let elapsed = s.last_draw_at.elapsed();
+        if !is_final && bytes_since < 5_000_000 && elapsed < Duration::from_millis(200) {
+            return;
+        }
+        s.last_drawn_bytes = bytes;
+        s.last_draw_at = Instant::now();
+
         let bytes_mb = bytes / 1_000_000;
         match total {
             Some(t) => {
@@ -208,5 +231,8 @@ fn stderr_progress() -> bootstrap::ProgressCallback {
             None => eprint!("\r  {} MB", bytes_mb),
         }
         let _ = std::io::stderr().flush();
+        if is_final {
+            eprintln!();
+        }
     })
 }
