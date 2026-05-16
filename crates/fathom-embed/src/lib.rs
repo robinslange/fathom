@@ -47,24 +47,20 @@ static STATE: OnceCell<EmbedderState> = OnceCell::new();
 /// Initialise the embedder. Must be called once before any `embed()` or
 /// `embed_batch()`. Subsequent calls are no-ops (initialised state stands).
 pub fn init_embedder(model_path: &Path, tokenizer_path: &Path) -> Result<()> {
-    if STATE.get().is_some() {
-        return Ok(());
-    }
-    let session = Session::builder()
-        .map_err(|e| anyhow!("ort Session::builder: {e}"))?
-        .with_optimization_level(GraphOptimizationLevel::Level3)
-        .map_err(|e| anyhow!("set optimization: {e}"))?
-        .commit_from_file(model_path)
-        .map_err(|e| anyhow!("commit model from {:?}: {e}", model_path))?;
-    let tokenizer = Tokenizer::from_file(tokenizer_path)
-        .map_err(|e| anyhow!("load tokenizer: {}", e))?;
-    let state = EmbedderState {
-        session: Mutex::new(session),
-        tokenizer,
-    };
-    STATE
-        .set(state)
-        .map_err(|_| anyhow!("embedder already initialised"))?;
+    STATE.get_or_try_init(|| {
+        let session = Session::builder()
+            .map_err(|e| anyhow!("ort Session::builder: {e}"))?
+            .with_optimization_level(GraphOptimizationLevel::Level3)
+            .map_err(|e| anyhow!("set optimization: {e}"))?
+            .commit_from_file(model_path)
+            .map_err(|e| anyhow!("commit model from {:?}: {e}", model_path))?;
+        let tokenizer = Tokenizer::from_file(tokenizer_path)
+            .map_err(|e| anyhow!("load tokenizer: {}", e))?;
+        Ok::<EmbedderState, anyhow::Error>(EmbedderState {
+            session: Mutex::new(session),
+            tokenizer,
+        })
+    })?;
     Ok(())
 }
 
