@@ -1,9 +1,26 @@
 :root {
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  /* Editorial reader-mode palette */
+  --paper: #f7f4ec;
+  --paper-deep: #efeadd;
+  --ink: #1f1d1a;
+  --ink-soft: #4a463e;
+  --ink-faint: #8a857a;
+  --rule: #d8d2c2;
+  --accent: #8a5a2b;
+  --accent-soft: #c89866;
+  --error: #9a3a1f;
+  --ok: #4a6a3a;
+
+  /* Fonts */
+  --serif: "Iowan Old Style", "Charter", "Source Serif Pro", Georgia, "Times New Roman", serif;
+  --sans: ui-sans-serif, -apple-system, "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace;
+
+  font-family: var(--sans);
   font-size: 15px;
   line-height: 1.55;
-  color: #1a1a1a;
-  background: #fafaf7;
+  color: var(--ink);
+  background: var(--paper);
 }
 
 * {
@@ -18,8 +35,14 @@ body {
 button {
   font: inherit;
   cursor: pointer;
+  font-family: var(--sans);
 }
 
 textarea, button, input, select {
   font-family: inherit;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--ink);
 }

@@ -1146,6 +1146,7 @@ dependencies = [
  "anyhow",
  "fathom-core",
  "fathom-engine",
+ "once_cell",
  "serde",
  "serde_json",
  "tauri",
