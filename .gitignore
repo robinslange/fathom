@@ -23,3 +23,6 @@ apps/desktop/src-tauri/target/
 # Local
 .venv/
 *.log
+
+# Design notes (kept local, not part of the repo)
+docs/superpowers/
