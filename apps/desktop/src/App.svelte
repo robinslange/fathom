@@ -486,6 +486,16 @@
       <span class="searching error" title={embedderError}>embedder offline</span>
     {/if}
   </div>
+  <button
+    class="theme-toggle"
+    type="button"
+    onclick={cycleTheme}
+    title="Theme: {preferenceLabel(themePref)} (click to cycle)"
+    aria-label="Theme: {preferenceLabel(themePref)}, click to cycle"
+  >
+    <span aria-hidden="true">{preferenceGlyph(themePref)}</span>
+    <span class="theme-toggle-label">{preferenceLabel(themePref)}</span>
+  </button>
 </header>
 
 <main class="library">
@@ -772,6 +782,29 @@
   .searching.error {
     color: var(--error-ink);
     opacity: 0.85;
+  }
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: transparent;
+    color: inherit;
+    border: 1px solid var(--rule-strong);
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem;
+    cursor: pointer;
+  }
+  .theme-toggle:hover {
+    background: var(--accent-wash-hover);
+  }
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .theme-toggle-label {
+    letter-spacing: 0.04em;
   }
 
   .library {

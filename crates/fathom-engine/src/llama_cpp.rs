@@ -39,7 +39,12 @@ use tokio::sync::{mpsc, oneshot};
 // the native limit. v0.21 plans to swap "inject all terms" for a semantic-
 // ranked subset that fits in ~4k, at which point this can drop back down.
 const N_CTX: u32 = 32768;
+/// Default cap for plain-prose paraphrase output.
 const MAX_NEW_TOKENS: u32 = 2000;
+/// Cap for the JIT identify pass — short JSON like
+/// `{"terms": ["eudaimonia", "logos"]}`. The 2000-token default was
+/// generous enough to hide a noticeable identify-pass tail.
+const JSON_MAX_NEW_TOKENS: u32 = 256;
 const TEMPERATURE: f32 = 0.2;
 const SEED: u32 = 1234;
 
@@ -67,6 +72,7 @@ unsafe extern "C" fn void_log(
 /// One unit of work for the worker thread.
 struct Job {
     prompt: String,
+    max_new_tokens: u32,
     reply: oneshot::Sender<Result<String>>,
 }
 
@@ -119,7 +125,7 @@ impl LlamaCppBackend {
 fn worker_loop(model: LlamaModel, mut rx: mpsc::Receiver<Job>) {
     let mut ctx: Option<LlamaContext<'_>> = None;
     while let Some(job) = rx.blocking_recv() {
-        let result = decode_with_ctx(&model, &mut ctx, &job.prompt);
+        let result = decode_with_ctx(&model, &mut ctx, &job.prompt, job.max_new_tokens);
         // Caller may have dropped the oneshot if they were cancelled; ignore.
         let _ = job.reply.send(result);
     }
@@ -131,6 +137,7 @@ fn decode_with_ctx<'m>(
     model: &'m LlamaModel,
     ctx_slot: &mut Option<LlamaContext<'m>>,
     prompt: &str,
+    max_new_tokens: u32,
 ) -> Result<String> {
     let backend = get_backend()?;
 
@@ -181,7 +188,7 @@ fn decode_with_ctx<'m>(
     let mut n_decoded: u32 = 0;
     let mut pos = n_in;
 
-    while n_decoded < MAX_NEW_TOKENS {
+    while n_decoded < max_new_tokens {
         let token = sampler.sample(ctx, batch.n_tokens() - 1);
         sampler.accept(token);
 
@@ -204,12 +211,12 @@ fn decode_with_ctx<'m>(
     Ok(output)
 }
 
-#[async_trait]
-impl Backend for LlamaCppBackend {
-    async fn generate(&self, prompt: &str) -> Result<String> {
+impl LlamaCppBackend {
+    async fn dispatch(&self, prompt: &str, max_new_tokens: u32) -> Result<String> {
         let (reply_tx, reply_rx) = oneshot::channel();
         let job = Job {
             prompt: prompt.to_string(),
+            max_new_tokens,
             reply: reply_tx,
         };
         self.tx
@@ -220,10 +227,19 @@ impl Backend for LlamaCppBackend {
             .await
             .map_err(|_| anyhow!("llama worker dropped reply channel"))?
     }
+}
+
+#[async_trait]
+impl Backend for LlamaCppBackend {
+    async fn generate(&self, prompt: &str) -> Result<String> {
+        self.dispatch(prompt, MAX_NEW_TOKENS).await
+    }
 
     async fn generate_json(&self, prompt: &str) -> Result<String> {
-        // No GBNF grammar yet; the JIT identify pass tolerates loose JSON via parser fallbacks.
-        self.generate(prompt).await
+        // No GBNF grammar yet; the JIT identify pass tolerates loose JSON via
+        // parser fallbacks. The shorter cap is the speed win — identify
+        // responses are short structured JSON, not free prose.
+        self.dispatch(prompt, JSON_MAX_NEW_TOKENS).await
     }
 
     fn model_label(&self) -> &str {
