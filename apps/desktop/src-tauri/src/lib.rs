@@ -1,6 +1,3 @@
-use fathom_core::library::{
-    self, PassageSummary, ThemeSummary, TraditionSummary,
-};
 use fathom_core::runtime::{ManifestBook, Runtime, SearchHit, Shard};
 use fathom_core::{
     bootstrap, fathom_with_global_substrate, fathom_with_judge, judge, FathomResult, JudgeMode,
@@ -130,76 +127,6 @@ async fn paraphrase(app: AppHandle, args: ParaphraseArgs) -> Result<FathomResult
         JudgeMode::Always(None),
     )
     .await?)
-}
-
-#[tauri::command]
-fn library_traditions() -> Vec<TraditionSummary> {
-    library::list_traditions()
-}
-
-#[tauri::command]
-fn library_themes() -> Vec<ThemeSummary> {
-    library::list_themes()
-}
-
-#[tauri::command]
-fn library_passages(
-    tradition: Option<String>,
-    theme: Option<String>,
-) -> Result<Vec<PassageSummary>, AppError> {
-    Ok(match (tradition, theme) {
-        (Some(_), Some(_)) => return Err(anyhow::anyhow!(
-            "pass exactly one of `tradition` or `theme`, not both"
-        )
-        .into()),
-        (Some(t), None) => library::list_passages_by_tradition(&t),
-        (None, Some(t)) => library::list_passages_by_theme(&t),
-        (None, None) => library::list_all_passages(),
-    })
-}
-
-#[derive(Serialize)]
-pub struct PassageDetail {
-    pub id: String,
-    pub fingerprint: String,
-    pub author: String,
-    pub title: String,
-    pub translation: String,
-    pub language: String,
-    pub tradition: String,
-    pub themes: Vec<String>,
-    pub terms: Vec<TermView>,
-}
-
-#[derive(Serialize)]
-pub struct TermView {
-    pub term: String,
-    pub substrate: String,
-    pub gloss: String,
-}
-
-#[tauri::command]
-fn library_get_passage(id: String) -> Option<PassageDetail> {
-    library::get_passage(&id).map(|e| PassageDetail {
-        id: e.passage.id.clone(),
-        fingerprint: e.passage.fingerprint.clone(),
-        author: e.source.author.clone(),
-        title: e.source.title.clone(),
-        translation: e.source.translation.clone(),
-        language: e.source.language.clone(),
-        tradition: e.source.tradition.clone(),
-        themes: e.passage.themes.clone(),
-        terms: e
-            .passage
-            .terms
-            .iter()
-            .map(|(term, info)| TermView {
-                term: term.clone(),
-                substrate: info.substrate.clone(),
-                gloss: info.gloss.clone(),
-            })
-            .collect(),
-    })
 }
 
 #[derive(Serialize)]
@@ -417,10 +344,6 @@ pub fn run() {
     let app = tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             paraphrase,
-            library_traditions,
-            library_themes,
-            library_passages,
-            library_get_passage,
             library_manifest,
             library_search,
             library_load_book,
