@@ -477,7 +477,7 @@
         {query.trim().length > 0 ? "No hits for this query." : "Library is empty."}
       </p>
     {:else}
-      <ul>
+      <ul aria-label="Library">
         {#each leftListItems as item (item.gutenberg_id + ":" + item.chunk_id)}
           <li>
             <button
@@ -544,11 +544,12 @@
   <aside class="paraphrase-pane">
     <div class="tier-control">
       <span class="control-label">Depth</span>
-      <div class="tier-buttons">
+      <div class="tier-buttons" role="group" aria-label="Paraphrase depth">
         {#each ["simple", "standard", "scholarly"] as t (t)}
           <button
             class="tier-btn"
             class:active={tier === t}
+            aria-pressed={tier === t}
             onclick={() => (tier = t as Tier)}
           >
             {t}
@@ -556,6 +557,14 @@
         {/each}
       </div>
     </div>
+
+    <button
+      class="fathom-trigger"
+      onclick={paraphraseSelection}
+      disabled={paraphraseBusy || !loadedBook}
+    >
+      Fathom selection
+    </button>
 
     {#if lastSelectionText}
       <section class="selection-preview">
@@ -775,6 +784,33 @@
   .hit.active {
     background: rgba(179, 121, 62, 0.14);
   }
+  .hit:focus-visible,
+  .tier-btn:focus-visible,
+  .page-btn:focus-visible,
+  .fathom-trigger:focus-visible,
+  .retry:focus-visible {
+    outline: 2px solid #b3793e;
+    outline-offset: 2px;
+  }
+  .fathom-trigger {
+    width: 100%;
+    background: #b3793e;
+    color: #fffdf8;
+    border: 1px solid #b3793e;
+    padding: 0.45rem 0.7rem;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-bottom: 0.7rem;
+  }
+  .fathom-trigger:hover:not(:disabled) {
+    background: #9d6831;
+  }
+  .fathom-trigger:disabled {
+    opacity: 0.55;
+    cursor: default;
+  }
   .hit-meta {
     font-family: "IBM Plex Sans", sans-serif;
     font-size: 0.85rem;
@@ -975,6 +1011,11 @@
     height: 100%;
     background: #b3793e;
     transition: width 0.2s;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bar-fill {
+      transition: none;
+    }
   }
 
   .error-box {
