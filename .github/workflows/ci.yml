@@ -85,6 +85,10 @@ jobs:
         working-directory: apps/desktop
         run: pnpm check
 
+      - name: Frontend tests
+        working-directory: apps/desktop
+        run: pnpm test
+
       - name: Build frontend
         working-directory: apps/desktop
         run: pnpm build

@@ -541,6 +541,51 @@ mod tests {
         );
     }
 
+    fn make_shard(version: u32) -> Vec<u8> {
+        let shard = Shard {
+            format_version: version,
+            gutenberg_id: 1,
+            title: "test".into(),
+            translators: vec![],
+            embed_model_id: "bge-small-en-v1.5".into(),
+            canonical_text: "hello".into(),
+            chunks: vec![],
+        };
+        let msgpack = rmp_serde::to_vec_named(&shard).expect("msgpack encode");
+        zstd::encode_all(msgpack.as_slice(), 0).expect("zstd encode")
+    }
+
+    #[test]
+    fn decode_shard_accepts_current_version() {
+        let raw = make_shard(SHARD_FORMAT_VERSION);
+        let decoded = decode_shard(&raw).expect("v2 shard should decode");
+        assert_eq!(decoded.format_version, SHARD_FORMAT_VERSION);
+        assert_eq!(decoded.gutenberg_id, 1);
+    }
+
+    #[test]
+    fn decode_shard_rejects_v1() {
+        // The Phase 1 bump from v1 → v2 must reject pre-bump shards loudly.
+        let raw = make_shard(1);
+        let err = decode_shard(&raw).expect_err("v1 shard should fail in v2 runtime");
+        let msg = format!("{err:#}");
+        assert!(
+            msg.contains("format_version"),
+            "unexpected error message: {msg}"
+        );
+    }
+
+    #[test]
+    fn decode_shard_rejects_future_version() {
+        let raw = make_shard(99);
+        let err = decode_shard(&raw).expect_err("v99 shard should fail in v2 runtime");
+        let msg = format!("{err:#}");
+        assert!(
+            msg.contains("format_version"),
+            "unexpected error message: {msg}"
+        );
+    }
+
     #[test]
     fn cosine_returns_one_for_identical_vectors() {
         let a = vec![0.5f32, 0.5, 0.5, 0.5];

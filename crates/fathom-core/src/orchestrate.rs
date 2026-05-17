@@ -296,6 +296,10 @@ impl From<&str> for Passage {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+    use async_trait::async_trait;
+    use std::sync::Mutex;
+
     #[test]
     fn global_substrate_map_builds_without_panic() {
         let m = crate::lexicon::global_substrate_map();
@@ -310,5 +314,165 @@ mod tests {
             has_eudaimonia,
             "expected 'eudaimonia' somewhere in the seed lexicon"
         );
+    }
+
+    /// Programmable Backend for testing orchestrate's Mode branches without
+    /// loading the 2.5GB Gemma model. `generate` returns `gloss_response`;
+    /// `generate_json` returns `json_response`. Recorded prompts are kept so
+    /// tests can assert which prompt was used.
+    struct MockBackend {
+        gloss_response: String,
+        json_response: String,
+        label: String,
+        gloss_prompts: Mutex<Vec<String>>,
+        json_prompts: Mutex<Vec<String>>,
+    }
+
+    impl MockBackend {
+        fn new(gloss: &str, json: &str) -> Self {
+            Self {
+                gloss_response: gloss.to_string(),
+                json_response: json.to_string(),
+                label: "mock".to_string(),
+                gloss_prompts: Mutex::new(Vec::new()),
+                json_prompts: Mutex::new(Vec::new()),
+            }
+        }
+    }
+
+    #[async_trait]
+    impl Backend for MockBackend {
+        async fn generate(&self, prompt: &str) -> anyhow::Result<String> {
+            self.gloss_prompts.lock().unwrap().push(prompt.to_string());
+            Ok(self.gloss_response.clone())
+        }
+
+        async fn generate_json(&self, prompt: &str) -> anyhow::Result<String> {
+            self.json_prompts.lock().unwrap().push(prompt.to_string());
+            Ok(self.json_response.clone())
+        }
+
+        fn model_label(&self) -> &str {
+            &self.label
+        }
+    }
+
+    #[tokio::test]
+    async fn mode_no_substrate_uses_unaided_path() {
+        let backend = MockBackend::new("PARAPHRASE: A plain restatement.\n", "");
+        let result = fathom_with_judge(
+            "Some passage about virtue.",
+            Tier::Standard,
+            Mode::NoSubstrate,
+            &backend,
+            JudgeMode::Skip,
+        )
+        .await
+        .expect("fathom_with_judge");
+        assert_eq!(result.resolution, Resolution::NoSubstrate);
+        assert_eq!(result.paraphrase, "A plain restatement.");
+        assert!(result.identified_terms.is_empty());
+        assert!(result.faithfulness.is_none());
+        // JIT identify must NOT have been called on the no-substrate path.
+        assert!(backend.json_prompts.lock().unwrap().is_empty());
+        assert_eq!(backend.gloss_prompts.lock().unwrap().len(), 1);
+    }
+
+    #[tokio::test]
+    async fn mode_jit_with_identified_terms() {
+        let backend = MockBackend::new(
+            "PARAPHRASE: Gloss with terms.\n",
+            r#"{"terms": ["eudaimonia", "logos"]}"#,
+        );
+        let result = fathom_with_judge(
+            "Aristotle on the good life.",
+            Tier::Standard,
+            Mode::Jit,
+            &backend,
+            JudgeMode::Skip,
+        )
+        .await
+        .expect("fathom_with_judge");
+        assert_eq!(result.resolution, Resolution::Jit);
+        assert_eq!(result.identified_terms, vec!["eudaimonia", "logos"]);
+        // identify (1 json call) + gloss-with-identified-terms (1 gloss call)
+        assert_eq!(backend.json_prompts.lock().unwrap().len(), 1);
+        assert_eq!(backend.gloss_prompts.lock().unwrap().len(), 1);
+    }
+
+    #[tokio::test]
+    async fn mode_jit_with_no_terms_falls_through_to_no_substrate() {
+        let backend = MockBackend::new("PARAPHRASE: Unaided gloss.\n", r#"{"terms": []}"#);
+        let result = fathom_with_judge(
+            "An English-only passage with no jargon.",
+            Tier::Standard,
+            Mode::Jit,
+            &backend,
+            JudgeMode::Skip,
+        )
+        .await
+        .expect("fathom_with_judge");
+        assert_eq!(result.resolution, Resolution::NoSubstrate);
+        assert!(result.identified_terms.is_empty());
+        // identify still called (returned empty) + no-substrate gloss.
+        assert_eq!(backend.json_prompts.lock().unwrap().len(), 1);
+        assert_eq!(backend.gloss_prompts.lock().unwrap().len(), 1);
+    }
+
+    #[tokio::test]
+    async fn mode_curated_without_matching_lexicon_entry_errors() {
+        let backend = MockBackend::new("ignored", "ignored");
+        let err = fathom_with_judge(
+            "An arbitrary modern passage that is NOT in the 135-entry seed.",
+            Tier::Standard,
+            Mode::Curated,
+            &backend,
+            JudgeMode::Skip,
+        )
+        .await
+        .expect_err("Mode::Curated must error when no lexicon entry matches");
+        let msg = format!("{err:#}");
+        assert!(
+            msg.contains("no curated substrate"),
+            "unexpected error: {msg}"
+        );
+        // No model calls should have been made — bailed before any backend dispatch.
+        assert!(backend.gloss_prompts.lock().unwrap().is_empty());
+        assert!(backend.json_prompts.lock().unwrap().is_empty());
+    }
+
+    #[tokio::test]
+    async fn mode_auto_falls_through_curated_to_jit_when_no_match() {
+        // Mode::Auto: curated lookup misses, then JIT identify runs.
+        let backend =
+            MockBackend::new("PARAPHRASE: An auto-mode gloss.\n", r#"{"terms": ["one"]}"#);
+        let result = fathom_with_judge(
+            "An arbitrary modern passage.",
+            Tier::Standard,
+            Mode::Auto,
+            &backend,
+            JudgeMode::Skip,
+        )
+        .await
+        .expect("fathom_with_judge");
+        // identify found one term → gloss_with_identified_terms → Resolution::Jit
+        assert_eq!(result.resolution, Resolution::Jit);
+        assert_eq!(result.identified_terms, vec!["one"]);
+    }
+
+    #[tokio::test]
+    async fn judge_mode_skip_leaves_faithfulness_none() {
+        let backend = MockBackend::new("PARAPHRASE: ok.\n", "");
+        let result = fathom_with_judge(
+            "Anything.",
+            Tier::Simple,
+            Mode::NoSubstrate,
+            &backend,
+            JudgeMode::Skip,
+        )
+        .await
+        .expect("fathom_with_judge");
+        assert!(result.faithfulness.is_none());
+        assert!(result.faithfulness_verdict.is_none());
     }
 }
