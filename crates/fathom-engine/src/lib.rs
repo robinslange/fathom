@@ -9,8 +9,8 @@
 
 use async_trait::async_trait;
 
-pub mod ollama;
 pub mod llama_cpp;
+pub mod ollama;
 
 pub use llama_cpp::LlamaCppBackend;
 pub use ollama::OllamaBackend;

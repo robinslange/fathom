@@ -10,10 +10,10 @@
 use anyhow::{anyhow, bail, Context, Result};
 use directories::ProjectDirs;
 use futures_util::StreamExt;
-use sha2::{Digest, Sha256};
-use std::path::{Path, PathBuf};
 use reqwest::header::{CONTENT_RANGE, RANGE};
 use reqwest::StatusCode;
+use sha2::{Digest, Sha256};
+use std::path::{Path, PathBuf};
 use tokio::fs::{File, OpenOptions};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 
@@ -254,7 +254,11 @@ mod tests {
         ids.sort();
         let original_len = ids.len();
         ids.dedup();
-        assert_eq!(ids.len(), original_len, "duplicate model id in MODEL_MANIFEST");
+        assert_eq!(
+            ids.len(),
+            original_len,
+            "duplicate model id in MODEL_MANIFEST"
+        );
     }
 
     #[test]
@@ -278,10 +282,7 @@ mod tests {
             parse_content_range_total("bytes 1000-2489999999/2490000000"),
             Some(2_490_000_000)
         );
-        assert_eq!(
-            parse_content_range_total("bytes 0-499/1234"),
-            Some(1234)
-        );
+        assert_eq!(parse_content_range_total("bytes 0-499/1234"), Some(1234));
     }
 
     #[test]

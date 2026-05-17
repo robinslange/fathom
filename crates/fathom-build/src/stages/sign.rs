@@ -43,7 +43,8 @@ pub async fn run(args: Args) -> Result<()> {
     let sk_string = std::fs::read_to_string(&secret_path)
         .with_context(|| format!("read secret key {}", secret_path.display()))?;
     let sk_box = SecretKeyBox::from_string(&sk_string).map_err(|e| anyhow!("parse key: {e}"))?;
-    let password = std::env::var("MINISIGN_PASSWORD").unwrap_or_else(|_| "fathom-build".to_string());
+    let password =
+        std::env::var("MINISIGN_PASSWORD").unwrap_or_else(|_| "fathom-build".to_string());
     let sk = sk_box
         .into_secret_key(Some(password))
         .map_err(|e| anyhow!("decrypt key: {e}"))?;
@@ -103,22 +104,36 @@ fn ensure_keypair(secret: &PathBuf, public: &PathBuf, auto_generate: bool) -> Re
         ));
     }
     if let Some(p) = secret.parent() {
-        std::fs::create_dir_all(p)
-            .with_context(|| format!("create key dir {}", p.display()))?;
+        std::fs::create_dir_all(p).with_context(|| format!("create key dir {}", p.display()))?;
     }
 
     // Always generate via the encrypted path. Use MINISIGN_PASSWORD if set,
     // else the sentinel "fathom-build" — this avoids the interactive prompt
     // that the unencrypted variant cannot decode without TTY.
-    let password = std::env::var("MINISIGN_PASSWORD").unwrap_or_else(|_| "fathom-build".to_string());
+    let password =
+        std::env::var("MINISIGN_PASSWORD").unwrap_or_else(|_| "fathom-build".to_string());
     let kp = KeyPair::generate_encrypted_keypair(Some(password.clone()))
         .map_err(|e| anyhow!("generate keypair: {e}"))?;
 
-    std::fs::write(secret, kp.sk.to_box(None).map_err(|e| anyhow!("encode sk: {e}"))?.into_string())
-        .with_context(|| format!("write {}", secret.display()))?;
-    std::fs::write(public, kp.pk.to_box().map_err(|e| anyhow!("encode pk: {e}"))?.into_string())
-        .with_context(|| format!("write {}", public.display()))?;
-    eprintln!("sign: keypair password is in MINISIGN_PASSWORD env (sentinel 'fathom-build' if unset)");
+    std::fs::write(
+        secret,
+        kp.sk
+            .to_box(None)
+            .map_err(|e| anyhow!("encode sk: {e}"))?
+            .into_string(),
+    )
+    .with_context(|| format!("write {}", secret.display()))?;
+    std::fs::write(
+        public,
+        kp.pk
+            .to_box()
+            .map_err(|e| anyhow!("encode pk: {e}"))?
+            .into_string(),
+    )
+    .with_context(|| format!("write {}", public.display()))?;
+    eprintln!(
+        "sign: keypair password is in MINISIGN_PASSWORD env (sentinel 'fathom-build' if unset)"
+    );
 
     eprintln!(
         "sign: generated new keypair → {} / {}",

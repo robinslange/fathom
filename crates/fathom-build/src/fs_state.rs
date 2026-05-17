@@ -23,15 +23,13 @@ pub fn write_json<T: Serialize>(path: &Path, value: &T) -> Result<()> {
     if let Some(parent) = path.parent() {
         ensure_dir(parent)?;
     }
-    let f = std::fs::File::create(path)
-        .with_context(|| format!("create {}", path.display()))?;
+    let f = std::fs::File::create(path).with_context(|| format!("create {}", path.display()))?;
     serde_json::to_writer_pretty(std::io::BufWriter::new(f), value)
         .with_context(|| format!("write json to {}", path.display()))
 }
 
 pub fn read_json<T: DeserializeOwned>(path: &Path) -> Result<T> {
-    let f = std::fs::File::open(path)
-        .with_context(|| format!("open {}", path.display()))?;
+    let f = std::fs::File::open(path).with_context(|| format!("open {}", path.display()))?;
     serde_json::from_reader(std::io::BufReader::new(f))
         .with_context(|| format!("parse json from {}", path.display()))
 }

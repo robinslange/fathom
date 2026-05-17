@@ -6,7 +6,9 @@ use fathom_embed::{embed, embed_batch, init_embedder, EMBED_DIMS};
 use std::path::PathBuf;
 
 fn model_dir() -> Option<PathBuf> {
-    std::env::var("FATHOM_BGE_MODEL_DIR").ok().map(PathBuf::from)
+    std::env::var("FATHOM_BGE_MODEL_DIR")
+        .ok()
+        .map(PathBuf::from)
 }
 
 fn ensure_init() -> bool {
@@ -17,7 +19,11 @@ fn ensure_init() -> bool {
     let model = dir.join("bge-small.onnx");
     let tokenizer = dir.join("tokenizer.json");
     if !model.exists() || !tokenizer.exists() {
-        eprintln!("skipping: missing {} or {}", model.display(), tokenizer.display());
+        eprintln!(
+            "skipping: missing {} or {}",
+            model.display(),
+            tokenizer.display()
+        );
         return false;
     }
     // OnceCell — only first init succeeds; ignore "already initialised" since
@@ -34,7 +40,11 @@ fn live_embed_returns_unit_vector() {
     let emb = embed("The unexamined life is not worth living.").expect("embed");
     assert_eq!(emb.dims(), EMBED_DIMS);
     let norm = emb.vector.iter().map(|x| x * x).sum::<f32>().sqrt();
-    assert!((norm - 1.0).abs() < 1e-3, "expected unit vector, got norm {}", norm);
+    assert!(
+        (norm - 1.0).abs() < 1e-3,
+        "expected unit vector, got norm {}",
+        norm
+    );
 }
 
 #[test]
@@ -52,7 +62,13 @@ fn live_embed_batch_matches_per_text_embed() {
     for (i, t) in texts.iter().enumerate() {
         let single = embed(t).expect("single embed");
         for (a, b) in batch[i].vector.iter().zip(single.vector.iter()) {
-            assert!((a - b).abs() < 1e-4, "batch[{}] vs single diverged at value: {} vs {}", i, a, b);
+            assert!(
+                (a - b).abs() < 1e-4,
+                "batch[{}] vs single diverged at value: {} vs {}",
+                i,
+                a,
+                b
+            );
         }
     }
 }
@@ -75,6 +91,7 @@ fn live_embed_semantic_neighbours_are_closer() {
     assert!(
         sim_near > sim_far + 0.1,
         "expected semantic near > far by 0.1: near={} far={}",
-        sim_near, sim_far
+        sim_near,
+        sim_far
     );
 }

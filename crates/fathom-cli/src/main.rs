@@ -6,7 +6,11 @@ use std::io::Read;
 use std::path::PathBuf;
 
 #[derive(Parser)]
-#[command(name = "fathom", version, about = "Paraphrase classical philosophy, preserving terms-of-art")]
+#[command(
+    name = "fathom",
+    version,
+    about = "Paraphrase classical philosophy, preserving terms-of-art"
+)]
 struct Cli {
     #[command(subcommand)]
     command: Command,
@@ -138,11 +142,9 @@ async fn main() -> Result<()> {
                     Box::new(b)
                 }
                 BackendArg::LlamaCpp => {
-                    let path = bootstrap::ensure_model_downloaded(
-                        &llama_model,
-                        Some(stderr_progress()),
-                    )
-                    .await?;
+                    let path =
+                        bootstrap::ensure_model_downloaded(&llama_model, Some(stderr_progress()))
+                            .await?;
                     eprintln!("\nloading model from {} ...", path.display());
                     Box::new(LlamaCppBackend::load(path)?)
                 }
@@ -182,8 +184,14 @@ async fn main() -> Result<()> {
                 }
                 authors.insert(&e.source.author);
             }
-            println!("traditions: {}", traditions.into_iter().collect::<Vec<_>>().join(", "));
-            println!("authors: {}", authors.into_iter().collect::<Vec<_>>().join(", "));
+            println!(
+                "traditions: {}",
+                traditions.into_iter().collect::<Vec<_>>().join(", ")
+            );
+            println!(
+                "authors: {}",
+                authors.into_iter().collect::<Vec<_>>().join(", ")
+            );
         }
         Command::Bootstrap { model } => {
             let entry = bootstrap::lookup_manifest(&model)
@@ -226,7 +234,11 @@ async fn main() -> Result<()> {
                         println!("  - {s}");
                     }
                 }
-                let verdict = if score.is_faithful() { "faithful" } else { "review" };
+                let verdict = if score.is_faithful() {
+                    "faithful"
+                } else {
+                    "review"
+                };
                 println!("verdict:           {verdict}");
             }
         }

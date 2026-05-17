@@ -53,8 +53,7 @@ async fn fetch_catalog(url: &str, out: &PathBuf) -> Result<()> {
         .build()?;
     let resp = client.get(url).send().await?.error_for_status()?;
     let bytes = resp.bytes().await?;
-    std::fs::write(out, &bytes)
-        .with_context(|| format!("write catalog to {}", out.display()))?;
+    std::fs::write(out, &bytes).with_context(|| format!("write catalog to {}", out.display()))?;
     Ok(())
 }
 

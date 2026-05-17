@@ -48,7 +48,10 @@ pub struct LexiconEntry {
 }
 
 fn normalise(s: &str) -> String {
-    s.to_lowercase().split_whitespace().collect::<Vec<_>>().join(" ")
+    s.to_lowercase()
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ")
 }
 
 static LEXICON: Lazy<Vec<LexiconEntry>> = Lazy::new(|| {
@@ -61,7 +64,9 @@ static LEXICON: Lazy<Vec<LexiconEntry>> = Lazy::new(|| {
         if ext != "yaml" && ext != "yml" {
             continue;
         }
-        let Some(contents) = file.contents_utf8() else { continue };
+        let Some(contents) = file.contents_utf8() else {
+            continue;
+        };
         let parsed: LexiconFile = match serde_yaml::from_str(contents) {
             Ok(p) => p,
             Err(e) => {
@@ -129,7 +134,10 @@ mod tests {
 
     #[test]
     fn lexicon_loads_at_least_one_entry() {
-        assert!(!all_entries().is_empty(), "lexicon should embed at least one entry");
+        assert!(
+            !all_entries().is_empty(),
+            "lexicon should embed at least one entry"
+        );
     }
 
     #[test]
@@ -137,7 +145,10 @@ mod tests {
         let passage = "Of things some are in our power, and others are not. \
             In our power are opinion, movement towards a thing, desire, aversion.";
         let entry = lookup_canonical(passage);
-        assert!(entry.is_some(), "Enchiridion §1 should be findable by fingerprint");
+        assert!(
+            entry.is_some(),
+            "Enchiridion §1 should be findable by fingerprint"
+        );
         let entry = entry.unwrap();
         assert_eq!(entry.source.author, "Epictetus");
     }

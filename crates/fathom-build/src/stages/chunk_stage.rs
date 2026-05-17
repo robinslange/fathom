@@ -93,7 +93,14 @@ pub async fn run(args: Args) -> Result<()> {
             }
         }
         if (i + 1) % 25 == 0 {
-            eprintln!("  ...{}/{} (chunks {} fail {} missing {})", i + 1, target.len(), total_chunks, failed, missing);
+            eprintln!(
+                "  ...{}/{} (chunks {} fail {} missing {})",
+                i + 1,
+                target.len(),
+                total_chunks,
+                failed,
+                missing
+            );
         }
     }
 
@@ -165,8 +172,8 @@ fn chunk_one(epub_path: &PathBuf, book: &Filtered, cfg: &ChunkerConfig) -> Resul
 pub(crate) fn extract_paragraphs(xhtml: &str) -> Result<Vec<String>> {
     let prepared = resolve_html_entities(xhtml);
     let prepared = strip_doctype(&prepared);
-    let doc = roxmltree::Document::parse(&prepared)
-        .map_err(|e| anyhow::anyhow!("xml parse: {e}"))?;
+    let doc =
+        roxmltree::Document::parse(&prepared).map_err(|e| anyhow::anyhow!("xml parse: {e}"))?;
     let mut paras = Vec::new();
     for node in doc.descendants() {
         if !node.is_element() {
@@ -198,7 +205,10 @@ fn is_gutenberg_boilerplate(paras: &[String]) -> bool {
     if paras.is_empty() {
         return false;
     }
-    let hits = paras.iter().filter(|p| looks_like_pg_metadata_line(p)).count();
+    let hits = paras
+        .iter()
+        .filter(|p| looks_like_pg_metadata_line(p))
+        .count();
     hits * 2 > paras.len()
 }
 

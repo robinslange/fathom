@@ -152,9 +152,7 @@ fn decode_with_ctx<'m>(
     let ctx = ctx_slot.as_mut().expect("ctx allocated above");
     ctx.clear_kv_cache();
 
-    let templated = format!(
-        "<start_of_turn>user\n{prompt}<end_of_turn>\n<start_of_turn>model\n"
-    );
+    let templated = format!("<start_of_turn>user\n{prompt}<end_of_turn>\n<start_of_turn>model\n");
 
     let tokens_in = model
         .str_to_token(&templated, AddBos::Always)
@@ -175,10 +173,8 @@ fn decode_with_ctx<'m>(
     }
     ctx.decode(&mut batch).context("initial decode failed")?;
 
-    let mut sampler = LlamaSampler::chain_simple([
-        LlamaSampler::temp(TEMPERATURE),
-        LlamaSampler::dist(SEED),
-    ]);
+    let mut sampler =
+        LlamaSampler::chain_simple([LlamaSampler::temp(TEMPERATURE), LlamaSampler::dist(SEED)]);
 
     let mut output = String::new();
     let mut decoder = UTF_8.new_decoder();

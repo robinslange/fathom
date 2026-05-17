@@ -12,21 +12,14 @@
 use once_cell::sync::Lazy;
 use regex::Regex;
 
-static MARKER_LEADING: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"^\s*(?:[IVXLCDM]+|\d+|§\s*\d+)\.\s+").unwrap()
-});
+static MARKER_LEADING: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"^\s*(?:[IVXLCDM]+|\d+|§\s*\d+)\.\s+").unwrap());
 
-static HYPHEN_LINE_BREAK: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"(\w)-\n\s*(\w)").unwrap()
-});
+static HYPHEN_LINE_BREAK: Lazy<Regex> = Lazy::new(|| Regex::new(r"(\w)-\n\s*(\w)").unwrap());
 
-static MULTI_SPACE: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"[ \t]{2,}").unwrap()
-});
+static MULTI_SPACE: Lazy<Regex> = Lazy::new(|| Regex::new(r"[ \t]{2,}").unwrap());
 
-static MULTI_NEWLINE: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"\n{3,}").unwrap()
-});
+static MULTI_NEWLINE: Lazy<Regex> = Lazy::new(|| Regex::new(r"\n{3,}").unwrap());
 
 /// Canonicalise heterogeneous source text. Output is the text whose UTF-8 byte
 /// offsets will be recorded in the chunks.

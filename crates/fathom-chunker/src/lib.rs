@@ -157,10 +157,21 @@ pub fn chunk_text(canonical_text: &str, config: &ChunkerConfig) -> Vec<Chunk> {
 /// into `chunk_text` — to the enclosing UAX#29 sentence boundaries.
 /// Returns `None` if the selection lies outside any sentence span (e.g. all
 /// whitespace).
-pub fn snap_to_sentence(chunk_text: &str, sel_start: usize, sel_end: usize) -> Option<(usize, usize)> {
+pub fn snap_to_sentence(
+    chunk_text: &str,
+    sel_start: usize,
+    sel_end: usize,
+) -> Option<(usize, usize)> {
     let spans = sentence_spans(chunk_text);
-    let containing_start = spans.iter().find(|&&(s, e)| s <= sel_start && sel_start < e).map(|&(s, _)| s);
-    let containing_end = spans.iter().rev().find(|&&(s, e)| s < sel_end && sel_end <= e).map(|&(_, e)| e);
+    let containing_start = spans
+        .iter()
+        .find(|&&(s, e)| s <= sel_start && sel_start < e)
+        .map(|&(s, _)| s);
+    let containing_end = spans
+        .iter()
+        .rev()
+        .find(|&&(s, e)| s < sel_end && sel_end <= e)
+        .map(|&(_, e)| e);
     match (containing_start, containing_end) {
         (Some(s), Some(e)) if s <= e => Some((s, e)),
         _ => None,

@@ -57,7 +57,9 @@ pub async fn run(args: Args) -> Result<()> {
     write_file_list(&list_path, &target)?;
     eprintln!("fetch-corpus: file list at {}", list_path.display());
 
-    let endpoint = args.rsync_endpoint.unwrap_or_else(|| RSYNC_ENDPOINT.to_string());
+    let endpoint = args
+        .rsync_endpoint
+        .unwrap_or_else(|| RSYNC_ENDPOINT.to_string());
     invoke_rsync(&list_path, &corpus_dir, &endpoint)?;
 
     let found = count_fetched(&corpus_dir, &target)?;

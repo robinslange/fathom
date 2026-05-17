@@ -127,7 +127,9 @@ fn cluster_observations(
         })
         .collect();
     clusters.sort_by(|a, b| {
-        b.citations.len().cmp(&a.citations.len())
+        b.citations
+            .len()
+            .cmp(&a.citations.len())
             .then_with(|| a.canonical.cmp(&b.canonical))
     });
     clusters
@@ -150,7 +152,9 @@ pub async fn run(args: Args) -> Result<()> {
     }
 
     let gemma = LlamaCppBackend::load(gemma_path).context("load Gemma")?;
-    judge::ensure_loaded(None).await.context("load DeBERTa NLI")?;
+    judge::ensure_loaded(None)
+        .await
+        .context("load DeBERTa NLI")?;
     let seed = seed_canonical_set();
 
     let chunks_dir = build_state_dir().join("chunks");
@@ -202,11 +206,10 @@ pub async fn run(args: Args) -> Result<()> {
                         continue;
                     }
                 };
-                let response: HarvestGlossResponse =
-                    match serde_json::from_str(&response_json) {
-                        Ok(r) => r,
-                        Err(_) => continue,
-                    };
+                let response: HarvestGlossResponse = match serde_json::from_str(&response_json) {
+                    Ok(r) => r,
+                    Err(_) => continue,
+                };
                 let (Some(substrate), Some(gloss)) = (response.substrate, response.gloss) else {
                     continue;
                 };
@@ -333,7 +336,10 @@ mod tests {
         let clusters = cluster_observations(observations, &seed);
 
         assert_eq!(clusters.len(), 2);
-        let eph = clusters.iter().find(|c| c.substrate == "eph' hēmin").unwrap();
+        let eph = clusters
+            .iter()
+            .find(|c| c.substrate == "eph' hēmin")
+            .unwrap();
         assert_eq!(eph.citations.len(), 2);
         assert!(eph.seed_match);
         assert_eq!(eph.gloss, "what depends on us");

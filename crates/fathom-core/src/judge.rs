@@ -70,8 +70,8 @@ fn load_state(model_path: &PathBuf, tokenizer_path: &PathBuf) -> Result<JudgeSta
         .commit_from_file(model_path)
         .map_err(|e| anyhow!("loading ONNX model from {}: {e}", model_path.display()))?;
 
-    let tokenizer = Tokenizer::from_file(tokenizer_path)
-        .map_err(|e| anyhow!("loading tokenizer: {e}"))?;
+    let tokenizer =
+        Tokenizer::from_file(tokenizer_path).map_err(|e| anyhow!("loading tokenizer: {e}"))?;
 
     Ok(JudgeState { session, tokenizer })
 }
@@ -191,8 +191,8 @@ fn score_pair(state: &mut JudgeState, premise: &str, hypothesis: &str) -> Result
     let input_ids: Vec<i64> = ids[..len].iter().map(|&x| x as i64).collect();
     let attention_mask: Vec<i64> = mask[..len].iter().map(|&x| x as i64).collect();
 
-    let ids_arr = Array2::<i64>::from_shape_vec((1, len), input_ids)
-        .context("shaping input_ids tensor")?;
+    let ids_arr =
+        Array2::<i64>::from_shape_vec((1, len), input_ids).context("shaping input_ids tensor")?;
     let mask_arr = Array2::<i64>::from_shape_vec((1, len), attention_mask)
         .context("shaping attention_mask tensor")?;
 
@@ -273,12 +273,7 @@ mod tests {
         let s = split_sentences("Hello world. This is a test! Yes? Indeed.");
         assert_eq!(
             s,
-            vec![
-                "Hello world.",
-                "This is a test!",
-                "Yes?",
-                "Indeed.",
-            ]
+            vec!["Hello world.", "This is a test!", "Yes?", "Indeed.",]
         );
     }
 
@@ -322,7 +317,9 @@ mod tests {
     #[test]
     fn sentences_section_citations() {
         // §-style citation that classical philosophy text uses, embedded mid-sentence.
-        let s = split_sentences("As Marcus writes in §4.3, virtue is sufficient. The rest is commentary.");
+        let s = split_sentences(
+            "As Marcus writes in §4.3, virtue is sufficient. The rest is commentary.",
+        );
         assert_eq!(s.len(), 2, "got {:?}", s);
     }
 
@@ -355,7 +352,11 @@ mod tests {
             vec![p(0.85, 0.10, 0.05), p(0.95, 0.03, 0.02)],
         ];
         let score = aggregate_nli_scores(&paraphrases, &pair_probs);
-        assert!(score.support > 0.6, "support {} should be > 0.6", score.support);
+        assert!(
+            score.support > 0.6,
+            "support {} should be > 0.6",
+            score.support
+        );
         assert!(
             score.contradiction_max < 0.1,
             "contradiction_max {} should be < 0.1",

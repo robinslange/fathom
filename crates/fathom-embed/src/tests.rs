@@ -12,14 +12,22 @@ fn f16_round_trip_preserves_to_known_tolerance() {
     for (a, b) in original.iter().zip(recovered.iter()) {
         let diff = (a - b).abs();
         // f16 mantissa is 10 bits → ~3 decimal places at magnitude ~0.25.
-        assert!(diff < 1e-3, "f16 round trip exceeded tolerance: {} vs {} (diff {})", a, b, diff);
+        assert!(
+            diff < 1e-3,
+            "f16 round trip exceeded tolerance: {} vs {} (diff {})",
+            a,
+            b,
+            diff
+        );
     }
 }
 
 #[test]
 fn f16_round_trip_preserves_cosine_similarity() {
     let a: Vec<f32> = (0..EMBED_DIMS).map(|i| (i as f32).sin() * 0.05).collect();
-    let b: Vec<f32> = (0..EMBED_DIMS).map(|i| (i as f32 * 0.7).cos() * 0.05).collect();
+    let b: Vec<f32> = (0..EMBED_DIMS)
+        .map(|i| (i as f32 * 0.7).cos() * 0.05)
+        .collect();
 
     fn cos(x: &[f32], y: &[f32]) -> f32 {
         let dot: f32 = x.iter().zip(y).map(|(a, b)| a * b).sum();
@@ -32,7 +40,12 @@ fn f16_round_trip_preserves_cosine_similarity() {
     let a16 = from_f16_bytes(&to_f16_bytes(&a));
     let b16 = from_f16_bytes(&to_f16_bytes(&b));
     let cos_f16 = cos(&a16, &b16);
-    assert!((cos_orig - cos_f16).abs() < 1e-3, "{} vs {}", cos_orig, cos_f16);
+    assert!(
+        (cos_orig - cos_f16).abs() < 1e-3,
+        "{} vs {}",
+        cos_orig,
+        cos_f16
+    );
 }
 
 #[test]

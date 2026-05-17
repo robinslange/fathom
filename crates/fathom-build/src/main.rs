@@ -15,8 +15,8 @@ mod translators;
 mod types;
 
 use stages::{
-    catalog_sync, chunk_stage, deploy, embed_stage, enrich_translators, fetch_corpus,
-    filter_stage, harvest_substrate, manifest, shard, sign, verify,
+    catalog_sync, chunk_stage, deploy, embed_stage, enrich_translators, fetch_corpus, filter_stage,
+    harvest_substrate, manifest, shard, sign, verify,
 };
 
 #[derive(Parser)]

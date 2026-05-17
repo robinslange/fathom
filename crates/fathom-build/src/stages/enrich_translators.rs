@@ -8,7 +8,9 @@
 //!
 //! Rate-limited fetcher: ~1 req/sec by default to stay polite with Gutenberg.
 
-use crate::fs_state::{candidates_path, ensure_dir, rdf_cache_dir, read_json, translators_path, write_json};
+use crate::fs_state::{
+    candidates_path, ensure_dir, rdf_cache_dir, read_json, translators_path, write_json,
+};
 use crate::translators::parse_translators_from_rdf;
 use crate::types::{Agent, AgentRole, BookTranslators, Candidate};
 use anyhow::{Context, Result};
@@ -72,7 +74,8 @@ pub async fn run(args: Args) -> Result<()> {
 
         if !has_csv_translator {
             // Need to check RDF.
-            let xml = fetch_rdf(&client, candidate.gutenberg_id, &cache_dir, args.use_cache).await?;
+            let xml =
+                fetch_rdf(&client, candidate.gutenberg_id, &cache_dir, args.use_cache).await?;
             match parse_translators_from_rdf(&xml) {
                 Ok(rdf_translators) => {
                     if !rdf_translators.is_empty() {
@@ -84,10 +87,7 @@ pub async fn run(args: Args) -> Result<()> {
                     }
                 }
                 Err(e) => {
-                    eprintln!(
-                        "  warn: parse RDF for pg{}: {}",
-                        candidate.gutenberg_id, e
-                    );
+                    eprintln!("  warn: parse RDF for pg{}: {}", candidate.gutenberg_id, e);
                     gaps += 1;
                 }
             }
@@ -122,7 +122,11 @@ pub async fn run(args: Args) -> Result<()> {
     write_json(&out_path, &out)?;
     eprintln!(
         "enrich-translators: csv={} rdf={} gaps={} original-lang={} → {}",
-        csv_hits, rdf_hits, gaps, original_lang, out_path.display()
+        csv_hits,
+        rdf_hits,
+        gaps,
+        original_lang,
+        out_path.display()
     );
     Ok(())
 }
@@ -142,10 +146,7 @@ async fn fetch_rdf(
         return std::fs::read_to_string(&cache_path)
             .with_context(|| format!("read cached {}", cache_path.display()));
     }
-    let url = format!(
-        "{}/{}/pg{}.rdf",
-        RDF_URL_PREFIX, gutenberg_id, gutenberg_id
-    );
+    let url = format!("{}/{}/pg{}.rdf", RDF_URL_PREFIX, gutenberg_id, gutenberg_id);
     let resp = client.get(&url).send().await?.error_for_status()?;
     let body = resp.text().await?;
     std::fs::write(&cache_path, &body)
@@ -160,10 +161,7 @@ async fn fetch_rdf(
 /// authors_raw mentions "Translator" anywhere (other roles), the book likely
 /// needs a translator we missed. Otherwise treat as original-language.
 fn looks_like_original_language(candidate: &Candidate, translators: &[Agent]) -> bool {
-    if translators
-        .iter()
-        .any(|a| a.role == AgentRole::Translator)
-    {
+    if translators.iter().any(|a| a.role == AgentRole::Translator) {
         return false;
     }
     // If the CSV mentions [Translator] anywhere, our extraction missed something.

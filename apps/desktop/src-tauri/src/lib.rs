@@ -1,8 +1,5 @@
 use fathom_core::runtime::{ManifestBook, Runtime, SearchHit, Shard};
-use fathom_core::{
-    bootstrap, fathom_with_judge, judge, FathomResult, JudgeMode,
-    Mode, Tier,
-};
+use fathom_core::{bootstrap, fathom_with_judge, judge, FathomResult, JudgeMode, Mode, Tier};
 use fathom_embed;
 use fathom_engine::LlamaCppBackend;
 use once_cell::sync::OnceCell;
@@ -65,7 +62,10 @@ struct DownloadProgress {
     total: Option<u64>,
 }
 
-fn make_progress_callback(handle: AppHandle, model_id: &'static str) -> bootstrap::ProgressCallback {
+fn make_progress_callback(
+    handle: AppHandle,
+    model_id: &'static str,
+) -> bootstrap::ProgressCallback {
     use std::sync::Mutex;
     use std::time::{Duration, Instant};
 
@@ -163,11 +163,7 @@ async fn library_search(query: String, top_n: usize) -> Result<Vec<SearchHit>, A
 async fn library_load_book(gutenberg_id: u32) -> Result<BookView, AppError> {
     let rt = ensure_runtime().await?;
     let shard: Arc<Shard> = rt.ensure_shard(gutenberg_id).await?;
-    let translators = shard
-        .translators
-        .iter()
-        .map(|t| t.name.clone())
-        .collect();
+    let translators = shard.translators.iter().map(|t| t.name.clone()).collect();
     let chunks = shard
         .chunks
         .iter()
@@ -242,8 +238,9 @@ async fn library_ensure_embedder(app: AppHandle) -> Result<(), AppError> {
         Some(make_progress_callback(app, "bge-small-tokenizer")),
     )
     .await?;
-    fathom_embed::init_embedder(&model, &tokenizer)
-        .map_err(|e| AppError { message: format!("init embedder: {e:#}") })?;
+    fathom_embed::init_embedder(&model, &tokenizer).map_err(|e| AppError {
+        message: format!("init embedder: {e:#}"),
+    })?;
     Ok(())
 }
 
@@ -265,20 +262,18 @@ async fn library_prewarm_shards(limit: usize) -> Result<usize, AppError> {
         let b_auth = b.translators.first().map(|t| t.name.as_str()).unwrap_or("");
         a_auth.cmp(b_auth).then_with(|| a.title.cmp(&b.title))
     });
-    let mut stream = futures_util::stream::iter(
-        books.into_iter().take(limit).map(|book| {
-            let rt = rt.clone();
-            async move {
-                match rt.ensure_shard(book.gutenberg_id).await {
-                    Ok(_) => 1usize,
-                    Err(e) => {
-                        eprintln!("prewarm shard {} failed: {e:#}", book.gutenberg_id);
-                        0
-                    }
+    let mut stream = futures_util::stream::iter(books.into_iter().take(limit).map(|book| {
+        let rt = rt.clone();
+        async move {
+            match rt.ensure_shard(book.gutenberg_id).await {
+                Ok(_) => 1usize,
+                Err(e) => {
+                    eprintln!("prewarm shard {} failed: {e:#}", book.gutenberg_id);
+                    0
                 }
             }
-        }),
-    )
+        }
+    }))
     .buffer_unordered(8);
     let mut warmed = 0usize;
     while let Some(n) = stream.next().await {
@@ -309,10 +304,9 @@ async fn library_favourites() -> Result<Vec<u32>, AppError> {
 }
 
 fn favourites_path() -> Result<PathBuf, AppError> {
-    let proj = directories::ProjectDirs::from("nz", "omit", "fathom")
-        .ok_or_else(|| AppError {
-            message: "project dirs unavailable".to_string(),
-        })?;
+    let proj = directories::ProjectDirs::from("nz", "omit", "fathom").ok_or_else(|| AppError {
+        message: "project dirs unavailable".to_string(),
+    })?;
     let dir = proj.data_dir().join("state");
     std::fs::create_dir_all(&dir).map_err(|e| AppError {
         message: format!("create state dir: {e}"),

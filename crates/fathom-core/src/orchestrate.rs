@@ -59,7 +59,9 @@ pub async fn fathom_with_judge(
                     "no curated substrate found for this passage; try Mode::Auto or Mode::Jit"
                 ));
             }
-            None => fall_through_after_curated(passage, audience, tier, mode, model, backend).await?,
+            None => {
+                fall_through_after_curated(passage, audience, tier, mode, model, backend).await?
+            }
         }
     } else if matches!(mode, Mode::Jit) {
         let terms = identify_terms(&passage.text, backend).await?;
@@ -299,10 +301,16 @@ mod tests {
     #[test]
     fn global_substrate_map_builds_without_panic() {
         let m = crate::lexicon::global_substrate_map();
-        assert!(!m.is_empty(), "seed lexicon should yield at least one substrate entry");
+        assert!(
+            !m.is_empty(),
+            "seed lexicon should yield at least one substrate entry"
+        );
         // Sanity: at least one expected term from the seed (Aristotelian).
         // If the seed changes shape, update this assertion.
         let has_eudaimonia = m.values().any(|v| v.substrate == "eudaimonia");
-        assert!(has_eudaimonia, "expected 'eudaimonia' somewhere in the seed lexicon");
+        assert!(
+            has_eudaimonia,
+            "expected 'eudaimonia' somewhere in the seed lexicon"
+        );
     }
 }

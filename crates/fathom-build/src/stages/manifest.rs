@@ -60,19 +60,16 @@ struct TraditionsEntry {
 }
 
 pub async fn run(args: Args) -> Result<()> {
-    let summaries: Vec<ShardSummary> =
-        read_json(&build_state_dir().join("shard-summaries.json"))
-            .context("load shard-summaries.json — run shard first")?;
-    let filtered: Vec<Filtered> =
-        read_json(&filtered_path()).context("load filtered.json")?;
+    let summaries: Vec<ShardSummary> = read_json(&build_state_dir().join("shard-summaries.json"))
+        .context("load shard-summaries.json — run shard first")?;
+    let filtered: Vec<Filtered> = read_json(&filtered_path()).context("load filtered.json")?;
 
-    let by_id: HashMap<u32, &Filtered> =
-        filtered.iter().map(|f| (f.gutenberg_id, f)).collect();
+    let by_id: HashMap<u32, &Filtered> = filtered.iter().map(|f| (f.gutenberg_id, f)).collect();
 
     let traditions_map = match args.traditions {
         Some(path) => {
-            let entries: Vec<TraditionsEntry> = read_json(&path)
-                .with_context(|| format!("load traditions {}", path.display()))?;
+            let entries: Vec<TraditionsEntry> =
+                read_json(&path).with_context(|| format!("load traditions {}", path.display()))?;
             entries
                 .into_iter()
                 .map(|e| (e.gutenberg_id, e.tradition))
@@ -120,8 +117,7 @@ pub async fn run(args: Args) -> Result<()> {
 
     let mp = rmp_serde::to_vec_named(&manifest).context("manifest msgpack encode")?;
     let out_path = dist_dir().join("index.msgpack");
-    std::fs::write(&out_path, &mp)
-        .with_context(|| format!("write {}", out_path.display()))?;
+    std::fs::write(&out_path, &mp).with_context(|| format!("write {}", out_path.display()))?;
 
     eprintln!(
         "manifest: {} books, {} bytes → {}",

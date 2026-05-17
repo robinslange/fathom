@@ -3,12 +3,9 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use std::collections::HashMap;
 
-static PARAPHRASE_RE: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"(?si)PARAPHRASE[^:]*:\s*(.+?)(?:GLOSSARY:|$)").unwrap()
-});
-static GLOSSARY_RE: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"(?si)GLOSSARY:\s*(.+)").unwrap()
-});
+static PARAPHRASE_RE: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"(?si)PARAPHRASE[^:]*:\s*(.+?)(?:GLOSSARY:|$)").unwrap());
+static GLOSSARY_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?si)GLOSSARY:\s*(.+)").unwrap());
 static BACKTICK_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"`([^`]+)`").unwrap());
 static PARENS_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"\(([^)]*)\)").unwrap());
 
@@ -46,10 +43,7 @@ fn parse_glossary(
 ) -> Vec<GlossaryEntry> {
     let mut entries = Vec::new();
     for line in text.lines() {
-        let stripped = line
-            .trim()
-            .trim_start_matches(['-', '*', '•'])
-            .trim();
+        let stripped = line.trim().trim_start_matches(['-', '*', '•']).trim();
         if stripped.is_empty() || !stripped.contains(':') {
             continue;
         }

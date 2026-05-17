@@ -54,8 +54,8 @@ pub fn init_embedder(model_path: &Path, tokenizer_path: &Path) -> Result<()> {
             .map_err(|e| anyhow!("set optimization: {e}"))?
             .commit_from_file(model_path)
             .map_err(|e| anyhow!("commit model from {:?}: {e}", model_path))?;
-        let tokenizer = Tokenizer::from_file(tokenizer_path)
-            .map_err(|e| anyhow!("load tokenizer: {}", e))?;
+        let tokenizer =
+            Tokenizer::from_file(tokenizer_path).map_err(|e| anyhow!("load tokenizer: {}", e))?;
         Ok::<EmbedderState, anyhow::Error>(EmbedderState {
             session: Mutex::new(session),
             tokenizer,
@@ -143,7 +143,10 @@ pub fn embed_batch(texts: &[&str]) -> Result<Vec<Embedding>> {
 
     let shape = last_hidden.shape().to_vec();
     if shape.len() != 3 {
-        bail!("expected 3D tensor (batch, seq, dim); got shape {:?}", shape);
+        bail!(
+            "expected 3D tensor (batch, seq, dim); got shape {:?}",
+            shape
+        );
     }
     let seq_dim = shape[1];
     let hidden_dim = shape[2];

@@ -72,8 +72,8 @@ pub async fn run(args: Args) -> Result<()> {
             .with_context(|| format!("pg{} not in filtered.json", cb.gutenberg_id))?;
 
         let bin_path = embeddings_dir.join(format!("{}.bin", cb.gutenberg_id));
-        let embeddings_bytes = std::fs::read(&bin_path)
-            .with_context(|| format!("read {}", bin_path.display()))?;
+        let embeddings_bytes =
+            std::fs::read(&bin_path).with_context(|| format!("read {}", bin_path.display()))?;
         let expected = cb.chunks.len() * 768;
         if embeddings_bytes.len() != expected {
             bail!(
@@ -163,13 +163,12 @@ fn hex_digest(bytes: &[u8]) -> String {
 /// Read + decompress a shard from disk. Used by `verify`.
 #[allow(dead_code)]
 pub fn read_shard(path: &PathBuf) -> Result<Shard> {
-    let mut f = std::fs::File::open(path)
-        .with_context(|| format!("open {}", path.display()))?;
+    let mut f = std::fs::File::open(path).with_context(|| format!("open {}", path.display()))?;
     let mut compressed = Vec::new();
     f.read_to_end(&mut compressed)?;
     let mp = zstd::decode_all(&compressed[..])
         .with_context(|| format!("zstd decode {}", path.display()))?;
-    let shard: Shard = rmp_serde::from_slice(&mp)
-        .with_context(|| format!("msgpack decode {}", path.display()))?;
+    let shard: Shard =
+        rmp_serde::from_slice(&mp).with_context(|| format!("msgpack decode {}", path.display()))?;
     Ok(shard)
 }

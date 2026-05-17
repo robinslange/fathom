@@ -16,11 +16,15 @@ use regex::Regex;
 /// `YYYY?-YYYY?`, `YYYY-`, `-YYYY`. Death year is the second number, optional.
 static YEAR_RANGE: Lazy<Regex> = Lazy::new(|| {
     // Accepts: `1817-1893`, `428? BCE-348? BCE`, `121-180`, `1800-`, `-1879`
-    Regex::new(r"(?P<birth>-?\d{1,4})\??\s*(?:BCE|CE)?\s*-\s*(?P<death>-?\d{1,4})?\??\s*(?:BCE|CE)?").unwrap()
+    Regex::new(
+        r"(?P<birth>-?\d{1,4})\??\s*(?:BCE|CE)?\s*-\s*(?P<death>-?\d{1,4})?\??\s*(?:BCE|CE)?",
+    )
+    .unwrap()
 });
 
 static ROLE_TAG: Lazy<Regex> = Lazy::new(|| {
-    Regex::new(r"\[(Translator|Editor|Illustrator|Author|Compiler|Contributor|Commentator)\]").unwrap()
+    Regex::new(r"\[(Translator|Editor|Illustrator|Author|Compiler|Contributor|Commentator)\]")
+        .unwrap()
 });
 
 /// Parse an `Authors` cell into a list of Agents.
@@ -51,12 +55,8 @@ fn parse_single_agent(entry: &str) -> Agent {
     // Strip the role tag and look for year range.
     let without_role = ROLE_TAG.replace(entry, "").to_string();
     let years = YEAR_RANGE.captures(&without_role).map(|c| {
-        let birth = c
-            .name("birth")
-            .and_then(|m| m.as_str().parse::<i32>().ok());
-        let death = c
-            .name("death")
-            .and_then(|m| m.as_str().parse::<i32>().ok());
+        let birth = c.name("birth").and_then(|m| m.as_str().parse::<i32>().ok());
+        let death = c.name("death").and_then(|m| m.as_str().parse::<i32>().ok());
         (birth, death)
     });
 
@@ -151,8 +151,9 @@ mod tests {
 
     #[test]
     fn parses_plato_translator_jowett() {
-        let agents =
-            parse_authors_field("Plato, 428? BCE-348? BCE; Jowett, Benjamin, 1817-1893 [Translator]");
+        let agents = parse_authors_field(
+            "Plato, 428? BCE-348? BCE; Jowett, Benjamin, 1817-1893 [Translator]",
+        );
         assert_eq!(agents.len(), 2);
         assert_eq!(agents[0].name, "Plato");
         assert_eq!(agents[0].role, AgentRole::Author);
@@ -172,7 +173,10 @@ mod tests {
             "Aurelius, Marcus, Emperor of Rome, 121-180; Long, George, 1800-1879 [Translator]",
         );
         assert_eq!(agents.len(), 2);
-        let trans = agents.iter().find(|a| a.role == AgentRole::Translator).unwrap();
+        let trans = agents
+            .iter()
+            .find(|a| a.role == AgentRole::Translator)
+            .unwrap();
         assert_eq!(trans.death_year, Some(1879));
     }
 
@@ -180,7 +184,10 @@ mod tests {
     fn parses_descartes_veitch() {
         let agents =
             parse_authors_field("Descartes, René, 1596-1650; Veitch, John, 1829-1894 [Translator]");
-        let trans = agents.iter().find(|a| a.role == AgentRole::Translator).unwrap();
+        let trans = agents
+            .iter()
+            .find(|a| a.role == AgentRole::Translator)
+            .unwrap();
         assert_eq!(trans.death_year, Some(1894));
         assert_eq!(trans.name, "Veitch, John");
     }

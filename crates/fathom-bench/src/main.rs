@@ -162,19 +162,17 @@ struct Summary {
 async fn main() -> Result<()> {
     let args = Args::parse();
 
-    let queries_path = args.queries.unwrap_or_else(|| {
-        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("data/queries.json")
-    });
+    let queries_path = args
+        .queries
+        .unwrap_or_else(|| PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("data/queries.json"));
     let out_dir = args
         .output_dir
         .unwrap_or_else(|| PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("results"));
-    std::fs::create_dir_all(&out_dir)
-        .with_context(|| format!("create {}", out_dir.display()))?;
+    std::fs::create_dir_all(&out_dir).with_context(|| format!("create {}", out_dir.display()))?;
 
     let queries_json = std::fs::read_to_string(&queries_path)
         .with_context(|| format!("read {}", queries_path.display()))?;
-    let queries: QuerySet =
-        serde_json::from_str(&queries_json).context("parse queries.json")?;
+    let queries: QuerySet = serde_json::from_str(&queries_json).context("parse queries.json")?;
     eprintln!(
         "loaded {} iconic + {} topical + {} adversarial queries from {}",
         queries.iconic_phrase.len(),
@@ -284,9 +282,7 @@ async fn main() -> Result<()> {
             match runtime.search(&q.query, args.top_k).await {
                 Ok(h) => h,
                 Err(e) => {
-                    eprintln!(
-                        "  adversarial query {q:?} errored (expected for some): {e:#}"
-                    );
+                    eprintln!("  adversarial query {q:?} errored (expected for some): {e:#}");
                     Vec::new()
                 }
             }
@@ -323,18 +319,14 @@ async fn main() -> Result<()> {
     let stamp = chrono::Utc::now().format("%Y%m%dT%H%M%SZ");
     let out_path = out_dir.join(format!("{}-{}.json", stamp, args.tag));
     let pretty = serde_json::to_string_pretty(&results)?;
-    std::fs::write(&out_path, &pretty)
-        .with_context(|| format!("write {}", out_path.display()))?;
+    std::fs::write(&out_path, &pretty).with_context(|| format!("write {}", out_path.display()))?;
     eprintln!("  → {}", out_path.display());
 
     print_summary(&results);
     Ok(())
 }
 
-fn score_iconic(
-    hits: &[SearchHit],
-    expected: &[u32],
-) -> (Option<usize>, Option<f32>, f32) {
+fn score_iconic(hits: &[SearchHit], expected: &[u32]) -> (Option<usize>, Option<f32>, f32) {
     if expected.is_empty() {
         return (None, None, 0.0);
     }
@@ -355,11 +347,7 @@ fn score_iconic(
     (best_rank, best_sim, rr)
 }
 
-fn hits_to_records(
-    hits: &[SearchHit],
-    runtime: &Runtime,
-    limit: usize,
-) -> Vec<HitRecord> {
+fn hits_to_records(hits: &[SearchHit], runtime: &Runtime, limit: usize) -> Vec<HitRecord> {
     hits.iter()
         .take(limit)
         .enumerate()
@@ -374,7 +362,12 @@ fn hits_to_records(
                 chunk_id: h.chunk_id.clone(),
                 similarity: h.similarity,
                 title,
-                excerpt: h.excerpt.chars().take(200).collect::<String>().replace('\n', " "),
+                excerpt: h
+                    .excerpt
+                    .chars()
+                    .take(200)
+                    .collect::<String>()
+                    .replace('\n', " "),
             }
         })
         .collect()
@@ -395,8 +388,7 @@ fn summarise(
         .filter(|r| r.expected_rank.is_some())
         .count() as f32
         / denom;
-    let mrr =
-        with_expected.iter().map(|r| r.reciprocal_rank).sum::<f32>() / denom;
+    let mrr = with_expected.iter().map(|r| r.reciprocal_rank).sum::<f32>() / denom;
     let at_thresh = |thresh: usize| {
         with_expected
             .iter()
@@ -429,17 +421,37 @@ fn print_summary(r: &BenchResults) {
     eprintln!("════════════════════════════════════════");
     eprintln!("  books_loaded:                {}", r.books_loaded);
     eprintln!("  top_k:                       {}", r.top_k);
-    eprintln!("  search wall:                 {:.2}s", r.summary.search_pass_seconds);
+    eprintln!(
+        "  search wall:                 {:.2}s",
+        r.summary.search_pass_seconds
+    );
     eprintln!();
-    eprintln!("  iconic queries:              {} ({} with expected books in corpus)",
-        r.summary.iconic_count, r.summary.iconic_with_expected_books);
-    eprintln!("    recall@top_k:              {:.1}%", r.summary.iconic_recall_at_k * 100.0);
+    eprintln!(
+        "  iconic queries:              {} ({} with expected books in corpus)",
+        r.summary.iconic_count, r.summary.iconic_with_expected_books
+    );
+    eprintln!(
+        "    recall@top_k:              {:.1}%",
+        r.summary.iconic_recall_at_k * 100.0
+    );
     eprintln!("    MRR:                       {:.3}", r.summary.iconic_mrr);
-    eprintln!("    hits@1:                    {:.1}%", r.summary.iconic_hits_at_1 * 100.0);
-    eprintln!("    hits@5:                    {:.1}%", r.summary.iconic_hits_at_5 * 100.0);
-    eprintln!("    hits@10:                   {:.1}%", r.summary.iconic_hits_at_10 * 100.0);
+    eprintln!(
+        "    hits@1:                    {:.1}%",
+        r.summary.iconic_hits_at_1 * 100.0
+    );
+    eprintln!(
+        "    hits@5:                    {:.1}%",
+        r.summary.iconic_hits_at_5 * 100.0
+    );
+    eprintln!(
+        "    hits@10:                   {:.1}%",
+        r.summary.iconic_hits_at_10 * 100.0
+    );
     eprintln!();
-    eprintln!("  adversarial max similarity:  {:.3}", r.summary.adversarial_max_similarity);
+    eprintln!(
+        "  adversarial max similarity:  {:.3}",
+        r.summary.adversarial_max_similarity
+    );
     eprintln!("    (lower is better — we want adversarial queries to NOT score confidently)");
     eprintln!();
     eprintln!("  per-iconic-query expected-source rank:");

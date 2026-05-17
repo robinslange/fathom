@@ -133,7 +133,10 @@ pub async fn fetch_manifest() -> Result<Manifest> {
             if !mp_path.is_file() {
                 let _ = tokio::fs::remove_file(&mp_partial).await;
                 let _ = tokio::fs::remove_file(&sig_partial).await;
-                bail!("manifest fetch failed and no cached manifest at {}", mp_path.display());
+                bail!(
+                    "manifest fetch failed and no cached manifest at {}",
+                    mp_path.display()
+                );
             }
         }
     }
@@ -141,8 +144,7 @@ pub async fn fetch_manifest() -> Result<Manifest> {
     let bytes = tokio::fs::read(&mp_path)
         .await
         .with_context(|| format!("read manifest {}", mp_path.display()))?;
-    let manifest: Manifest = rmp_serde::from_slice(&bytes)
-        .context("decode manifest msgpack")?;
+    let manifest: Manifest = rmp_serde::from_slice(&bytes).context("decode manifest msgpack")?;
     Ok(manifest)
 }
 
@@ -170,8 +172,8 @@ fn verify_signature(manifest_path: &Path, sig_path: &Path) -> Result<()> {
             .ok_or_else(|| anyhow!("no key line in fathom.pub"))?,
     )
     .map_err(|e| anyhow!("parse fathom.pub: {e}"))?;
-    let sig_bytes = std::fs::read(sig_path)
-        .with_context(|| format!("read sig {}", sig_path.display()))?;
+    let sig_bytes =
+        std::fs::read(sig_path).with_context(|| format!("read sig {}", sig_path.display()))?;
     let sig = Signature::decode(std::str::from_utf8(&sig_bytes).context("sig not utf-8")?)
         .map_err(|e| anyhow!("parse signature: {e}"))?;
     let manifest_bytes = std::fs::read(manifest_path)
@@ -418,11 +420,7 @@ impl Runtime {
             return Ok(None);
         }
         // Try UAX#29 sentence snap first.
-        if let Some(snapped) = fathom_chunker::snap_to_sentence(
-            text,
-            clamped_start,
-            clamped_end,
-        ) {
+        if let Some(snapped) = fathom_chunker::snap_to_sentence(text, clamped_start, clamped_end) {
             return Ok(Some(snapped));
         }
         // Fallback: walk to nearest char boundary in/out.
@@ -439,7 +437,6 @@ impl Runtime {
         }
         Ok(Some((s, e)))
     }
-
 }
 
 /// Search hit: book + chunk + similarity score + an excerpt for previewing.
@@ -538,7 +535,10 @@ mod tests {
     fn sha256_helper_matches_known_hash() {
         // sha256("hello world\n") = a948904f2f0f479b8f8197694b30184b0d2ed1c1cd2a1ec0fb85d299a192a447
         let h = sha256_hex(b"hello world\n");
-        assert_eq!(h, "a948904f2f0f479b8f8197694b30184b0d2ed1c1cd2a1ec0fb85d299a192a447");
+        assert_eq!(
+            h,
+            "a948904f2f0f479b8f8197694b30184b0d2ed1c1cd2a1ec0fb85d299a192a447"
+        );
     }
 
     #[test]

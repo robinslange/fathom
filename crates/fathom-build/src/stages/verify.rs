@@ -49,13 +49,16 @@ pub async fn run() -> Result<()> {
         }
     }
 
-    let pub_string =
-        std::fs::read_to_string(&pub_path).with_context(|| format!("read {}", pub_path.display()))?;
-    let pk_box = PublicKeyBox::from_string(&pub_string).map_err(|e| anyhow!("parse pub key: {e}"))?;
-    let pk = pk_box.into_public_key().map_err(|e| anyhow!("decode pub key: {e}"))?;
+    let pub_string = std::fs::read_to_string(&pub_path)
+        .with_context(|| format!("read {}", pub_path.display()))?;
+    let pk_box =
+        PublicKeyBox::from_string(&pub_string).map_err(|e| anyhow!("parse pub key: {e}"))?;
+    let pk = pk_box
+        .into_public_key()
+        .map_err(|e| anyhow!("decode pub key: {e}"))?;
 
-    let sig_string =
-        std::fs::read_to_string(&sig_path).with_context(|| format!("read {}", sig_path.display()))?;
+    let sig_string = std::fs::read_to_string(&sig_path)
+        .with_context(|| format!("read {}", sig_path.display()))?;
     let sig_box = minisign::SignatureBox::from_string(&sig_string)
         .map_err(|e| anyhow!("parse signature: {e}"))?;
 
@@ -66,7 +69,8 @@ pub async fn run() -> Result<()> {
     if hash_mismatches > 0 || missing > 0 {
         bail!(
             "verify failed: {} hash mismatches, {} missing shards",
-            hash_mismatches, missing
+            hash_mismatches,
+            missing
         );
     }
 

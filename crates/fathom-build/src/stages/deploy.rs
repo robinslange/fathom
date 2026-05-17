@@ -77,10 +77,7 @@ pub async fn run(args: Args) -> Result<()> {
 
     for p in [&manifest_path, &sig_path, &pub_path] {
         if !p.is_file() {
-            bail!(
-                "{} not found — run `fathom-build all` first",
-                p.display()
-            );
+            bail!("{} not found — run `fathom-build all` first", p.display());
         }
     }
     if !shards_dir.is_dir() {
@@ -93,9 +90,33 @@ pub async fn run(args: Args) -> Result<()> {
     if !args.skip_shards {
         upload_shards(&args, &shards_dir).await?;
     }
-    upload_object(&args.wrangler, &args.bucket, &pub_path, "fathom.pub", "application/octet-stream", MANIFEST_CACHE_CONTROL).await?;
-    upload_object(&args.wrangler, &args.bucket, &sig_path, "index.msgpack.minisig", "application/octet-stream", MANIFEST_CACHE_CONTROL).await?;
-    upload_object(&args.wrangler, &args.bucket, &manifest_path, "index.msgpack", "application/msgpack", MANIFEST_CACHE_CONTROL).await?;
+    upload_object(
+        &args.wrangler,
+        &args.bucket,
+        &pub_path,
+        "fathom.pub",
+        "application/octet-stream",
+        MANIFEST_CACHE_CONTROL,
+    )
+    .await?;
+    upload_object(
+        &args.wrangler,
+        &args.bucket,
+        &sig_path,
+        "index.msgpack.minisig",
+        "application/octet-stream",
+        MANIFEST_CACHE_CONTROL,
+    )
+    .await?;
+    upload_object(
+        &args.wrangler,
+        &args.bucket,
+        &manifest_path,
+        "index.msgpack",
+        "application/msgpack",
+        MANIFEST_CACHE_CONTROL,
+    )
+    .await?;
 
     eprintln!("deploy: complete");
     Ok(())
@@ -193,7 +214,8 @@ async fn upload_object(
     if !status.success() {
         bail!(
             "wrangler r2 object put {} failed with status {}",
-            object_path, status
+            object_path,
+            status
         );
     }
     Ok(())

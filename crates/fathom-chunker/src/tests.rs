@@ -45,20 +45,34 @@ fn normalise_collapses_double_spaces() {
 fn normalise_preserves_paragraph_breaks() {
     let raw = "First paragraph.\n\nSecond paragraph.\n\n\n\nThird paragraph.";
     let out = canonicalise(raw);
-    assert_eq!(out, "First paragraph.\n\nSecond paragraph.\n\nThird paragraph.");
+    assert_eq!(
+        out,
+        "First paragraph.\n\nSecond paragraph.\n\nThird paragraph."
+    );
 }
 
 #[test]
 fn chunk_short_paragraphs_get_merged() {
-    let cfg = ChunkerConfig { min_tokens: 5, max_tokens: 100 };
+    let cfg = ChunkerConfig {
+        min_tokens: 5,
+        max_tokens: 100,
+    };
     let text = "tiny one.\n\ntiny two.\n\ntiny three four five six seven eight.";
     let chunks = chunk_text(text, &cfg);
-    assert_eq!(chunks.len(), 1, "tiny paragraphs should merge until min_tokens reached. got: {:#?}", chunks);
+    assert_eq!(
+        chunks.len(),
+        1,
+        "tiny paragraphs should merge until min_tokens reached. got: {:#?}",
+        chunks
+    );
 }
 
 #[test]
 fn chunk_normal_paragraphs_one_chunk_each() {
-    let cfg = ChunkerConfig { min_tokens: 3, max_tokens: 100 };
+    let cfg = ChunkerConfig {
+        min_tokens: 3,
+        max_tokens: 100,
+    };
     let text = "alpha beta gamma delta epsilon zeta.\n\neta theta iota kappa lambda mu.";
     let chunks = chunk_text(text, &cfg);
     assert_eq!(chunks.len(), 2);
@@ -68,7 +82,10 @@ fn chunk_normal_paragraphs_one_chunk_each() {
 
 #[test]
 fn chunk_offsets_round_trip_to_source_text() {
-    let cfg = ChunkerConfig { min_tokens: 3, max_tokens: 100 };
+    let cfg = ChunkerConfig {
+        min_tokens: 3,
+        max_tokens: 100,
+    };
     let text = "alpha beta gamma delta epsilon zeta.\n\neta theta iota kappa lambda mu.";
     let chunks = chunk_text(text, &cfg);
     for c in &chunks {
@@ -80,13 +97,23 @@ fn chunk_offsets_round_trip_to_source_text() {
 fn chunk_overlong_splits_at_sentence_boundary() {
     // UAX#29 sentence detection requires `.` followed by space + capital to split.
     // Lowercase-after-period stays one sentence (correct behaviour for abbreviations).
-    let cfg = ChunkerConfig { min_tokens: 3, max_tokens: 10 };
+    let cfg = ChunkerConfig {
+        min_tokens: 3,
+        max_tokens: 10,
+    };
     let text = "Alpha beta gamma three four. Delta epsilon zeta seven eight nine. Theta iota kappa lambda mu nu twelve thirteen.";
     let chunks = chunk_text(text, &cfg);
-    assert!(chunks.len() >= 2, "overlong should split. got: {:#?}", chunks);
+    assert!(
+        chunks.len() >= 2,
+        "overlong should split. got: {:#?}",
+        chunks
+    );
     for c in &chunks {
-        assert!(c.text.ends_with('.') || c.text.ends_with('!') || c.text.ends_with('?'),
-            "split should land on sentence-ending punctuation. got: {:?}", c.text);
+        assert!(
+            c.text.ends_with('.') || c.text.ends_with('!') || c.text.ends_with('?'),
+            "split should land on sentence-ending punctuation. got: {:?}",
+            c.text
+        );
     }
 }
 
@@ -115,7 +142,11 @@ fn snap_to_sentence_on_classical_prose_aurelius_section() {
     let mid = para.len() / 2;
     let snapped = snap_to_sentence(para, mid - 5, mid + 5).expect("should snap");
     let snapped_text = &para[snapped.0..snapped.1];
-    assert!(snapped_text.ends_with('.'), "snap should end at sentence terminator: {:?}", snapped_text);
+    assert!(
+        snapped_text.ends_with('.'),
+        "snap should end at sentence terminator: {:?}",
+        snapped_text
+    );
 }
 
 #[test]
