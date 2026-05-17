@@ -202,6 +202,7 @@ pub struct ShardChunk {
     pub chunk_id: String,
     pub paragraph_id: String,
     pub section_id: Option<String>,
+    /// UTF-8 byte offset into `canonical_text`.
     pub byte_offset_start: usize,
     pub byte_offset_end: usize,
     pub token_count: usize,
