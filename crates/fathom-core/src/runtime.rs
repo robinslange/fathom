@@ -228,15 +228,21 @@ pub struct Runtime {
 
 impl Runtime {
     pub fn new(manifest: Manifest) -> Self {
+        Self::with_cache_capacity(manifest, SHARD_CACHE_CAPACITY)
+    }
+
+    /// Same as `new` but allows overriding the LRU cache capacity. Useful for
+    /// benchmarks or other "load everything" callers that need the entire
+    /// corpus searchable in memory rather than the desktop default of 64.
+    pub fn with_cache_capacity(manifest: Manifest, capacity: usize) -> Self {
         let http = reqwest::Client::builder()
             .user_agent(concat!("fathom/", env!("CARGO_PKG_VERSION")))
             .build()
             .expect("reqwest client builds");
+        let cap = NonZeroUsize::new(capacity.max(1)).expect("capacity max(1) > 0");
         Self {
             manifest,
-            shards: AsyncMutex::new(LruCache::new(
-                NonZeroUsize::new(SHARD_CACHE_CAPACITY).unwrap(),
-            )),
+            shards: AsyncMutex::new(LruCache::new(cap)),
             http,
         }
     }
