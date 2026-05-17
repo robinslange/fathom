@@ -287,6 +287,10 @@ impl Runtime {
             .clone();
         let local = shard_path(&book.shard_filename)?;
 
+        // Capture the verified bytes from whichever branch produces them so
+        // decode_shard below doesn't have to re-read the file. Network branch
+        // already has them in memory; disk-hit branch reads once and reuses.
+        let mut raw: Option<Vec<u8>> = None;
         for attempt in 0..2u8 {
             if !local.is_file() {
                 let url = format!("{}/shards/{}", base_url(), book.shard_filename);
@@ -320,6 +324,7 @@ impl Runtime {
                 tokio::fs::rename(&partial, &local)
                     .await
                     .with_context(|| format!("finalise {}", local.display()))?;
+                raw = Some(bytes.to_vec());
             } else {
                 let bytes = tokio::fs::read(&local).await?;
                 if !sha256_hex(&bytes).eq_ignore_ascii_case(&book.shard_sha256) {
@@ -332,11 +337,12 @@ impl Runtime {
                         local.display()
                     );
                 }
+                raw = Some(bytes);
             }
             break;
         }
 
-        let raw = tokio::fs::read(&local).await?;
+        let raw = raw.expect("loop above must populate raw or bail");
         let shard = match decode_shard(&raw) {
             Ok(s) => s,
             Err(e) => {
@@ -355,9 +361,16 @@ impl Runtime {
     /// startup, then re-searches as the user reads.
     pub async fn search(&self, query: &str, top_n: usize) -> Result<Vec<SearchHit>> {
         let q = fathom_embed::embed(query).context("embed query")?;
+        // Snapshot Arc<Shard> handles out of the LRU and release the lock
+        // before the kNN scan. The scan is the bulk of the work; holding the
+        // cache mutex across it would block every concurrent ensure_shard /
+        // search call during a prewarm burst.
+        let shards: Vec<Arc<Shard>> = {
+            let cache = self.shards.lock().await;
+            cache.iter().map(|(_, s)| s.clone()).collect()
+        };
         let mut hits: Vec<SearchHit> = Vec::new();
-        let cache = self.shards.lock().await;
-        for (_, shard) in cache.iter() {
+        for shard in &shards {
             for chunk in &shard.chunks {
                 let v = fathom_embed::from_f16_bytes(&chunk.embedding_f16);
                 let sim = cosine(&q.vector, &v);
