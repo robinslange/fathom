@@ -210,16 +210,18 @@ async fn library_paraphrase_selection(
 
     ensure_judge(&app).await?;
     let llama = ensure_llama(&app).await?;
-    // v0.2 uses the curated path: per-passage substrate (via lookup_canonical
-    // in gloss_curated) only, no global-substrate injection. The global-
-    // substrate path dumps the entire union map as glossary regardless of
-    // relevance to the selection — fine in principle, terrible in v0.2 UX.
-    // v0.21 plans semantic substrate retrieval: rank the global map against
-    // the selection's embedding, inject only top-N relevant terms.
+    // Mode::Auto: try the curated 135-passage seed lexicon by fingerprint
+    // first (rare hit on arbitrary Gutenberg prose), fall through to JIT
+    // identification + gloss-with-guard (Gemma identifies terms-of-art in
+    // the selection and glosses them on the fly), then no-substrate as a
+    // last resort. Curated-only would error for almost every selection.
+    // v0.21 plans semantic substrate retrieval — rank the global substrate
+    // map against the selection's embedding and inject the top-N relevant
+    // terms — but that's a separate piece of work.
     Ok(fathom_with_judge(
         text,
         args.tier,
-        fathom_core::Mode::Curated,
+        fathom_core::Mode::Auto,
         llama.as_ref(),
         JudgeMode::Always(None),
     )
