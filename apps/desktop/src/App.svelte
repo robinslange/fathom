@@ -599,7 +599,7 @@
     {/if}
 
     {#if paraphraseResult}
-      <section class="paraphrase-block">
+      <section class="paraphrase-block" aria-live="polite" aria-atomic="true">
         <header>
           <h3>Paraphrase</h3>
           <div class="paraphrase-meta">
@@ -615,11 +615,22 @@
         {#if paraphraseResult.faithfulness}
           {@const f = paraphraseResult.faithfulness}
           {@const v = paraphraseResult.faithfulness_verdict}
+          {@const isWarn = v ? !v.faithful : false}
           <div
             class="faithfulness"
-            class:warn={v ? !v.faithful : false}
+            class:warn={isWarn}
             title={v ? `passes when support > ${v.support_floor} and contradiction < ${v.contradiction_ceiling}` : ""}
           >
+            <div
+              class="faithfulness-verdict"
+              role="status"
+              aria-label={isWarn
+                ? `Faithfulness warning: ${f.introductions.length} unsupported ${f.introductions.length === 1 ? "sentence" : "sentences"}`
+                : "Faithful: paraphrase aligns with the source"}
+            >
+              <span class="verdict-glyph" aria-hidden="true">{isWarn ? "⚠" : "✓"}</span>
+              <span class="verdict-label">{isWarn ? "Check" : "Faithful"}</span>
+            </div>
             <div class="faithfulness-summary">
               <span>support {f.support.toFixed(2)}</span>
               <span class="dot">·</span>
@@ -1009,6 +1020,21 @@
   .faithfulness.warn {
     border-color: #b35a3e;
     background: #fbf0e7;
+  }
+  .faithfulness-verdict {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+  }
+  .faithfulness .verdict-glyph {
+    font-size: 0.95rem;
+    line-height: 1;
+    color: #4a7a4a;
+  }
+  .faithfulness.warn .verdict-glyph {
+    color: #b35a3e;
   }
   .faithfulness-summary {
     display: flex;
