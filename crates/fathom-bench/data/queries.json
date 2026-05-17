@@ -1,0 +1,181 @@
+{
+  "version": 1,
+  "notes": "Three query categories: iconic_phrase has a known source book the query is taken from verbatim or near-verbatim. topical has no single source but should resonate in a domain. adversarial should NOT score high anywhere (noise-floor probe).",
+  "iconic_phrase": [
+    {
+      "query": "the unexamined life is not worth living",
+      "expected_gutenberg_ids": [1656, 13726],
+      "source": "Plato, Apology 38a",
+      "notes": "The 2026-05-17 baseline measured this missing top-20 entirely."
+    },
+    {
+      "query": "I think, therefore I am",
+      "expected_gutenberg_ids": [59, 25830],
+      "source": "Descartes, Discourse on the Method"
+    },
+    {
+      "query": "from my grandfather Verus I learned good morals",
+      "expected_gutenberg_ids": [2680, 6920, 55317],
+      "source": "Marcus Aurelius, Meditations I.1"
+    },
+    {
+      "query": "some things are in our power and others are not",
+      "expected_gutenberg_ids": [45109, 10661],
+      "source": "Epictetus, Enchiridion 1"
+    },
+    {
+      "query": "the cave with prisoners chained watching shadows on the wall",
+      "expected_gutenberg_ids": [10214, 40437],
+      "source": "Plato, Republic 514a (allegory of the cave)"
+    },
+    {
+      "query": "philosophy is preparation for death",
+      "expected_gutenberg_ids": [1658, 13726],
+      "source": "Plato, Phaedo 64a"
+    },
+    {
+      "query": "act only according to that maxim which you can will to be a universal law",
+      "expected_gutenberg_ids": [5683, 4280, 5684],
+      "source": "Kant, Groundwork / Critique of Practical Reason"
+    },
+    {
+      "query": "God is dead and we have killed him",
+      "expected_gutenberg_ids": [1998],
+      "source": "Nietzsche, Thus Spake Zarathustra / Gay Science"
+    },
+    {
+      "query": "human life solitary poor nasty brutish and short",
+      "expected_gutenberg_ids": [],
+      "source": "Hobbes, Leviathan — NOT in corpus, recall baseline for missing source"
+    },
+    {
+      "query": "happiness is an activity of the soul in accordance with virtue",
+      "expected_gutenberg_ids": [8438],
+      "source": "Aristotle, Nicomachean Ethics I.7"
+    },
+    {
+      "query": "what is past is done with",
+      "expected_gutenberg_ids": [2680, 6920, 55317],
+      "source": "Marcus Aurelius, Meditations VIII.36"
+    },
+    {
+      "query": "the only thing I know is that I know nothing",
+      "expected_gutenberg_ids": [1656, 13726],
+      "source": "Socrates via Plato, Apology 21d"
+    },
+    {
+      "query": "when you arise in the morning think of what a privilege it is to be alive",
+      "expected_gutenberg_ids": [2680, 6920, 55317],
+      "source": "Marcus Aurelius (paraphrase)"
+    },
+    {
+      "query": "everything that happens happens as it should",
+      "expected_gutenberg_ids": [2680, 6920, 55317],
+      "source": "Marcus Aurelius, Meditations IV.10"
+    },
+    {
+      "query": "a treatise of human nature being an attempt to introduce the experimental method",
+      "expected_gutenberg_ids": [4705, 62856],
+      "source": "Hume, Treatise of Human Nature (verbatim subtitle)"
+    },
+    {
+      "query": "the will to power",
+      "expected_gutenberg_ids": [],
+      "source": "Nietzsche — corpus has pg52915 'Will to Power Book III-IV' specifically (high-volume target)"
+    },
+    {
+      "query": "every action of yours that has no reference to a social end",
+      "expected_gutenberg_ids": [2680, 6920, 55317],
+      "source": "Marcus Aurelius, Meditations IX.23"
+    },
+    {
+      "query": "no man steps in the same river twice",
+      "expected_gutenberg_ids": [],
+      "source": "Heraclitus — fragment, not a complete book; recall baseline"
+    },
+    {
+      "query": "appearances are not realities and what is is not what seems",
+      "expected_gutenberg_ids": [10214, 40437, 1658, 13726],
+      "source": "Plato — recurring motif across Republic, Phaedo, Theaetetus"
+    },
+    {
+      "query": "concerning the principles of human knowledge",
+      "expected_gutenberg_ids": [4723],
+      "source": "Berkeley, Principles of Human Knowledge (verbatim title)"
+    }
+  ],
+  "topical": [
+    {
+      "query": "form and matter",
+      "expected_traditions": ["Aristotelian", "Medieval"],
+      "notes": "Should land in Aristotle + Maimonides territory."
+    },
+    {
+      "query": "eudaimonia and human flourishing",
+      "expected_traditions": ["Aristotelian", "Stoic"],
+      "notes": "Greek ethics."
+    },
+    {
+      "query": "categorical imperative and moral duty",
+      "expected_traditions": ["Kantian"],
+      "notes": "Kantian deontology."
+    },
+    {
+      "query": "the categories of the understanding",
+      "expected_traditions": ["Kantian"],
+      "notes": "Kantian epistemology."
+    },
+    {
+      "query": "Forms and the Good",
+      "expected_traditions": ["Platonic"],
+      "notes": "Platonic metaphysics."
+    },
+    {
+      "query": "scepticism and the limits of knowledge",
+      "expected_traditions": ["Empiricist", "Sceptic"],
+      "notes": "Hume + Pyrrho territory."
+    },
+    {
+      "query": "virtue and the good life",
+      "expected_traditions": ["Stoic", "Aristotelian"],
+      "notes": "Ethics generally."
+    },
+    {
+      "query": "the will and freedom of choice",
+      "expected_traditions": ["Stoic", "Existentialist"],
+      "notes": "Free will discussion."
+    },
+    {
+      "query": "the existence of God",
+      "expected_traditions": ["Scholastic", "Medieval"],
+      "notes": "Cosmological / ontological arguments."
+    },
+    {
+      "query": "perception and the senses",
+      "expected_traditions": ["Empiricist"],
+      "notes": "Locke + Berkeley + Hume."
+    }
+  ],
+  "adversarial": [
+    {
+      "query": "the the the the the",
+      "notes": "High-frequency token spam. Top similarity should be < 0.65."
+    },
+    {
+      "query": "asdf qwerty zxcv hjkl",
+      "notes": "Nonsense ASCII. Top similarity should be < 0.50."
+    },
+    {
+      "query": "",
+      "notes": "Empty query. Should error gracefully, NOT return high-similarity hits."
+    },
+    {
+      "query": "good",
+      "notes": "Single common word. Top similarity should be in the 0.55–0.65 range — present but not confident."
+    },
+    {
+      "query": "🦀 hello world 🚀",
+      "notes": "Emoji + filler. Tests Unicode handling. Similarity should be diffuse."
+    }
+  ]
+}

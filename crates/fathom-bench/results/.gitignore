@@ -1,0 +1,3 @@
+# Per-run timestamped output is local; only checked-in baselines (named
+# without a timestamp prefix, e.g. baseline-v0.20.json) belong in git.
+*Z-*.json

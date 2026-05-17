@@ -278,7 +278,14 @@
     )?.closest("[data-byte-start]") as HTMLElement | null;
     if (!el) return null;
     const paraByteStart = Number(el.dataset.byteStart ?? "0");
-    const prefix = el.innerText.slice(0, charOffset);
+    // Range offsets are container-relative. For text-node containers
+    // (the common case for mouse selections) the offset indexes into
+    // (container as Text).data; for element containers it indexes
+    // child nodes — fall back to innerText.slice as a best-effort.
+    const prefix =
+      container.nodeType === Node.TEXT_NODE
+        ? (container as Text).data.slice(0, charOffset)
+        : el.innerText.slice(0, charOffset);
     return paraByteStart + utf8ByteLength(prefix);
   }
 

@@ -1,0 +1,23 @@
+[package]
+name = "fathom-bench"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+rust-version.workspace = true
+description = "Retrieval benchmark harness for Fathom. Runs a fixed query set against the live R2 corpus (or a local manifest URL), measures recall + topical coherence + noise floor, writes JSON for v0.21 BM25 comparison."
+
+[[bin]]
+name = "fathom-bench"
+path = "src/main.rs"
+
+[dependencies]
+anyhow.workspace = true
+tokio.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+clap.workspace = true
+fathom-core.workspace = true
+fathom-embed.workspace = true
+chrono.workspace = true
