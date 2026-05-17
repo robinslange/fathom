@@ -104,16 +104,6 @@
 
   let currentPage = $state(0);
 
-  // Temporary diagnostic HUD — captures console.error lines for in-app visibility
-  // while we debug the silent-paraphrase issue. Remove with the diagnostics.
-  let debugLog: string[] = $state([]);
-  const origConsoleError = console.error.bind(console);
-  console.error = (...args: unknown[]) => {
-    origConsoleError(...args);
-    const line = args.map((a) => (typeof a === "string" ? a : JSON.stringify(a))).join(" ");
-    debugLog = [...debugLog.slice(-19), line];
-  };
-
   const modelLabels: Record<string, string> = {
     "gemma3-4b": "Loading paraphrase model (Gemma 3 4B)",
     "deberta-nli": "Loading faithfulness model (DeBERTa NLI)",
@@ -372,24 +362,12 @@
   }
 
   async function paraphraseSelection() {
-    if (!loadedBook) {
-      console.error("[fathom:paraphrase] bail: no loadedBook");
-      return;
-    }
+    if (!loadedBook) return;
     const selection = window.getSelection();
-    if (!selection || selection.isCollapsed) {
-      console.error("[fathom:paraphrase] bail: no/collapsed selection");
-      return;
-    }
+    if (!selection || selection.isCollapsed) return;
     const range = selection.getRangeAt(0);
     const selText = selection.toString();
-    if (selText.trim().length === 0) {
-      console.error("[fathom:paraphrase] bail: empty selText");
-      return;
-    }
-    console.error("[fathom:paraphrase] selText:", JSON.stringify(selText.slice(0, 80)));
-    console.error("[fathom:paraphrase] startContainer:", range.startContainer.nodeType, range.startContainer.nodeName, "offset:", range.startOffset);
-    console.error("[fathom:paraphrase] endContainer:", range.endContainer.nodeType, range.endContainer.nodeName, "offset:", range.endOffset);
+    if (selText.trim().length === 0) return;
 
     let startByte = endpointToByte(range.startContainer, range.startOffset, "start");
     let endByte = endpointToByte(range.endContainer, range.endOffset, "end");
@@ -414,14 +392,7 @@
       if (sp) endByte = spByteStart + utf8ByteLength(sp.text);
     }
 
-    console.error("[fathom:paraphrase] startByte:", startByte, "endByte:", endByte, "startParaEl?", !!startParaEl, "endParaEl?", !!endParaEl);
-
-    if (endByte <= startByte) {
-      console.error("[fathom:paraphrase] bail: endByte <= startByte");
-      return;
-    }
-
-    console.error("[fathom:paraphrase] invoking library_paraphrase_selection");
+    if (endByte <= startByte) return;
 
     lastSelectionText = selText;
     paraphraseBusy = true;
@@ -437,8 +408,17 @@
         },
       });
     } catch (e) {
-      const msg = e instanceof Error ? e.message : String(e);
-      console.error("[fathom:paraphrase] invoke FAILED:", msg);
+      // Tauri serialises Rust AppError { message: String } as a plain object
+      // with a `message` field — neither `instanceof Error` nor `String(e)`
+      // surfaces it correctly. Dig into the object explicitly.
+      const msg =
+        e instanceof Error
+          ? e.message
+          : typeof e === "object" && e !== null && "message" in e
+            ? String((e as { message: unknown }).message)
+            : typeof e === "string"
+              ? e
+              : JSON.stringify(e);
       paraphraseError = msg || "paraphrase failed";
     } finally {
       paraphraseBusy = false;
@@ -682,16 +662,6 @@
     {/if}
   </aside>
 </main>
-
-{#if debugLog.length > 0}
-  <div class="debug-hud">
-    <div class="debug-hud-header">
-      debug ({debugLog.length})
-      <button onclick={() => (debugLog = [])}>clear</button>
-    </div>
-    <pre>{debugLog.join("\n")}</pre>
-  </div>
-{/if}
 
 <style>
   :global(:root) {
@@ -1086,46 +1056,4 @@
     opacity: 0.9;
   }
 
-  /* Temporary diagnostic HUD — remove with the console.error traces. */
-  .debug-hud {
-    position: fixed;
-    bottom: 0.5rem;
-    left: 0.5rem;
-    max-width: 50vw;
-    max-height: 35vh;
-    background: rgba(0, 0, 0, 0.82);
-    color: #fffdf8;
-    font-family: "IBM Plex Mono", monospace;
-    font-size: 0.7rem;
-    line-height: 1.35;
-    padding: 0.4rem 0.6rem;
-    border-radius: 4px;
-    overflow: auto;
-    z-index: 9999;
-    user-select: text;
-  }
-  .debug-hud-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    opacity: 0.6;
-    margin-bottom: 0.25rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-  }
-  .debug-hud-header button {
-    background: transparent;
-    color: inherit;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 0.1rem 0.4rem;
-    font: inherit;
-    font-size: 0.65rem;
-    cursor: pointer;
-    border-radius: 2px;
-  }
-  .debug-hud pre {
-    margin: 0;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
 </style>

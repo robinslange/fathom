@@ -24,7 +24,12 @@ use std::num::NonZeroU32;
 use std::path::PathBuf;
 use std::sync::Arc;
 
-const N_CTX: u32 = 4096;
+// Gemma 3 4B's native context is ~131k tokens. We use 32k to give plenty of
+// headroom for the global substrate map (~20k tokens once Slice 1's harvest
+// landed) plus passage + output, without paying the full KV-cache cost of
+// the native limit. v0.21 plans to swap "inject all terms" for a semantic-
+// ranked subset that fits in ~4k, at which point this can drop back down.
+const N_CTX: u32 = 32768;
 const MAX_NEW_TOKENS: u32 = 2000;
 const TEMPERATURE: f32 = 0.2;
 const SEED: u32 = 1234;
@@ -79,8 +84,15 @@ impl LlamaCppBackend {
 
 fn decode_sync(model: Arc<LlamaModel>, prompt: String) -> Result<String> {
     let backend = get_backend()?;
+    // n_batch must accommodate the entire prompt in a single decode call —
+    // the default of 512 triggers a GGML_ASSERT abort (visible as a SIGABRT
+    // on a tokio worker thread) when we feed it the ~20k-token prompt that
+    // global-substrate injection produces. Keep n_ubatch smaller to control
+    // peak compute memory; llama-cpp will split internally.
     let ctx_params = LlamaContextParams::default()
-        .with_n_ctx(NonZeroU32::new(N_CTX));
+        .with_n_ctx(NonZeroU32::new(N_CTX))
+        .with_n_batch(N_CTX)
+        .with_n_ubatch(512);
     let mut ctx = model
         .new_context(backend, ctx_params)
         .context("creating llama context")?;
@@ -97,7 +109,11 @@ fn decode_sync(model: Arc<LlamaModel>, prompt: String) -> Result<String> {
         bail!("prompt too long: {} tokens >= n_ctx {}", n_in, N_CTX);
     }
 
-    let mut batch = LlamaBatch::new(512, 1);
+    // Batch must hold the full prompt; the prior 512 limit panicked with
+    // "Insufficient Space" once the global substrate map pushed prompts past
+    // a few hundred tokens. Match N_CTX so any prompt that fits the context
+    // also fits the batch.
+    let mut batch = LlamaBatch::new(N_CTX as usize, 1);
     for (i, token) in tokens_in.iter().enumerate() {
         let is_last = i == tokens_in.len() - 1;
         batch.add(*token, i as i32, &[0], is_last)?;

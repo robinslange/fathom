@@ -371,8 +371,14 @@ impl Runtime {
     /// Snap a document-absolute byte-offset selection (which may span chunks)
     /// to the enclosing UAX#29 sentence boundaries within `canonical_text`.
     ///
-    /// Returns `Ok(None)` if the selection collapses to nothing or doesn't
-    /// overlap any sentence in the canonical text.
+    /// If the UAX#29 snap fails (selection lies between sentence spans, or
+    /// `unicode_sentences` segmented around a feature like an em-dash without
+    /// classifying byte 0 as a sentence start), falls back to the raw selection
+    /// clamped to UTF-8 char boundaries. We'd rather paraphrase the user's
+    /// literal selection than silently fail; quality cost is a possibly
+    /// mid-sentence cut, robustness gain is the user always gets something.
+    ///
+    /// Returns `Ok(None)` only when the selection collapses to zero length.
     pub async fn snap_selection(
         &self,
         gutenberg_id: u32,
@@ -386,12 +392,29 @@ impl Runtime {
         if clamped_end <= clamped_start {
             return Ok(None);
         }
-        Ok(fathom_chunker::snap_to_sentence(
+        // Try UAX#29 sentence snap first.
+        if let Some(snapped) = fathom_chunker::snap_to_sentence(
             text,
             clamped_start,
             clamped_end,
-        ))
+        ) {
+            return Ok(Some(snapped));
+        }
+        // Fallback: walk to nearest char boundary in/out.
+        let mut s = clamped_start;
+        while s < text.len() && !text.is_char_boundary(s) {
+            s += 1;
+        }
+        let mut e = clamped_end;
+        while e > 0 && e < text.len() && !text.is_char_boundary(e) {
+            e -= 1;
+        }
+        if e <= s {
+            return Ok(None);
+        }
+        Ok(Some((s, e)))
     }
+
 }
 
 /// Search hit: book + chunk + similarity score + an excerpt for previewing.

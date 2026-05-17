@@ -1,6 +1,6 @@
 use fathom_core::runtime::{ManifestBook, Runtime, SearchHit, Shard};
 use fathom_core::{
-    bootstrap, fathom_with_global_substrate, fathom_with_judge, judge, FathomResult, JudgeMode,
+    bootstrap, fathom_with_judge, judge, FathomResult, JudgeMode,
     Mode, Tier,
 };
 use fathom_embed;
@@ -193,15 +193,6 @@ pub struct LibraryParaphraseArgs {
     pub tier: Tier,
 }
 
-// Build the global substrate map once at first call; reuse across paraphrases.
-static GLOBAL_SUBSTRATE: OnceCell<std::collections::BTreeMap<String, fathom_core::lexicon::TermEntry>> =
-    OnceCell::new();
-
-fn global_substrate(
-) -> &'static std::collections::BTreeMap<String, fathom_core::lexicon::TermEntry> {
-    GLOBAL_SUBSTRATE.get_or_init(fathom_core::lexicon::global_substrate_map)
-}
-
 #[tauri::command]
 async fn library_paraphrase_selection(
     app: AppHandle,
@@ -219,11 +210,17 @@ async fn library_paraphrase_selection(
 
     ensure_judge(&app).await?;
     let llama = ensure_llama(&app).await?;
-    Ok(fathom_with_global_substrate(
+    // v0.2 uses the curated path: per-passage substrate (via lookup_canonical
+    // in gloss_curated) only, no global-substrate injection. The global-
+    // substrate path dumps the entire union map as glossary regardless of
+    // relevance to the selection — fine in principle, terrible in v0.2 UX.
+    // v0.21 plans semantic substrate retrieval: rank the global map against
+    // the selection's embedding, inject only top-N relevant terms.
+    Ok(fathom_with_judge(
         text,
         args.tier,
+        fathom_core::Mode::Curated,
         llama.as_ref(),
-        global_substrate(),
         JudgeMode::Always(None),
     )
     .await?)
