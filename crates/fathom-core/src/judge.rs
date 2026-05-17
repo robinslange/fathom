@@ -97,15 +97,61 @@ pub fn score_paraphrase(original: &str, paraphrase: &str) -> Result<Faithfulness
         });
     }
 
+    // Score every paraphrase × original pair, then hand the matrix to the
+    // pure aggregation function. Keeping inference and aggregation separate
+    // lets us unit-test the aggregation without loading the ONNX model.
+    let mut pair_probs: Vec<Vec<[f32; 3]>> = Vec::with_capacity(paraphrases.len());
+    for hyp in &paraphrases {
+        let mut row = Vec::with_capacity(originals.len());
+        for prem in &originals {
+            row.push(score_pair(&mut state, prem, hyp)?);
+        }
+        pair_probs.push(row);
+    }
+
+    Ok(aggregate_nli_scores(&paraphrases, &pair_probs))
+}
+
+/// Pure aggregation of NLI pair probabilities into a `FaithfulnessScore`.
+///
+/// `pair_probs[i][j]` is `[entail, neutral, contra]` for paraphrase[i] vs
+/// original[j]. For each paraphrase sentence we pick the original sentence
+/// that maximises entailment ("best-aligned premise") and read contradiction
+/// off the same premise. `support` is the mean of those best entailments;
+/// `contradiction_max` is the max of the matched contradictions; any
+/// paraphrase sentence whose best entailment falls below SUPPORT_THRESHOLD
+/// becomes an `introduction`.
+///
+/// Panics if `paraphrases.len() != pair_probs.len()` or if any row is empty.
+pub(crate) fn aggregate_nli_scores(
+    paraphrases: &[String],
+    pair_probs: &[Vec<[f32; 3]>],
+) -> FaithfulnessScore {
+    assert_eq!(
+        paraphrases.len(),
+        pair_probs.len(),
+        "paraphrases and pair_probs length mismatch"
+    );
+    if paraphrases.is_empty() {
+        return FaithfulnessScore {
+            support: 0.0,
+            contradiction_max: 0.0,
+            introductions: Vec::new(),
+        };
+    }
+
     let mut per_paraphrase_support = Vec::with_capacity(paraphrases.len());
     let mut per_paraphrase_contradiction = Vec::with_capacity(paraphrases.len());
     let mut introductions = Vec::new();
 
-    for hyp in &paraphrases {
+    for (hyp, row) in paraphrases.iter().zip(pair_probs.iter()) {
+        assert!(
+            !row.is_empty(),
+            "pair_probs row for paraphrase {hyp:?} is empty"
+        );
         let mut best_entail = 0.0f32;
         let mut contradiction_at_best = 0.0f32;
-        for prem in &originals {
-            let probs = score_pair(&mut state, prem, hyp)?;
+        for probs in row {
             if probs[ENTAILMENT_IDX] > best_entail {
                 best_entail = probs[ENTAILMENT_IDX];
                 contradiction_at_best = probs[CONTRADICTION_IDX];
@@ -124,11 +170,11 @@ pub fn score_paraphrase(original: &str, paraphrase: &str) -> Result<Faithfulness
         .copied()
         .fold(0.0f32, f32::max);
 
-    Ok(FaithfulnessScore {
+    FaithfulnessScore {
         support,
         contradiction_max,
         introductions,
-    })
+    }
 }
 
 fn score_pair(state: &mut JudgeState, premise: &str, hypothesis: &str) -> Result<[f32; 3]> {
@@ -258,5 +304,133 @@ mod tests {
     fn sentences_skip_empty() {
         let s = split_sentences("   ");
         assert!(s.is_empty());
+    }
+
+    // ---- aggregate_nli_scores ----
+    //
+    // Probability triples are [entailment, neutral, contradiction].
+
+    fn p(entail: f32, neutral: f32, contra: f32) -> [f32; 3] {
+        [entail, neutral, contra]
+    }
+
+    #[test]
+    fn aggregate_all_strongly_entailed() {
+        // Two paraphrase sentences, two originals, every pair strongly entails.
+        let paraphrases = vec!["A".into(), "B".into()];
+        let pair_probs = vec![
+            vec![p(0.90, 0.05, 0.05), p(0.80, 0.15, 0.05)],
+            vec![p(0.85, 0.10, 0.05), p(0.95, 0.03, 0.02)],
+        ];
+        let score = aggregate_nli_scores(&paraphrases, &pair_probs);
+        assert!(score.support > 0.6, "support {} should be > 0.6", score.support);
+        assert!(
+            score.contradiction_max < 0.1,
+            "contradiction_max {} should be < 0.1",
+            score.contradiction_max
+        );
+        assert!(score.introductions.is_empty());
+    }
+
+    #[test]
+    fn aggregate_all_contradiction() {
+        let paraphrases = vec!["A".into(), "B".into()];
+        let pair_probs = vec![
+            vec![p(0.05, 0.10, 0.85), p(0.10, 0.10, 0.80)],
+            vec![p(0.05, 0.15, 0.80), p(0.05, 0.05, 0.90)],
+        ];
+        let score = aggregate_nli_scores(&paraphrases, &pair_probs);
+        // Best entailment is whichever pair has the highest entail score,
+        // which here is 0.10 — well below SUPPORT_THRESHOLD = 0.5.
+        assert!(score.support < 0.2);
+        // contradiction_at_best is paired with the best-entail premise, so
+        // for paraphrase A that's row[1] (entail 0.10 → contra 0.80) and for
+        // B it's row[0] (entail 0.05 → contra 0.80). Max = 0.80.
+        assert!(
+            score.contradiction_max > 0.5,
+            "contradiction_max {} should be > 0.5",
+            score.contradiction_max
+        );
+        assert_eq!(score.introductions.len(), 2);
+    }
+
+    #[test]
+    fn aggregate_mixed_introductions() {
+        // First paraphrase supported, second not.
+        let paraphrases = vec!["supported".into(), "introduced".into()];
+        let pair_probs = vec![
+            vec![p(0.80, 0.15, 0.05)],
+            vec![p(0.20, 0.70, 0.10)], // best entail 0.20 < 0.5 threshold
+        ];
+        let score = aggregate_nli_scores(&paraphrases, &pair_probs);
+        assert_eq!(score.introductions, vec!["introduced".to_string()]);
+        // mean of (0.80, 0.20) = 0.50
+        assert!((score.support - 0.50).abs() < 1e-5);
+    }
+
+    #[test]
+    fn aggregate_empty_input() {
+        let score = aggregate_nli_scores(&[], &[]);
+        assert_eq!(score.support, 0.0);
+        assert_eq!(score.contradiction_max, 0.0);
+        assert!(score.introductions.is_empty());
+    }
+
+    #[test]
+    fn aggregate_contradiction_pairs_with_best_entail_premise() {
+        // One paraphrase, three originals. The premise with the highest
+        // entailment (0.70) carries a low contradiction (0.05). Another
+        // premise has high contradiction (0.85) but its entailment is
+        // mediocre (0.10). Only the matched contradiction counts —
+        // contradiction_max should be 0.05, NOT 0.85.
+        let paraphrases = vec!["paraphrase".into()];
+        let pair_probs = vec![vec![
+            p(0.10, 0.05, 0.85),
+            p(0.70, 0.25, 0.05),
+            p(0.30, 0.50, 0.20),
+        ]];
+        let score = aggregate_nli_scores(&paraphrases, &pair_probs);
+        assert!((score.support - 0.70).abs() < 1e-5);
+        assert!(
+            (score.contradiction_max - 0.05).abs() < 1e-5,
+            "contradiction_max {} should pair with the entail-winning premise (0.05), not the global max (0.85)",
+            score.contradiction_max
+        );
+        assert!(score.introductions.is_empty());
+    }
+
+    #[test]
+    fn aggregate_threshold_boundary_excludes_at_exactly_threshold() {
+        // SUPPORT_THRESHOLD is 0.5 and the check is `< threshold`, so
+        // exactly-0.5 does NOT count as an introduction. Pinning the
+        // boundary so changes to the comparator are loud.
+        let paraphrases = vec!["edge".into()];
+        let pair_probs = vec![vec![p(SUPPORT_THRESHOLD, 0.3, 0.2)]];
+        let score = aggregate_nli_scores(&paraphrases, &pair_probs);
+        assert!(score.introductions.is_empty());
+    }
+
+    #[test]
+    fn aggregate_single_paraphrase_many_originals() {
+        // Best entail is the third original (0.92); contradiction at that
+        // premise is 0.03.
+        let paraphrases = vec!["one".into()];
+        let pair_probs = vec![vec![
+            p(0.30, 0.50, 0.20),
+            p(0.55, 0.30, 0.15),
+            p(0.92, 0.05, 0.03),
+            p(0.10, 0.40, 0.50),
+        ]];
+        let score = aggregate_nli_scores(&paraphrases, &pair_probs);
+        assert!((score.support - 0.92).abs() < 1e-5);
+        assert!((score.contradiction_max - 0.03).abs() < 1e-5);
+    }
+
+    #[test]
+    #[should_panic(expected = "length mismatch")]
+    fn aggregate_mismatched_lengths_panic() {
+        let paraphrases = vec!["a".into(), "b".into()];
+        let pair_probs = vec![vec![p(0.5, 0.3, 0.2)]]; // only one row
+        let _ = aggregate_nli_scores(&paraphrases, &pair_probs);
     }
 }
