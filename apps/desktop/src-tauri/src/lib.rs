@@ -117,8 +117,10 @@ async fn ensure_judge(handle: &AppHandle) -> Result<(), AppError> {
 
 #[tauri::command]
 async fn paraphrase(app: AppHandle, args: ParaphraseArgs) -> Result<FathomResult, AppError> {
-    ensure_judge(&app).await?;
-    let llama = ensure_llama(&app).await?;
+    // Cold-start optimisation: judge ONNX (~270MB) and Gemma GGUF (~2.5GB)
+    // are independent downloads with independent in-memory init costs. Run
+    // them concurrently so total bootstrap is max(judge, llama) not sum.
+    let (_, llama) = tokio::try_join!(ensure_judge(&app), ensure_llama(&app))?;
     Ok(fathom_with_judge(
         args.text,
         args.tier,
@@ -208,8 +210,8 @@ async fn library_paraphrase_selection(
     let shard = rt.ensure_shard(args.gutenberg_id).await?;
     let text = shard.canonical_text[snapped.0..snapped.1].to_string();
 
-    ensure_judge(&app).await?;
-    let llama = ensure_llama(&app).await?;
+    // Concurrent bootstrap; see comment in paraphrase().
+    let (_, llama) = tokio::try_join!(ensure_judge(&app), ensure_llama(&app))?;
     // Mode::Auto: try the curated 135-passage seed lexicon by fingerprint
     // first (rare hit on arbitrary Gutenberg prose), fall through to JIT
     // identification + gloss-with-guard (Gemma identifies terms-of-art in
