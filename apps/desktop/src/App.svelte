@@ -2,6 +2,8 @@
   import { invoke } from "@tauri-apps/api/core";
   import { listen } from "@tauri-apps/api/event";
   import { onMount } from "svelte";
+  import { endpointToByteOffset as endpointToByteOffsetPure } from "./lib/selection.js";
+  import type { ElementLike, NodeLike } from "./lib/selection.js";
 
   type Tier = "simple" | "standard" | "scholarly";
 
@@ -267,26 +269,66 @@
     if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
-  // Translate a DOM Range endpoint to a document-absolute UTF-8 byte offset.
-  function endpointToByteOffset(
-    container: Node,
-    charOffset: number,
-  ): number | null {
-    const el = (container.nodeType === Node.TEXT_NODE
-      ? container.parentElement
-      : (container as HTMLElement)
-    )?.closest("[data-byte-start]") as HTMLElement | null;
-    if (!el) return null;
-    const paraByteStart = Number(el.dataset.byteStart ?? "0");
-    // Range offsets are container-relative. For text-node containers
-    // (the common case for mouse selections) the offset indexes into
-    // (container as Text).data; for element containers it indexes
-    // child nodes — fall back to innerText.slice as a best-effort.
-    const prefix =
-      container.nodeType === Node.TEXT_NODE
-        ? (container as Text).data.slice(0, charOffset)
-        : el.innerText.slice(0, charOffset);
-    return paraByteStart + utf8ByteLength(prefix);
+  /**
+   * Wrap a real DOM Node in the NodeLike interface the pure module expects.
+   * Pre-resolves paraEl via closest("[data-byte-start]") so the pure function
+   * needs no DOM access.
+   */
+  function toNodeLike(domNode: Node): NodeLike {
+    const closestPara = (n: Node): ElementLike | null => {
+      const el = (n.nodeType === Node.TEXT_NODE ? n.parentElement : (n as Element))
+        ?.closest("[data-byte-start]") as HTMLElement | null;
+      if (!el) return null;
+      return domElementToElementLike(el);
+    };
+
+    function domElementToElementLike(el: HTMLElement): ElementLike {
+      const paraEl = closestPara(el);
+      return {
+        nodeType: 1,
+        textContent: el.textContent,
+        dataset: { byteStart: el.dataset.byteStart },
+        childNodes: Array.from(el.childNodes).map(domNodeToNodeLike),
+        paraEl: paraEl ?? undefined,
+      };
+    }
+
+    function domNodeToNodeLike(n: Node): NodeLike {
+      if (n.nodeType === Node.TEXT_NODE) {
+        const text = n as Text;
+        return {
+          nodeType: 3,
+          data: text.data,
+          textContent: text.data,
+          parentElement: text.parentElement
+            ? domElementToElementLike(text.parentElement as HTMLElement)
+            : null,
+        };
+      }
+      return domElementToElementLike(n as HTMLElement);
+    }
+
+    if (domNode.nodeType === Node.TEXT_NODE) {
+      const text = domNode as Text;
+      const paraEl = closestPara(domNode);
+      const parentElementLike: ElementLike | null = text.parentElement
+        ? {
+            nodeType: 1,
+            textContent: text.parentElement.textContent,
+            dataset: { byteStart: (text.parentElement as HTMLElement).dataset?.byteStart },
+            childNodes: Array.from(text.parentElement.childNodes).map(domNodeToNodeLike),
+            paraEl: paraEl ?? undefined,
+          }
+        : null;
+      return {
+        nodeType: 3,
+        data: text.data,
+        textContent: text.data,
+        parentElement: parentElementLike,
+      };
+    }
+
+    return domElementToElementLike(domNode as HTMLElement);
   }
 
   async function paraphraseSelection() {
@@ -297,9 +339,40 @@
     const selText = selection.toString();
     if (selText.trim().length === 0) return;
 
-    const startByte = endpointToByteOffset(range.startContainer, range.startOffset);
-    const endByte = endpointToByteOffset(range.endContainer, range.endOffset);
-    if (startByte === null || endByte === null) return;
+    const paras = paragraphs.map((p) => ({ byteStart: p.byteStart, text: p.text }));
+
+    const startNode = toNodeLike(range.startContainer);
+    const endNode = toNodeLike(range.endContainer);
+
+    const startPara =
+      startNode.nodeType === 3
+        ? startNode.parentElement?.paraEl
+        : (startNode as ElementLike).paraEl;
+    const endPara =
+      endNode.nodeType === 3
+        ? endNode.parentElement?.paraEl
+        : (endNode as ElementLike).paraEl;
+
+    // Determine fallback directions for cross-endpoint snapping:
+    // If start is in the gutter but end is in a paragraph, snap start to
+    // that paragraph's beginning. Mirror for end.
+    const startFallback: "start" | "end" = "start";
+    const endFallback: "start" | "end" = "end";
+
+    let startByte = endpointToByteOffsetPure(startNode, range.startOffset, paras, utf8ByteLength, startFallback);
+    let endByte = endpointToByteOffsetPure(endNode, range.endOffset, paras, utf8ByteLength, endFallback);
+
+    // Cross-endpoint snap: if one side is in the gutter, clamp to the paragraph
+    // containing the other side rather than to the document boundary.
+    if (!startPara && endPara) {
+      startByte = Number(endPara.dataset?.byteStart ?? "0");
+    }
+    if (!endPara && startPara) {
+      const spByteStart = Number(startPara.dataset?.byteStart ?? "0");
+      const spText = paras.find((p) => p.byteStart === spByteStart)?.text ?? "";
+      endByte = spByteStart + utf8ByteLength(spText);
+    }
+
     if (endByte <= startByte) return;
 
     lastSelectionText = selText;
