@@ -95,6 +95,14 @@ To contribute:
 
 ## Development
 
+### Prerequisites
+
+- Rust 1.90+
+- `cmake` (e.g. `brew install cmake`)
+- Xcode Command Line Tools (`xcode-select --install`)
+- Node 20+
+- pnpm (`npm install -g pnpm` or via [pnpm.io](https://pnpm.io/installation))
+
 ```bash
 # Rust workspace
 cargo build --workspace
@@ -102,11 +110,11 @@ cargo test --workspace
 
 # Desktop app dev mode (Vite hot reload + Tauri)
 cd apps/desktop
-npm install
-npm run tauri dev
+pnpm install
+pnpm tauri dev
 
 # Desktop app release build (produces target/release/bundle/macos/Fathom.app)
-npm run tauri -- build
+pnpm tauri build
 ```
 
 The workspace pins `CMAKE_OSX_DEPLOYMENT_TARGET=12.0` in `.cargo/config.toml`. This is required because `cmake-rs` doesn't propagate `MACOSX_DEPLOYMENT_TARGET` to the bundled C++ compilation, and `llama.cpp` uses `std::filesystem::path` which is gated behind macOS 10.15+.
