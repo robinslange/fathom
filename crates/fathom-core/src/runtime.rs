@@ -24,6 +24,10 @@ const FATHOM_PUB: &[u8] = include_bytes!("../data/fathom.pub");
 /// Default base URL for manifest + shard fetch. Override via `FATHOM_MANIFEST_URL`.
 const DEFAULT_BASE_URL: &str = "https://corpus.fathom.omit.nz";
 
+/// Shard format version this runtime understands. Must match the build-time constant.
+/// Shards with a different version are rejected at decode time.
+pub const SHARD_FORMAT_VERSION: u32 = 2;
+
 /// Manifest schema as written by `fathom-build manifest`. Wire-compat with
 /// `crates/fathom-build/src/stages/manifest.rs::Manifest`.
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -196,8 +200,8 @@ pub struct ShardChunk {
     pub chunk_id: String,
     pub paragraph_id: String,
     pub section_id: Option<String>,
-    pub char_offset_start: usize,
-    pub char_offset_end: usize,
+    pub byte_offset_start: usize,
+    pub byte_offset_end: usize,
     pub token_count: usize,
     #[serde(with = "serde_bytes")]
     pub embedding_f16: Vec<u8>,
@@ -211,7 +215,15 @@ fn sha256_hex(bytes: &[u8]) -> String {
 
 fn decode_shard(raw: &[u8]) -> Result<Shard> {
     let decompressed = zstd::decode_all(raw).context("zstd decode shard")?;
-    rmp_serde::from_slice(&decompressed).context("decode shard msgpack")
+    let shard: Shard = rmp_serde::from_slice(&decompressed).context("decode shard msgpack")?;
+    if shard.format_version != SHARD_FORMAT_VERSION {
+        anyhow::bail!(
+            "shard format_version {} != runtime {}",
+            shard.format_version,
+            SHARD_FORMAT_VERSION
+        );
+    }
+    Ok(shard)
 }
 
 /// Maximum number of decoded shards to keep in memory. 64 covers most search
@@ -445,7 +457,7 @@ fn cosine(a: &[f32], b: &[f32]) -> f32 {
 
 fn chunk_excerpt(canonical: &str, chunk: &ShardChunk) -> String {
     const MAX: usize = 200;
-    let slice = &canonical[chunk.char_offset_start..chunk.char_offset_end];
+    let slice = &canonical[chunk.byte_offset_start..chunk.byte_offset_end];
     if slice.len() <= MAX {
         slice.to_string()
     } else {

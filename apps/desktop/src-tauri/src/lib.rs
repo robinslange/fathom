@@ -141,8 +141,8 @@ pub struct BookView {
 #[derive(Serialize)]
 pub struct ChunkRefView {
     pub chunk_id: String,
-    pub char_offset_start: usize,
-    pub char_offset_end: usize,
+    pub byte_offset_start: usize,
+    pub byte_offset_end: usize,
 }
 
 #[tauri::command]
@@ -171,8 +171,8 @@ async fn library_load_book(gutenberg_id: u32) -> Result<BookView, AppError> {
         .iter()
         .map(|c| ChunkRefView {
             chunk_id: c.chunk_id.clone(),
-            char_offset_start: c.char_offset_start,
-            char_offset_end: c.char_offset_end,
+            byte_offset_start: c.byte_offset_start,
+            byte_offset_end: c.byte_offset_end,
         })
         .collect();
     Ok(BookView {

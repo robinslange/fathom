@@ -30,14 +30,14 @@ pub fn paragraphs(canonical_text: &str) -> Vec<(String, usize, usize)> {
 /// overlong paragraph.
 pub struct Sub {
     pub text: String,
-    pub char_offset_start: usize,
-    pub char_offset_end: usize,
+    pub byte_offset_start: usize,
+    pub byte_offset_end: usize,
     pub token_count: usize,
 }
 
 /// Split an overlong paragraph at UAX#29 sentence boundaries, packing sentences
 /// greedily until just before max_tokens. The base offset is the paragraph's
-/// char_offset_start in the parent canonical text.
+/// byte_offset_start in the parent canonical text.
 pub fn split_overlong(paragraph: &str, base_offset: usize, max_tokens: usize) -> Vec<Sub> {
     let mut out = Vec::new();
     let sentences: Vec<(usize, usize, &str)> = sentence_spans(paragraph)
@@ -60,8 +60,8 @@ pub fn split_overlong(paragraph: &str, base_offset: usize, max_tokens: usize) ->
         let tokens = approx_tokens(paragraph);
         out.push(Sub {
             text: paragraph.to_string(),
-            char_offset_start: base_offset,
-            char_offset_end: base_offset + paragraph.len(),
+            byte_offset_start: base_offset,
+            byte_offset_end: base_offset + paragraph.len(),
             token_count: tokens,
         });
         return out;
@@ -76,8 +76,8 @@ pub fn split_overlong(paragraph: &str, base_offset: usize, max_tokens: usize) ->
         if buf_tokens + t_tokens > max_tokens && buf_tokens > 0 {
             out.push(Sub {
                 text: paragraph[buf_start..buf_end].to_string(),
-                char_offset_start: base_offset + buf_start,
-                char_offset_end: base_offset + buf_end,
+                byte_offset_start: base_offset + buf_start,
+                byte_offset_end: base_offset + buf_end,
                 token_count: buf_tokens,
             });
             buf_start = *s;
@@ -91,8 +91,8 @@ pub fn split_overlong(paragraph: &str, base_offset: usize, max_tokens: usize) ->
 
     out.push(Sub {
         text: paragraph[buf_start..buf_end].to_string(),
-        char_offset_start: base_offset + buf_start,
-        char_offset_end: base_offset + buf_end,
+        byte_offset_start: base_offset + buf_start,
+        byte_offset_end: base_offset + buf_end,
         token_count: buf_tokens,
     });
 

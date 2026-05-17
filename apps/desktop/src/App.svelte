@@ -33,8 +33,8 @@
 
   type ChunkRefView = {
     chunk_id: string;
-    char_offset_start: number;
-    char_offset_end: number;
+    byte_offset_start: number;
+    byte_offset_end: number;
   };
 
   type BookView = {
@@ -161,7 +161,7 @@
     const SEPARATOR_BYTES = 2; // '\n\n' is two ASCII bytes
     for (const para of text.split("\n\n")) {
       const chunk = loadedBook.chunks.find(
-        (c) => c.char_offset_start <= offset && offset < c.char_offset_end,
+        (c) => c.byte_offset_start <= offset && offset < c.byte_offset_end,
       );
       result.push({
         chunkId: chunk?.chunk_id ?? "",

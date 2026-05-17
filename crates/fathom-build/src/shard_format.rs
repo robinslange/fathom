@@ -11,7 +11,7 @@ use fathom_chunker::Chunk;
 use serde::{Deserialize, Serialize};
 
 /// Wire-format version. Bump on any breaking change to the shard schema.
-pub const SHARD_FORMAT_VERSION: u32 = 1;
+pub const SHARD_FORMAT_VERSION: u32 = 2;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Shard {
@@ -32,8 +32,8 @@ pub struct ShardChunk {
     pub chunk_id: String,
     pub paragraph_id: String,
     pub section_id: Option<String>,
-    pub char_offset_start: usize,
-    pub char_offset_end: usize,
+    pub byte_offset_start: usize,
+    pub byte_offset_end: usize,
     pub token_count: usize,
     /// 768 bytes: 384-dim f16 vector.
     #[serde(with = "serde_bytes")]
@@ -47,8 +47,8 @@ impl ShardChunk {
             chunk_id: chunk.chunk_id.clone(),
             paragraph_id: chunk.paragraph_id.clone(),
             section_id: chunk.section_id.clone(),
-            char_offset_start: chunk.char_offset_start,
-            char_offset_end: chunk.char_offset_end,
+            byte_offset_start: chunk.byte_offset_start,
+            byte_offset_end: chunk.byte_offset_end,
             token_count: chunk.token_count,
             embedding_f16,
         }

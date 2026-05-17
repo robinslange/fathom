@@ -72,7 +72,7 @@ fn chunk_offsets_round_trip_to_source_text() {
     let text = "alpha beta gamma delta epsilon zeta.\n\neta theta iota kappa lambda mu.";
     let chunks = chunk_text(text, &cfg);
     for c in &chunks {
-        assert_eq!(&text[c.char_offset_start..c.char_offset_end], &c.text);
+        assert_eq!(&text[c.byte_offset_start..c.byte_offset_end], &c.text);
     }
 }
 

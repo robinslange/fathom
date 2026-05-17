@@ -9,7 +9,7 @@
 //! source of truth for that invariant.
 //!
 //! Rules: normalise → paragraph-split → length-guard with sentence-boundary
-//! splitting for overlongs. Char offsets are into the canonical (post-normalise)
+//! splitting for overlongs. Byte offsets are into the canonical (post-normalise)
 //! UTF-8 text; the runtime stores this canonical text and uses offsets for the
 //! highlight-to-paraphrase flow.
 
@@ -19,7 +19,7 @@ use unicode_segmentation::UnicodeSegmentation;
 pub mod normalise;
 pub mod split;
 
-/// One row of chunked text. char offsets are into the *canonical* UTF-8 text
+/// One row of chunked text. byte offsets are into the *canonical* UTF-8 text
 /// (post-normalisation), measured in UTF-8 byte positions.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Chunk {
@@ -27,8 +27,8 @@ pub struct Chunk {
     pub paragraph_id: String,
     pub section_id: Option<String>,
     pub text: String,
-    pub char_offset_start: usize,
-    pub char_offset_end: usize,
+    pub byte_offset_start: usize,
+    pub byte_offset_end: usize,
     pub token_count: usize,
 }
 
@@ -57,7 +57,7 @@ pub fn approx_tokens(text: &str) -> usize {
 /// Chunk a canonical UTF-8 text into paragraph-level chunks.
 ///
 /// `canonical_text` must already be normalised — call `normalise::canonicalise`
-/// upstream. The text passed in is the same text whose char offsets are recorded
+/// upstream. The text passed in is the same text whose byte offsets are recorded
 /// in the resulting Chunks.
 pub fn chunk_text(canonical_text: &str, config: &ChunkerConfig) -> Vec<Chunk> {
     let paragraphs = split::paragraphs(canonical_text);
@@ -80,8 +80,8 @@ pub fn chunk_text(canonical_text: &str, config: &ChunkerConfig) -> Vec<Chunk> {
                         paragraph_id: format!("p{:06}", para_idx),
                         section_id: None,
                         text: combined,
-                        char_offset_start: acc_start,
-                        char_offset_end: combined_end,
+                        byte_offset_start: acc_start,
+                        byte_offset_end: combined_end,
                         token_count: combined_tokens,
                     });
                     chunk_idx += 1;
@@ -92,8 +92,8 @@ pub fn chunk_text(canonical_text: &str, config: &ChunkerConfig) -> Vec<Chunk> {
                             paragraph_id: format!("p{:06}", para_idx),
                             section_id: None,
                             text: sub.text,
-                            char_offset_start: sub.char_offset_start,
-                            char_offset_end: sub.char_offset_end,
+                            byte_offset_start: sub.byte_offset_start,
+                            byte_offset_end: sub.byte_offset_end,
                             token_count: sub.token_count,
                         });
                         chunk_idx += 1;
@@ -116,8 +116,8 @@ pub fn chunk_text(canonical_text: &str, config: &ChunkerConfig) -> Vec<Chunk> {
                 paragraph_id: format!("p{:06}", para_idx),
                 section_id: None,
                 text: para_text,
-                char_offset_start: para_start,
-                char_offset_end: para_end,
+                byte_offset_start: para_start,
+                byte_offset_end: para_end,
                 token_count: tokens,
             });
             chunk_idx += 1;
@@ -128,8 +128,8 @@ pub fn chunk_text(canonical_text: &str, config: &ChunkerConfig) -> Vec<Chunk> {
                     paragraph_id: format!("p{:06}", para_idx),
                     section_id: None,
                     text: sub.text,
-                    char_offset_start: sub.char_offset_start,
-                    char_offset_end: sub.char_offset_end,
+                    byte_offset_start: sub.byte_offset_start,
+                    byte_offset_end: sub.byte_offset_end,
                     token_count: sub.token_count,
                 });
                 chunk_idx += 1;
@@ -144,8 +144,8 @@ pub fn chunk_text(canonical_text: &str, config: &ChunkerConfig) -> Vec<Chunk> {
             paragraph_id: format!("p{:06}", chunks.len()),
             section_id: None,
             text,
-            char_offset_start: start,
-            char_offset_end: end,
+            byte_offset_start: start,
+            byte_offset_end: end,
             token_count: tokens,
         });
     }
