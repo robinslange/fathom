@@ -87,8 +87,8 @@ describe("getPage", () => {
 describe("pageForChunk", () => {
   it("returns the page containing the chunk_id", () => {
     const paras = makeParagraphs(PARAS_PER_PAGE * 2);
-    // chunk-5 is index 5, which is on page 1 (indices 4-7)
-    expect(pageForChunk(paras, "chunk-5")).toBe(1);
+    // chunk at index PARAS_PER_PAGE+1 is always on page 1
+    expect(pageForChunk(paras, `chunk-${PARAS_PER_PAGE + 1}`)).toBe(1);
   });
 
   it("returns 0 when chunk_id not found", () => {
@@ -110,8 +110,8 @@ describe("pageForChunk", () => {
 describe("pageForByteOffset", () => {
   it("returns page containing the byte", () => {
     const paras = makeParagraphs(PARAS_PER_PAGE * 2);
-    // paragraph at index 5 (page 1), check middle of that paragraph
-    const targetPara = paras[5];
+    // paragraph at index PARAS_PER_PAGE+1 is always on page 1
+    const targetPara = paras[PARAS_PER_PAGE + 1];
     const midByte = targetPara.byteStart + Math.floor(targetPara.text.length / 2);
     expect(pageForByteOffset(paras, midByte)).toBe(1);
   });

@@ -2,8 +2,6 @@
   import { invoke } from "@tauri-apps/api/core";
   import { listen } from "@tauri-apps/api/event";
   import { onMount } from "svelte";
-  import { endpointToByteOffset as endpointToByteOffsetPure } from "./lib/selection.js";
-  import type { ElementLike, NodeLike } from "./lib/selection.js";
   import { getPage, pageForChunk } from "./lib/pagination.js";
 
   type Tier = "simple" | "standard" | "scholarly";
@@ -105,6 +103,16 @@
   let lastSelectionText = $state("");
 
   let currentPage = $state(0);
+
+  // Temporary diagnostic HUD — captures console.error lines for in-app visibility
+  // while we debug the silent-paraphrase issue. Remove with the diagnostics.
+  let debugLog: string[] = $state([]);
+  const origConsoleError = console.error.bind(console);
+  console.error = (...args: unknown[]) => {
+    origConsoleError(...args);
+    const line = args.map((a) => (typeof a === "string" ? a : JSON.stringify(a))).join(" ");
+    debugLog = [...debugLog.slice(-19), line];
+  };
 
   const modelLabels: Record<string, string> = {
     "gemma3-4b": "Loading paraphrase model (Gemma 3 4B)",
@@ -283,10 +291,16 @@
     if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
   }
 
+  function scrollReaderToTop() {
+    const el = document.querySelector(".reader") as HTMLElement | null;
+    if (el) el.scrollTop = 0;
+  }
+
   function pageBack() {
     if (currentPage > 0) {
       currentPage -= 1;
       window.getSelection()?.removeAllRanges();
+      setTimeout(scrollReaderToTop, 0);
     }
   }
 
@@ -294,6 +308,7 @@
     if (currentPage < currentPageBounds.pageCount - 1) {
       currentPage += 1;
       window.getSelection()?.removeAllRanges();
+      setTimeout(scrollReaderToTop, 0);
     }
   }
 
@@ -308,65 +323,52 @@
   }
 
   /**
-   * Wrap a real DOM Node in the NodeLike interface the pure module expects.
-   * Pre-resolves paraEl via closest("[data-byte-start]") so the pure function
-   * needs no DOM access.
+   * Direct DOM endpoint → document-absolute UTF-8 byte offset.
+   * Handles the v0.2 flat <p>{text}</p> markup. For v0.21 rich markup
+   * (inline <em>/<strong>) the pure module in lib/selection.ts is the
+   * reference implementation; we'll port back to it then.
    */
-  function toNodeLike(domNode: Node): NodeLike {
-    const closestPara = (n: Node): ElementLike | null => {
-      const el = (n.nodeType === Node.TEXT_NODE ? n.parentElement : (n as Element))
-        ?.closest("[data-byte-start]") as HTMLElement | null;
-      if (!el) return null;
-      return domElementToElementLike(el);
-    };
+  function endpointToByte(
+    container: Node,
+    charOffset: number,
+    fallback: "start" | "end",
+  ): number {
+    const paraEl = (container.nodeType === Node.TEXT_NODE
+      ? container.parentElement
+      : (container as HTMLElement)
+    )?.closest("[data-byte-start]") as HTMLElement | null;
 
-    function domElementToElementLike(el: HTMLElement): ElementLike {
-      const paraEl = closestPara(el);
-      return {
-        nodeType: 1,
-        textContent: el.textContent,
-        dataset: { byteStart: el.dataset.byteStart },
-        childNodes: Array.from(el.childNodes).map(domNodeToNodeLike),
-        paraEl: paraEl ?? undefined,
-      };
+    if (!paraEl) {
+      if (paragraphs.length === 0) return 0;
+      if (fallback === "start") return paragraphs[0].byteStart;
+      const last = paragraphs[paragraphs.length - 1];
+      return last.byteStart + utf8ByteLength(last.text);
     }
 
-    function domNodeToNodeLike(n: Node): NodeLike {
-      if (n.nodeType === Node.TEXT_NODE) {
-        const text = n as Text;
-        return {
-          nodeType: 3,
-          data: text.data,
-          textContent: text.data,
-          parentElement: text.parentElement
-            ? domElementToElementLike(text.parentElement as HTMLElement)
-            : null,
-        };
+    const paraByteStart = Number(paraEl.dataset.byteStart ?? "0");
+
+    if (container.nodeType === Node.TEXT_NODE) {
+      // Text-node container: charOffset is a UTF-16 code-unit index into
+      // (container as Text).data. Sum preceding siblings within paraEl,
+      // then add the prefix within this text node.
+      let bytes = 0;
+      for (const sib of Array.from(paraEl.childNodes)) {
+        if (sib === container) break;
+        bytes += utf8ByteLength(sib.textContent ?? "");
       }
-      return domElementToElementLike(n as HTMLElement);
+      bytes += utf8ByteLength((container as Text).data.slice(0, charOffset));
+      return paraByteStart + bytes;
     }
 
-    if (domNode.nodeType === Node.TEXT_NODE) {
-      const text = domNode as Text;
-      const paraEl = closestPara(domNode);
-      const parentElementLike: ElementLike | null = text.parentElement
-        ? {
-            nodeType: 1,
-            textContent: text.parentElement.textContent,
-            dataset: { byteStart: (text.parentElement as HTMLElement).dataset?.byteStart },
-            childNodes: Array.from(text.parentElement.childNodes).map(domNodeToNodeLike),
-            paraEl: paraEl ?? undefined,
-          }
-        : null;
-      return {
-        nodeType: 3,
-        data: text.data,
-        textContent: text.data,
-        parentElement: parentElementLike,
-      };
+    // Element container: charOffset is a child index. Triple-click case
+    // (container === paraEl) is the only one we need today.
+    const el = container as HTMLElement;
+    const limit = Math.min(charOffset, el.childNodes.length);
+    let bytes = 0;
+    for (let i = 0; i < limit; i++) {
+      bytes += utf8ByteLength(el.childNodes[i].textContent ?? "");
     }
-
-    return domElementToElementLike(domNode as HTMLElement);
+    return paraByteStart + bytes;
   }
 
   async function paraphraseSelection() {
@@ -389,41 +391,30 @@
     console.error("[fathom:paraphrase] startContainer:", range.startContainer.nodeType, range.startContainer.nodeName, "offset:", range.startOffset);
     console.error("[fathom:paraphrase] endContainer:", range.endContainer.nodeType, range.endContainer.nodeName, "offset:", range.endOffset);
 
-    const paras = paragraphs.map((p) => ({ byteStart: p.byteStart, text: p.text }));
+    let startByte = endpointToByte(range.startContainer, range.startOffset, "start");
+    let endByte = endpointToByte(range.endContainer, range.endOffset, "end");
 
-    const startNode = toNodeLike(range.startContainer);
-    const endNode = toNodeLike(range.endContainer);
-
-    const startPara =
-      startNode.nodeType === 3
-        ? startNode.parentElement?.paraEl
-        : (startNode as ElementLike).paraEl;
-    const endPara =
-      endNode.nodeType === 3
-        ? endNode.parentElement?.paraEl
-        : (endNode as ElementLike).paraEl;
-
-    // Determine fallback directions for cross-endpoint snapping:
-    // If start is in the gutter but end is in a paragraph, snap start to
-    // that paragraph's beginning. Mirror for end.
-    const startFallback: "start" | "end" = "start";
-    const endFallback: "start" | "end" = "end";
-
-    let startByte = endpointToByteOffsetPure(startNode, range.startOffset, paras, utf8ByteLength, startFallback);
-    let endByte = endpointToByteOffsetPure(endNode, range.endOffset, paras, utf8ByteLength, endFallback);
-
-    // Cross-endpoint snap: if one side is in the gutter, clamp to the paragraph
-    // containing the other side rather than to the document boundary.
-    if (!startPara && endPara) {
-      startByte = Number(endPara.dataset?.byteStart ?? "0");
+    // Cross-endpoint snap: if one side fell back to document bounds because
+    // it was outside any paragraph, but the other side IS inside a paragraph,
+    // snap the gutter side to that paragraph instead of to the document.
+    const startParaEl = (range.startContainer.nodeType === Node.TEXT_NODE
+      ? range.startContainer.parentElement
+      : (range.startContainer as HTMLElement)
+    )?.closest("[data-byte-start]") as HTMLElement | null;
+    const endParaEl = (range.endContainer.nodeType === Node.TEXT_NODE
+      ? range.endContainer.parentElement
+      : (range.endContainer as HTMLElement)
+    )?.closest("[data-byte-start]") as HTMLElement | null;
+    if (!startParaEl && endParaEl) {
+      startByte = Number(endParaEl.dataset.byteStart ?? "0");
     }
-    if (!endPara && startPara) {
-      const spByteStart = Number(startPara.dataset?.byteStart ?? "0");
-      const spText = paras.find((p) => p.byteStart === spByteStart)?.text ?? "";
-      endByte = spByteStart + utf8ByteLength(spText);
+    if (!endParaEl && startParaEl) {
+      const spByteStart = Number(startParaEl.dataset.byteStart ?? "0");
+      const sp = paragraphs.find((p) => p.byteStart === spByteStart);
+      if (sp) endByte = spByteStart + utf8ByteLength(sp.text);
     }
 
-    console.error("[fathom:paraphrase] startByte:", startByte, "endByte:", endByte, "startPara?", !!startPara, "endPara?", !!endPara);
+    console.error("[fathom:paraphrase] startByte:", startByte, "endByte:", endByte, "startParaEl?", !!startParaEl, "endParaEl?", !!endParaEl);
 
     if (endByte <= startByte) {
       console.error("[fathom:paraphrase] bail: endByte <= startByte");
@@ -691,6 +682,16 @@
     {/if}
   </aside>
 </main>
+
+{#if debugLog.length > 0}
+  <div class="debug-hud">
+    <div class="debug-hud-header">
+      debug ({debugLog.length})
+      <button onclick={() => (debugLog = [])}>clear</button>
+    </div>
+    <pre>{debugLog.join("\n")}</pre>
+  </div>
+{/if}
 
 <style>
   :global(:root) {
@@ -1083,5 +1084,48 @@
     font-size: 0.88rem;
     line-height: 1.5;
     opacity: 0.9;
+  }
+
+  /* Temporary diagnostic HUD — remove with the console.error traces. */
+  .debug-hud {
+    position: fixed;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    max-width: 50vw;
+    max-height: 35vh;
+    background: rgba(0, 0, 0, 0.82);
+    color: #fffdf8;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.7rem;
+    line-height: 1.35;
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+    overflow: auto;
+    z-index: 9999;
+    user-select: text;
+  }
+  .debug-hud-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0.6;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .debug-hud-header button {
+    background: transparent;
+    color: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.1rem 0.4rem;
+    font: inherit;
+    font-size: 0.65rem;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+  .debug-hud pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
   }
 </style>

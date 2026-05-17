@@ -1,4 +1,4 @@
-export const PARAS_PER_PAGE = 4;
+export const PARAS_PER_PAGE = 8;
 
 export type Paragraph = { chunkId: string; byteStart: number; text: string };
 
