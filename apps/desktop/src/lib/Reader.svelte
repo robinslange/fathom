@@ -1,40 +1,33 @@
 <script lang="ts">
-  import {
-    getLoadedBook,
-    isLoadingBook,
-    getCurrentPage,
-    getCurrentPageBounds,
-    pageBack,
-    pageForward,
-  } from "./use-library.svelte.js";
-  import { paraphraseSelection } from "./use-paraphrase.svelte.js";
+  import { library } from "./use-library.svelte.js";
+  import { paraphrase } from "./use-paraphrase.svelte.js";
 
   function onKeydown(e: KeyboardEvent) {
-    if (!getLoadedBook()) return;
+    if (!library.loadedBook) return;
     const target = e.target as HTMLElement;
     if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
-    if (e.key === "ArrowLeft") { e.preventDefault(); pageBack(); }
-    else if (e.key === "ArrowRight") { e.preventDefault(); pageForward(); }
-    else if (e.key === " " && e.shiftKey) { e.preventDefault(); pageBack(); }
-    else if (e.key === " ") { e.preventDefault(); pageForward(); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); library.pageBack(); }
+    else if (e.key === "ArrowRight") { e.preventDefault(); library.pageForward(); }
+    else if (e.key === " " && e.shiftKey) { e.preventDefault(); library.pageBack(); }
+    else if (e.key === " ") { e.preventDefault(); library.pageForward(); }
   }
 </script>
 
 <svelte:window onkeydown={onKeydown} />
 
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-<section class="reader" aria-label="Book reader" onmouseup={paraphraseSelection}>
-  {#if !getLoadedBook()}
+<section class="reader" aria-label="Book reader" onmouseup={() => paraphrase.paraphraseSelection()}>
+  {#if !library.loadedBook}
     <div class="empty">
       <p>Pick a book on the left.</p>
     </div>
-  {:else if isLoadingBook()}
+  {:else if library.loadingBook}
     <div class="empty">
-      <p>Loading {getLoadedBook()!.title}…</p>
+      <p>Loading {library.loadedBook.title}…</p>
     </div>
   {:else}
-    {@const loadedBook = getLoadedBook()!}
-    {@const pageBounds = getCurrentPageBounds()}
+    {@const loadedBook = library.loadedBook}
+    {@const pageBounds = library.currentPageBounds}
     <article>
       <header class="book-header">
         <h2>{loadedBook.title}</h2>
@@ -44,9 +37,9 @@
           </p>
         {/if}
         <div class="pagination">
-          <button class="page-btn" onclick={pageBack} disabled={getCurrentPage() === 0} aria-label="Previous page">&#x2039;</button>
-          <span class="page-indicator">page {getCurrentPage() + 1} of {pageBounds.pageCount}</span>
-          <button class="page-btn" onclick={pageForward} disabled={getCurrentPage() >= pageBounds.pageCount - 1} aria-label="Next page">&#x203a;</button>
+          <button class="page-btn" onclick={() => library.pageBack()} disabled={library.currentPage === 0} aria-label="Previous page">&#x2039;</button>
+          <span class="page-indicator">page {library.currentPage + 1} of {pageBounds.pageCount}</span>
+          <button class="page-btn" onclick={() => library.pageForward()} disabled={library.currentPage >= pageBounds.pageCount - 1} aria-label="Next page">&#x203a;</button>
         </div>
       </header>
       <div class="paragraphs">

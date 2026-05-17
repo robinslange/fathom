@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import { getLoadedBook, getParagraphs } from "./use-library.svelte.js";
+import { library } from "./use-library.svelte.js";
 import { utf8ByteLength } from "./utf8.js";
 
 export type Tier = "simple" | "standard" | "scholarly";
@@ -33,86 +33,86 @@ export type FathomResult = {
   faithfulness_verdict?: FaithfulnessVerdict | null;
 };
 
-// ----- state -----
-let tier: Tier = $state("standard");
-let paraphraseResult: FathomResult | null = $state(null);
-let paraphraseBusy = $state(false);
-let paraphraseError: string | null = $state(null);
-let lastSelectionText = $state("");
+class ParaphraseStore {
+  tier = $state<Tier>("standard");
+  paraphraseResult = $state<FathomResult | null>(null);
+  paraphraseBusy = $state(false);
+  paraphraseError = $state<string | null>(null);
+  lastSelectionText = $state("");
 
-$effect(() => {
-  getLoadedBook()?.gutenberg_id;
-  paraphraseResult = null;
-  paraphraseError = null;
-});
+  private effectsInitialised = false;
 
-// ----- getters / setters -----
-export function getTier(): Tier { return tier; }
-export function setTier(t: Tier): void { tier = t; }
-export function getParaphraseResult(): FathomResult | null { return paraphraseResult; }
-export function isParaphraseBusy(): boolean { return paraphraseBusy; }
-export function getParaphraseError(): string | null { return paraphraseError; }
-export function getLastSelectionText(): string { return lastSelectionText; }
-
-// ----- action -----
-export async function paraphraseSelection(): Promise<void> {
-  const loadedBook = getLoadedBook();
-  if (!loadedBook) return;
-  const selection = window.getSelection();
-  if (!selection || selection.isCollapsed) return;
-  const range = selection.getRangeAt(0);
-  const selText = selection.toString();
-  if (selText.trim().length === 0) return;
-
-  const paragraphs = getParagraphs();
-
-  let startByte = endpointToByte(range.startContainer, range.startOffset, "start", paragraphs);
-  let endByte = endpointToByte(range.endContainer, range.endOffset, "end", paragraphs);
-
-  const startParaEl = (range.startContainer.nodeType === Node.TEXT_NODE
-    ? range.startContainer.parentElement
-    : (range.startContainer as HTMLElement)
-  )?.closest("[data-byte-start]") as HTMLElement | null;
-  const endParaEl = (range.endContainer.nodeType === Node.TEXT_NODE
-    ? range.endContainer.parentElement
-    : (range.endContainer as HTMLElement)
-  )?.closest("[data-byte-start]") as HTMLElement | null;
-  if (!startParaEl && endParaEl) {
-    startByte = Number(endParaEl.dataset.byteStart ?? "0");
-  }
-  if (!endParaEl && startParaEl) {
-    const spByteStart = Number(startParaEl.dataset.byteStart ?? "0");
-    const sp = paragraphs.find((p) => p.byteStart === spByteStart);
-    if (sp) endByte = spByteStart + utf8ByteLength(sp.text);
-  }
-
-  if (endByte <= startByte) return;
-
-  lastSelectionText = selText;
-  paraphraseBusy = true;
-  paraphraseError = null;
-  paraphraseResult = null;
-  try {
-    paraphraseResult = await invoke<FathomResult>("library_paraphrase_selection", {
-      args: {
-        gutenbergId: loadedBook.gutenberg_id,
-        startByte,
-        endByte,
-        tier,
-      },
+  initEffects(): void {
+    if (this.effectsInitialised) return;
+    this.effectsInitialised = true;
+    $effect.root(() => {
+      $effect(() => {
+        library.loadedBook?.gutenberg_id;
+        this.paraphraseResult = null;
+        this.paraphraseError = null;
+      });
     });
-  } catch (e) {
-    const msg =
-      e instanceof Error
-        ? e.message
-        : typeof e === "object" && e !== null && "message" in e
-          ? String((e as { message: unknown }).message)
-          : typeof e === "string"
-            ? e
-            : JSON.stringify(e);
-    paraphraseError = msg || "paraphrase failed";
-  } finally {
-    paraphraseBusy = false;
+  }
+
+  async paraphraseSelection(): Promise<void> {
+    const loadedBook = library.loadedBook;
+    if (!loadedBook) return;
+    const selection = window.getSelection();
+    if (!selection || selection.isCollapsed) return;
+    const range = selection.getRangeAt(0);
+    const selText = selection.toString();
+    if (selText.trim().length === 0) return;
+
+    const paragraphs = library.paragraphs;
+
+    let startByte = endpointToByte(range.startContainer, range.startOffset, "start", paragraphs);
+    let endByte = endpointToByte(range.endContainer, range.endOffset, "end", paragraphs);
+
+    const startParaEl = (range.startContainer.nodeType === Node.TEXT_NODE
+      ? range.startContainer.parentElement
+      : (range.startContainer as HTMLElement)
+    )?.closest("[data-byte-start]") as HTMLElement | null;
+    const endParaEl = (range.endContainer.nodeType === Node.TEXT_NODE
+      ? range.endContainer.parentElement
+      : (range.endContainer as HTMLElement)
+    )?.closest("[data-byte-start]") as HTMLElement | null;
+    if (!startParaEl && endParaEl) {
+      startByte = Number(endParaEl.dataset.byteStart ?? "0");
+    }
+    if (!endParaEl && startParaEl) {
+      const spByteStart = Number(startParaEl.dataset.byteStart ?? "0");
+      const sp = paragraphs.find((p) => p.byteStart === spByteStart);
+      if (sp) endByte = spByteStart + utf8ByteLength(sp.text);
+    }
+
+    if (endByte <= startByte) return;
+
+    this.lastSelectionText = selText;
+    this.paraphraseBusy = true;
+    this.paraphraseError = null;
+    this.paraphraseResult = null;
+    try {
+      this.paraphraseResult = await invoke<FathomResult>("library_paraphrase_selection", {
+        args: {
+          gutenbergId: loadedBook.gutenberg_id,
+          startByte,
+          endByte,
+          tier: this.tier,
+        },
+      });
+    } catch (e) {
+      const msg =
+        e instanceof Error
+          ? e.message
+          : typeof e === "object" && e !== null && "message" in e
+            ? String((e as { message: unknown }).message)
+            : typeof e === "string"
+              ? e
+              : JSON.stringify(e);
+      this.paraphraseError = msg || "paraphrase failed";
+    } finally {
+      this.paraphraseBusy = false;
+    }
   }
 }
 
@@ -154,3 +154,5 @@ function endpointToByte(
   }
   return paraByteStart + bytes;
 }
+
+export const paraphrase = new ParaphraseStore();

@@ -49,156 +49,158 @@ export const modelLabels: Record<string, string> = {
   "bge-small-tokenizer": "Loading embedding tokenizer",
 };
 
-// ----- state -----
-let manifest: ManifestBook[] = $state([]);
-let manifestLoading = $state(true);
-let manifestError: string | null = $state(null);
+class LibraryStore {
+  manifest = $state<ManifestBook[]>([]);
+  manifestLoading = $state(true);
+  manifestError = $state<string | null>(null);
 
-let embedderReady = $state(false);
-let embedderError: string | null = $state(null);
+  embedderReady = $state(false);
+  embedderError = $state<string | null>(null);
 
-let downloadProgress: Record<string, DownloadProgress> = $state({});
+  downloadProgress = $state<Record<string, DownloadProgress>>({});
 
-let loadedBook: BookView | null = $state(null);
-let loadingBook = $state(false);
-let loadBookError: string | null = $state(null);
+  loadedBook = $state<BookView | null>(null);
+  loadingBook = $state(false);
+  loadBookError = $state<string | null>(null);
 
-let currentPage = $state(0);
+  currentPage = $state(0);
 
-let paragraphs = $derived.by((): Paragraph[] => {
-  if (!loadedBook) return [];
-  const text = loadedBook.canonical_text;
-  const result: Paragraph[] = [];
-  let offset = 0;
-  const SEPARATOR_BYTES = 2;
-  for (const para of text.split("\n\n")) {
-    const chunk = loadedBook.chunks.find(
-      (c) => c.byte_offset_start <= offset && offset < c.byte_offset_end,
-    );
-    result.push({
-      chunkId: chunk?.chunk_id ?? "",
-      byteStart: offset,
-      text: para,
-    });
-    offset += utf8ByteLength(para) + SEPARATOR_BYTES;
-  }
-  return result;
-});
-
-let currentPageBounds = $derived(getPage(paragraphs, currentPage));
-
-$effect(() => {
-  loadedBook?.gutenberg_id;
-  currentPage = 0;
-});
-
-// ----- getters -----
-export function getManifest(): ManifestBook[] { return manifest; }
-export function isManifestLoading(): boolean { return manifestLoading; }
-export function getManifestError(): string | null { return manifestError; }
-export function isEmbedderReady(): boolean { return embedderReady; }
-export function getEmbedderError(): string | null { return embedderError; }
-export function getDownloadProgress(): Record<string, DownloadProgress> { return downloadProgress; }
-export function getLoadedBook(): BookView | null { return loadedBook; }
-export function isLoadingBook(): boolean { return loadingBook; }
-export function getLoadBookError(): string | null { return loadBookError; }
-export function getParagraphs(): Paragraph[] { return paragraphs; }
-export function getCurrentPage(): number { return currentPage; }
-export function setCurrentPage(n: number): void { currentPage = n; }
-export function getCurrentPageBounds() { return currentPageBounds; }
-
-// ----- actions -----
-export async function initLibrary(): Promise<void> {
-  listen<DownloadProgress>("fathom://download-progress", (e) => {
-    downloadProgress = { ...downloadProgress, [e.payload.model]: e.payload };
+  paragraphs = $derived.by((): Paragraph[] => {
+    if (!this.loadedBook) return [];
+    const text = this.loadedBook.canonical_text;
+    const result: Paragraph[] = [];
+    let offset = 0;
+    const SEPARATOR_BYTES = 2;
+    for (const para of text.split("\n\n")) {
+      const chunk = this.loadedBook.chunks.find(
+        (c) => c.byte_offset_start <= offset && offset < c.byte_offset_end,
+      );
+      result.push({
+        chunkId: chunk?.chunk_id ?? "",
+        byteStart: offset,
+        text: para,
+      });
+      offset += utf8ByteLength(para) + SEPARATOR_BYTES;
+    }
+    return result;
   });
 
-  try {
-    manifest = await invoke<ManifestBook[]>("library_manifest");
-  } catch (e) {
-    manifestError = e instanceof Error ? e.message : String(e);
-  } finally {
-    manifestLoading = false;
-  }
+  currentPageBounds = $derived(getPage(this.paragraphs, this.currentPage));
 
-  if (manifestError) return;
+  private effectsInitialised = false;
 
-  const embedderPromise = (async () => {
-    try {
-      await invoke("library_ensure_embedder");
-      embedderReady = true;
-    } catch (e) {
-      embedderError = e instanceof Error ? e.message : String(e);
-    }
-  })();
-
-  try {
-    await invoke<number>("library_prewarm_shards", { limit: 64 });
-  } catch (e) {
-    console.warn("prewarm failed:", e);
-  }
-
-  await embedderPromise;
-}
-
-export async function retryManifest(): Promise<void> {
-  manifestLoading = true;
-  manifestError = null;
-  try {
-    manifest = await invoke<ManifestBook[]>("library_manifest");
-  } catch (e) {
-    manifestError = e instanceof Error ? e.message : String(e);
-  } finally {
-    manifestLoading = false;
-  }
-}
-
-export async function openBook(gutenberg_id: number, chunkIdToScrollTo?: string): Promise<void> {
-  if (loadedBook?.gutenberg_id === gutenberg_id) {
-    if (chunkIdToScrollTo) scrollToChunk(chunkIdToScrollTo);
-    return;
-  }
-  loadingBook = true;
-  loadBookError = null;
-  try {
-    loadedBook = await invoke<BookView>("library_load_book", {
-      gutenbergId: gutenberg_id,
+  initEffects(): void {
+    if (this.effectsInitialised) return;
+    this.effectsInitialised = true;
+    $effect.root(() => {
+      $effect(() => {
+        this.loadedBook?.gutenberg_id;
+        this.currentPage = 0;
+      });
     });
-    if (chunkIdToScrollTo) {
-      setTimeout(() => {
-        currentPage = pageForChunk(paragraphs, chunkIdToScrollTo);
-        scrollToChunk(chunkIdToScrollTo);
-      }, 0);
+  }
+
+  async init(): Promise<void> {
+    listen<DownloadProgress>("fathom://download-progress", (e) => {
+      this.downloadProgress = { ...this.downloadProgress, [e.payload.model]: e.payload };
+    });
+
+    try {
+      this.manifest = await invoke<ManifestBook[]>("library_manifest");
+    } catch (e) {
+      this.manifestError = e instanceof Error ? e.message : String(e);
+    } finally {
+      this.manifestLoading = false;
     }
-  } catch (e) {
-    loadBookError = e instanceof Error ? e.message : String(e);
-  } finally {
-    loadingBook = false;
+
+    if (this.manifestError) return;
+
+    const embedderPromise = (async () => {
+      try {
+        await invoke("library_ensure_embedder");
+        this.embedderReady = true;
+      } catch (e) {
+        this.embedderError = e instanceof Error ? e.message : String(e);
+      }
+    })();
+
+    try {
+      await invoke<number>("library_prewarm_shards", { limit: 64 });
+    } catch (e) {
+      console.warn("prewarm failed:", e);
+    }
+
+    await embedderPromise;
+  }
+
+  async retryManifest(): Promise<void> {
+    this.manifestLoading = true;
+    this.manifestError = null;
+    try {
+      this.manifest = await invoke<ManifestBook[]>("library_manifest");
+    } catch (e) {
+      this.manifestError = e instanceof Error ? e.message : String(e);
+    } finally {
+      this.manifestLoading = false;
+    }
+  }
+
+  async openBook(gutenberg_id: number, chunkIdToScrollTo?: string): Promise<void> {
+    if (this.loadedBook?.gutenberg_id === gutenberg_id) {
+      if (chunkIdToScrollTo) scrollToChunk(chunkIdToScrollTo);
+      return;
+    }
+    this.loadingBook = true;
+    this.loadBookError = null;
+    try {
+      this.loadedBook = await invoke<BookView>("library_load_book", {
+        gutenbergId: gutenberg_id,
+      });
+      if (chunkIdToScrollTo) {
+        setTimeout(() => {
+          this.currentPage = pageForChunk(this.paragraphs, chunkIdToScrollTo);
+          scrollToChunk(chunkIdToScrollTo);
+        }, 0);
+      }
+    } catch (e) {
+      this.loadBookError =
+        e instanceof Error
+          ? e.message
+          : typeof e === "object" && e !== null && "message" in e
+            ? String((e as { message: unknown }).message)
+            : typeof e === "string"
+              ? e
+              : JSON.stringify(e);
+    } finally {
+      this.loadingBook = false;
+    }
+  }
+
+  pageBack(): void {
+    if (this.currentPage > 0) {
+      this.currentPage -= 1;
+      window.getSelection()?.removeAllRanges();
+      setTimeout(scrollReaderToTop, 0);
+    }
+  }
+
+  pageForward(): void {
+    if (this.currentPage < this.currentPageBounds.pageCount - 1) {
+      this.currentPage += 1;
+      window.getSelection()?.removeAllRanges();
+      setTimeout(scrollReaderToTop, 0);
+    }
   }
 }
 
-export function scrollReaderToTop() {
+function scrollReaderToTop() {
   const el = document.querySelector(".reader") as HTMLElement | null;
   if (el) el.scrollTop = 0;
-}
-
-export function pageBack() {
-  if (currentPage > 0) {
-    currentPage -= 1;
-    window.getSelection()?.removeAllRanges();
-    setTimeout(scrollReaderToTop, 0);
-  }
-}
-
-export function pageForward() {
-  if (currentPage < currentPageBounds.pageCount - 1) {
-    currentPage += 1;
-    window.getSelection()?.removeAllRanges();
-    setTimeout(scrollReaderToTop, 0);
-  }
 }
 
 function scrollToChunk(chunkId: string) {
   const el = document.querySelector(`[data-chunk-id="${chunkId}"]`);
   if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
 }
+
+export const library = new LibraryStore();

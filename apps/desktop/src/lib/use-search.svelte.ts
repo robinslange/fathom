@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import { isEmbedderReady } from "./use-library.svelte.js";
+import { library } from "./use-library.svelte.js";
 
 export type SearchHit = {
   gutenberg_id: number;
@@ -8,38 +8,42 @@ export type SearchHit = {
   similarity: number;
 };
 
-// ----- state -----
-let query = $state("");
-let searchHits: SearchHit[] = $state([]);
-let searching = $state(false);
+class SearchStore {
+  query = $state("");
+  searchHits = $state<SearchHit[]>([]);
+  searching = $state(false);
 
-let searchTimer: ReturnType<typeof setTimeout> | null = null;
+  private searchTimer: ReturnType<typeof setTimeout> | null = null;
+  private effectsInitialised = false;
 
-$effect(() => {
-  const q = query.trim();
-  if (searchTimer) clearTimeout(searchTimer);
-  if (q.length === 0 || !isEmbedderReady()) {
-    searchHits = [];
-    searching = false;
-    return;
-  }
-  searching = true;
-  searchTimer = setTimeout(async () => {
-    try {
-      searchHits = await invoke<SearchHit[]>("library_search", {
-        query: q,
-        topN: 50,
+  initEffects(): void {
+    if (this.effectsInitialised) return;
+    this.effectsInitialised = true;
+    $effect.root(() => {
+      $effect(() => {
+        const q = this.query.trim();
+        if (this.searchTimer) clearTimeout(this.searchTimer);
+        if (q.length === 0 || !library.embedderReady) {
+          this.searchHits = [];
+          this.searching = false;
+          return;
+        }
+        this.searching = true;
+        this.searchTimer = setTimeout(async () => {
+          try {
+            this.searchHits = await invoke<SearchHit[]>("library_search", {
+              query: q,
+              topN: 50,
+            });
+          } catch {
+            this.searchHits = [];
+          } finally {
+            this.searching = false;
+          }
+        }, 200);
       });
-    } catch {
-      searchHits = [];
-    } finally {
-      searching = false;
-    }
-  }, 200);
-});
+    });
+  }
+}
 
-// ----- getters / setters -----
-export function getQuery(): string { return query; }
-export function setQuery(v: string): void { query = v; }
-export function getSearchHits(): SearchHit[] { return searchHits; }
-export function isSearching(): boolean { return searching; }
+export const search = new SearchStore();

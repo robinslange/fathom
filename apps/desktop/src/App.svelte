@@ -4,9 +4,16 @@
   import LibrarySidebar from "./lib/LibrarySidebar.svelte";
   import Reader from "./lib/Reader.svelte";
   import ParaphrasePane from "./lib/ParaphrasePane.svelte";
-  import { initLibrary } from "./lib/use-library.svelte.js";
+  import { library } from "./lib/use-library.svelte.js";
+  import { search } from "./lib/use-search.svelte.js";
+  import { paraphrase } from "./lib/use-paraphrase.svelte.js";
 
-  onMount(initLibrary);
+  onMount(() => {
+    library.initEffects();
+    search.initEffects();
+    paraphrase.initEffects();
+    library.init();
+  });
 </script>
 
 <Header />

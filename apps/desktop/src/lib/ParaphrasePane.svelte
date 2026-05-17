@@ -1,27 +1,13 @@
 <script lang="ts">
-  import {
-    getLoadedBook,
-    getDownloadProgress,
-    getLoadBookError,
-    modelLabels,
-  } from "./use-library.svelte.js";
-  import {
-    getTier,
-    setTier,
-    getLastSelectionText,
-    isParaphraseBusy,
-    getParaphraseError,
-    getParaphraseResult,
-    paraphraseSelection,
-    type Tier,
-  } from "./use-paraphrase.svelte.js";
+  import { library, modelLabels } from "./use-library.svelte.js";
+  import { paraphrase, type Tier } from "./use-paraphrase.svelte.js";
 
   function pctOrNull(p?: { bytes: number; total: number | null }) {
     if (!p || !p.total) return null;
     return Math.min(100, Math.round((p.bytes / p.total) * 100));
   }
 
-  let displayError = $derived(getParaphraseError() ?? getLoadBookError());
+  let displayError = $derived(paraphrase.paraphraseError ?? library.loadBookError);
 </script>
 
 <aside class="paraphrase-pane">
@@ -31,9 +17,9 @@
       {#each (["simple", "standard", "scholarly"] as Tier[]) as t (t)}
         <button
           class="tier-btn"
-          class:active={getTier() === t}
-          aria-pressed={getTier() === t}
-          onclick={() => setTier(t)}
+          class:active={paraphrase.tier === t}
+          aria-pressed={paraphrase.tier === t}
+          onclick={() => { paraphrase.tier = t; }}
         >
           {t}
         </button>
@@ -43,26 +29,26 @@
 
   <button
     class="fathom-trigger"
-    onclick={paraphraseSelection}
-    disabled={isParaphraseBusy() || !getLoadedBook()}
+    onclick={() => paraphrase.paraphraseSelection()}
+    disabled={paraphrase.paraphraseBusy || !library.loadedBook}
   >
     Fathom selection
   </button>
 
-  {#if getLastSelectionText()}
+  {#if paraphrase.lastSelectionText}
     <section class="selection-preview">
       <h3>Selection</h3>
-      <p>{getLastSelectionText()}</p>
+      <p>{paraphrase.lastSelectionText}</p>
     </section>
   {/if}
 
-  {#if isParaphraseBusy()}
+  {#if paraphrase.paraphraseBusy}
     <p class="busy">fathoming…</p>
   {/if}
 
-  {#if isParaphraseBusy() && Object.keys(getDownloadProgress()).length > 0}
+  {#if paraphrase.paraphraseBusy && Object.keys(library.downloadProgress).length > 0}
     <section class="downloads">
-      {#each Object.values(getDownloadProgress()) as p}
+      {#each Object.values(library.downloadProgress) as p}
         {#if p.bytes < (p.total ?? Infinity)}
           <div class="download">
             <div class="download-label">
@@ -90,8 +76,8 @@
     <section class="error-box">{displayError}</section>
   {/if}
 
-  {#if getParaphraseResult()}
-    {@const result = getParaphraseResult()!}
+  {#if paraphrase.paraphraseResult}
+    {@const result = paraphrase.paraphraseResult}
     <section class="paraphrase-block" aria-live="polite" aria-atomic="true">
       <header>
         <h3>Paraphrase</h3>

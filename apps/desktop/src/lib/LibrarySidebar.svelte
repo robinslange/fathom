@@ -1,19 +1,11 @@
 <script lang="ts">
-  import {
-    getManifest,
-    isManifestLoading,
-    getManifestError,
-    getLoadedBook,
-    openBook,
-    retryManifest,
-  } from "./use-library.svelte.js";
-  import { getQuery, getSearchHits } from "./use-search.svelte.js";
+  import { library } from "./use-library.svelte.js";
+  import { search } from "./use-search.svelte.js";
 
   let leftListItems = $derived.by(() => {
-    const query = getQuery();
-    if (query.trim().length > 0) {
-      return getSearchHits().map((h) => {
-        const book = getManifest().find((b) => b.gutenberg_id === h.gutenberg_id);
+    if (search.query.trim().length > 0) {
+      return search.searchHits.map((h) => {
+        const book = library.manifest.find((b) => b.gutenberg_id === h.gutenberg_id);
         return {
           kind: "hit" as const,
           gutenberg_id: h.gutenberg_id,
@@ -25,7 +17,7 @@
         };
       });
     }
-    return [...getManifest()]
+    return [...library.manifest]
       .sort((a, b) => {
         const aAuth = a.translators[0]?.name ?? "";
         const bAuth = b.translators[0]?.name ?? "";
@@ -49,16 +41,16 @@
 </script>
 
 <aside class="left-column">
-  {#if isManifestLoading()}
+  {#if library.manifestLoading}
     <p class="empty">Loading library…</p>
-  {:else if getManifestError()}
+  {:else if library.manifestError}
     <div class="offline">
       <p>Library offline.</p>
-      <button class="retry" onclick={retryManifest}>Retry</button>
+      <button class="retry" onclick={() => library.retryManifest()}>Retry</button>
     </div>
   {:else if leftListItems.length === 0}
     <p class="empty">
-      {getQuery().trim().length > 0 ? "No hits for this query." : "Library is empty."}
+      {search.query.trim().length > 0 ? "No hits for this query." : "Library is empty."}
     </p>
   {:else}
     <ul aria-label="Library">
@@ -66,8 +58,8 @@
         <li>
           <button
             class="hit"
-            class:active={getLoadedBook()?.gutenberg_id === item.gutenberg_id}
-            onclick={() => openBook(item.gutenberg_id, item.chunk_id || undefined)}
+            class:active={library.loadedBook?.gutenberg_id === item.gutenberg_id}
+            onclick={() => library.openBook(item.gutenberg_id, item.chunk_id || undefined)}
           >
             <div class="hit-meta">
               <span class="author">{item.author}</span>

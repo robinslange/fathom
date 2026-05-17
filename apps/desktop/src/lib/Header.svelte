@@ -10,12 +10,8 @@
     watchSystemTheme,
     type ThemePreference,
   } from "./theme.js";
-  import {
-    isEmbedderReady,
-    getEmbedderError,
-    getDownloadProgress,
-  } from "./use-library.svelte.js";
-  import { getQuery, setQuery, isSearching } from "./use-search.svelte.js";
+  import { library } from "./use-library.svelte.js";
+  import { search } from "./use-search.svelte.js";
 
   let themePref: ThemePreference = $state(readStoredPreference());
 
@@ -49,21 +45,20 @@
   <div class="search">
     <input
       type="search"
-      value={getQuery()}
-      oninput={(e) => setQuery(e.currentTarget.value)}
-      placeholder={isEmbedderReady() ? "Search the library…" : "Loading embedding model…"}
+      bind:value={search.query}
+      placeholder={library.embedderReady ? "Search the library…" : "Loading embedding model…"}
       aria-label="Search the library"
-      disabled={!isEmbedderReady()}
+      disabled={!library.embedderReady}
     />
-    {#if isSearching()}
+    {#if search.searching}
       <span class="searching">searching…</span>
-    {:else if !isEmbedderReady() && !getEmbedderError()}
-      {@const m = getDownloadProgress()["bge-small"]}
+    {:else if !library.embedderReady && !library.embedderError}
+      {@const m = library.downloadProgress["bge-small"]}
       <span class="searching">
         loading model{m && m.total ? ` · ${pctOrNull(m) ?? 0}%` : "…"}
       </span>
-    {:else if getEmbedderError()}
-      <span class="searching error" title={getEmbedderError()!}>embedder offline</span>
+    {:else if library.embedderError}
+      <span class="searching error" title={library.embedderError}>embedder offline</span>
     {/if}
   </div>
   <button
