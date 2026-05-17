@@ -4,6 +4,7 @@
   import { onMount } from "svelte";
   import { endpointToByteOffset as endpointToByteOffsetPure } from "./lib/selection.js";
   import type { ElementLike, NodeLike } from "./lib/selection.js";
+  import { getPage, pageForChunk } from "./lib/pagination.js";
 
   type Tier = "simple" | "standard" | "scholarly";
 
@@ -103,6 +104,8 @@
 
   let lastSelectionText = $state("");
 
+  let currentPage = $state(0);
+
   const modelLabels: Record<string, string> = {
     "gemma3-4b": "Loading paraphrase model (Gemma 3 4B)",
     "deberta-nli": "Loading faithfulness model (DeBERTa NLI)",
@@ -171,6 +174,14 @@
     }
     return result;
   });
+
+  $effect(() => {
+    // Reset to first page whenever a different book is loaded.
+    loadedBook?.gutenberg_id;
+    currentPage = 0;
+  });
+
+  let currentPageBounds = $derived(getPage(paragraphs, currentPage));
 
   onMount(async () => {
     listen<DownloadProgress>("fathom://download-progress", (e) => {
@@ -255,7 +266,10 @@
         gutenbergId: gutenberg_id,
       });
       if (chunkIdToScrollTo) {
-        setTimeout(() => scrollToChunk(chunkIdToScrollTo), 0);
+        setTimeout(() => {
+          currentPage = pageForChunk(paragraphs, chunkIdToScrollTo);
+          scrollToChunk(chunkIdToScrollTo);
+        }, 0);
       }
     } catch (e) {
       paraphraseError = e instanceof Error ? e.message : String(e);
@@ -267,6 +281,30 @@
   function scrollToChunk(chunkId: string) {
     const el = document.querySelector(`[data-chunk-id="${chunkId}"]`);
     if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+
+  function pageBack() {
+    if (currentPage > 0) {
+      currentPage -= 1;
+      window.getSelection()?.removeAllRanges();
+    }
+  }
+
+  function pageForward() {
+    if (currentPage < currentPageBounds.pageCount - 1) {
+      currentPage += 1;
+      window.getSelection()?.removeAllRanges();
+    }
+  }
+
+  function onKeydown(e: KeyboardEvent) {
+    if (!loadedBook) return;
+    const target = e.target as HTMLElement;
+    if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
+    if (e.key === "ArrowLeft") { e.preventDefault(); pageBack(); }
+    else if (e.key === "ArrowRight") { e.preventDefault(); pageForward(); }
+    else if (e.key === " " && e.shiftKey) { e.preventDefault(); pageBack(); }
+    else if (e.key === " ") { e.preventDefault(); pageForward(); }
   }
 
   /**
@@ -332,12 +370,24 @@
   }
 
   async function paraphraseSelection() {
-    if (!loadedBook) return;
+    if (!loadedBook) {
+      console.error("[fathom:paraphrase] bail: no loadedBook");
+      return;
+    }
     const selection = window.getSelection();
-    if (!selection || selection.isCollapsed) return;
+    if (!selection || selection.isCollapsed) {
+      console.error("[fathom:paraphrase] bail: no/collapsed selection");
+      return;
+    }
     const range = selection.getRangeAt(0);
     const selText = selection.toString();
-    if (selText.trim().length === 0) return;
+    if (selText.trim().length === 0) {
+      console.error("[fathom:paraphrase] bail: empty selText");
+      return;
+    }
+    console.error("[fathom:paraphrase] selText:", JSON.stringify(selText.slice(0, 80)));
+    console.error("[fathom:paraphrase] startContainer:", range.startContainer.nodeType, range.startContainer.nodeName, "offset:", range.startOffset);
+    console.error("[fathom:paraphrase] endContainer:", range.endContainer.nodeType, range.endContainer.nodeName, "offset:", range.endOffset);
 
     const paras = paragraphs.map((p) => ({ byteStart: p.byteStart, text: p.text }));
 
@@ -373,7 +423,14 @@
       endByte = spByteStart + utf8ByteLength(spText);
     }
 
-    if (endByte <= startByte) return;
+    console.error("[fathom:paraphrase] startByte:", startByte, "endByte:", endByte, "startPara?", !!startPara, "endPara?", !!endPara);
+
+    if (endByte <= startByte) {
+      console.error("[fathom:paraphrase] bail: endByte <= startByte");
+      return;
+    }
+
+    console.error("[fathom:paraphrase] invoking library_paraphrase_selection");
 
     lastSelectionText = selText;
     paraphraseBusy = true;
@@ -390,6 +447,7 @@
       });
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
+      console.error("[fathom:paraphrase] invoke FAILED:", msg);
       paraphraseError = msg || "paraphrase failed";
     } finally {
       paraphraseBusy = false;
@@ -405,6 +463,8 @@
     return s.length > n ? s.slice(0, n).trimEnd() + "…" : s;
   }
 </script>
+
+<svelte:window onkeydown={onKeydown} />
 
 <header class="app-header">
   <div class="brand">
@@ -491,9 +551,14 @@
               tr. {loadedBook.translators.join(", ")}
             </p>
           {/if}
+          <div class="pagination">
+            <button class="page-btn" onclick={pageBack} disabled={currentPage === 0} aria-label="Previous page">&#x2039;</button>
+            <span class="page-indicator">page {currentPage + 1} of {currentPageBounds.pageCount}</span>
+            <button class="page-btn" onclick={pageForward} disabled={currentPage >= currentPageBounds.pageCount - 1} aria-label="Next page">&#x203a;</button>
+          </div>
         </header>
         <div class="paragraphs">
-          {#each paragraphs as p, i (i)}
+          {#each currentPageBounds.paragraphs as p, i (currentPageBounds.startParaIndex + i)}
             <p
               data-chunk-id={p.chunkId}
               data-byte-start={p.byteStart}
@@ -800,6 +865,36 @@
     font-size: 0.85rem;
     opacity: 0.6;
     font-family: "IBM Plex Sans", sans-serif;
+  }
+  .pagination {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.8rem;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem;
+  }
+  .page-btn {
+    background: transparent;
+    border: 1px solid rgba(31, 26, 19, 0.2);
+    padding: 0.15rem 0.55rem;
+    font: inherit;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 3px;
+    color: inherit;
+  }
+  .page-btn:hover:not(:disabled) {
+    background: rgba(179, 121, 62, 0.08);
+  }
+  .page-btn:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+  .page-indicator {
+    opacity: 0.55;
+    letter-spacing: 0.04em;
   }
   .paragraphs p {
     line-height: 1.7;
