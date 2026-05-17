@@ -35,7 +35,10 @@ async-trait = "0.1"
 directories = "6"
 sha2 = "0.10"
 futures-util = "0.3"
-llama-cpp-2 = "0.1"
+# Pinned to a specific patch — the bundled C++ build in llama-cpp-sys-2
+# has shifted across patch versions, so accepting the full 0.1.x range
+# would let an `update` regress the build. Bump deliberately.
+llama-cpp-2 = "=0.1.146"
 ort = "2.0.0-rc.12"
 ndarray = "0.17"
 tokenizers = { version = "0.21", default-features = false, features = ["onig"] }

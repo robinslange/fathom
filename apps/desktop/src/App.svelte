@@ -3,6 +3,16 @@
   import { listen } from "@tauri-apps/api/event";
   import { onMount } from "svelte";
   import { getPage, pageForChunk } from "./lib/pagination.js";
+  import {
+    applyTheme,
+    nextPreference,
+    preferenceGlyph,
+    preferenceLabel,
+    readStoredPreference,
+    storePreference,
+    watchSystemTheme,
+    type ThemePreference,
+  } from "./lib/theme.js";
 
   type Tier = "simple" | "standard" | "scholarly";
 
@@ -104,6 +114,14 @@
 
   let currentPage = $state(0);
 
+  let themePref: ThemePreference = $state(readStoredPreference());
+
+  function cycleTheme() {
+    themePref = nextPreference(themePref);
+    storePreference(themePref);
+    applyTheme(themePref);
+  }
+
   const modelLabels: Record<string, string> = {
     "gemma3-4b": "Loading paraphrase model (Gemma 3 4B)",
     "deberta-nli": "Loading faithfulness model (DeBERTa NLI)",
@@ -182,6 +200,13 @@
   let currentPageBounds = $derived(getPage(paragraphs, currentPage));
 
   onMount(async () => {
+    applyTheme(themePref);
+    // Root component lives for the app's lifetime, so we don't unsubscribe.
+    watchSystemTheme(
+      () => themePref,
+      () => applyTheme(themePref),
+    );
+
     listen<DownloadProgress>("fathom://download-progress", (e) => {
       downloadProgress = { ...downloadProgress, [e.payload.model]: e.payload };
     });
@@ -1021,8 +1046,8 @@
   }
 
   .error-box {
-    background: #f6e7e0;
-    color: #6c2f10;
+    background: var(--error-bg);
+    color: var(--error-ink);
     padding: 0.65rem 0.85rem;
     border-radius: 4px;
     font-size: 0.88rem;
@@ -1053,7 +1078,7 @@
   }
 
   .faithfulness {
-    border: 1px solid rgba(31, 26, 19, 0.15);
+    border: 1px solid var(--surface-fill-strong);
     border-radius: 4px;
     padding: 0.5rem 0.7rem;
     font-family: "IBM Plex Mono", monospace;
@@ -1061,8 +1086,8 @@
     margin-bottom: 0.9rem;
   }
   .faithfulness.warn {
-    border-color: #b35a3e;
-    background: #fbf0e7;
+    border-color: var(--warn-ink);
+    background: var(--warn-bg);
   }
   .faithfulness-verdict {
     display: inline-flex;
@@ -1074,10 +1099,10 @@
   .faithfulness .verdict-glyph {
     font-size: 0.95rem;
     line-height: 1;
-    color: #4a7a4a;
+    color: var(--ok-ink);
   }
   .faithfulness.warn .verdict-glyph {
-    color: #b35a3e;
+    color: var(--warn-ink);
   }
   .faithfulness-summary {
     display: flex;

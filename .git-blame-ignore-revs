@@ -1,0 +1,6 @@
+# Revisions to ignore when running `git blame`.
+# Configure once locally:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+
+# cargo fmt --all sweep
+b92c533e7ea7dd96966acbf7097a3d7e53fb68ad

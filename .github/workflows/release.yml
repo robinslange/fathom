@@ -28,6 +28,9 @@ jobs:
         uses: Swatinem/rust-cache@v2
         with:
           workspaces: ". -> target"
+          # Shared key with ci.yml's desktop job — they build the same
+          # Tauri bundle, so let cache hits cross-pollinate.
+          shared-key: "macos-tauri-bundle"
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v3
