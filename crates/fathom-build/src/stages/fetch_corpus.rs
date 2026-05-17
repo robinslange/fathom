@@ -16,7 +16,7 @@ use crate::types::Filtered;
 use anyhow::{bail, Context, Result};
 use clap::Args as ClapArgs;
 use std::io::Write;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 
 const RSYNC_ENDPOINT: &str = "rsync.ibiblio.org::gutenberg-epub";
@@ -112,7 +112,7 @@ fn invoke_rsync(list_path: &PathBuf, dest: &PathBuf, endpoint: &str) -> Result<(
     }
 }
 
-fn count_fetched(corpus_dir: &PathBuf, books: &[&Filtered]) -> Result<usize> {
+fn count_fetched(corpus_dir: &Path, books: &[&Filtered]) -> Result<usize> {
     let mut found = 0;
     for b in books {
         let path = corpus_dir.join(format!("{}/pg{}.epub", b.gutenberg_id, b.gutenberg_id));

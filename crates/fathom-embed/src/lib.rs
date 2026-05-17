@@ -174,14 +174,14 @@ pub fn embed_batch(texts: &[&str]) -> Result<Vec<Embedding>> {
         if mask_total == 0.0 {
             bail!("row {} has all-zero attention mask", row);
         }
-        for d in 0..EMBED_DIMS {
-            summed[d] /= mask_total;
+        for v in summed.iter_mut() {
+            *v /= mask_total;
         }
         // L2 normalise — cosine similarity callers assume unit vectors.
         let norm = summed.iter().map(|x| x * x).sum::<f32>().sqrt();
         if norm > 0.0 {
-            for d in 0..EMBED_DIMS {
-                summed[d] /= norm;
+            for v in summed.iter_mut() {
+                *v /= norm;
             }
         }
         out.push(Embedding {

@@ -78,11 +78,16 @@ fn seed_canonical_set() -> HashSet<String> {
         .collect()
 }
 
+/// Clustering key: `(canonical_lowercase, substrate)`.
+type ClusterKey = (String, String);
+/// Per-cluster entry: `(canonical_original_case, gloss, citation)`.
+type ClusterEntry = (String, String, Citation);
+
 fn cluster_observations(
     observations: Vec<Observation>,
     seed: &HashSet<String>,
 ) -> Vec<HarvestCandidate> {
-    let mut by_key: HashMap<(String, String), Vec<(String, String, Citation)>> = HashMap::new();
+    let mut by_key: HashMap<ClusterKey, Vec<ClusterEntry>> = HashMap::new();
     for (canonical, substrate, gloss, citation) in observations {
         let key = (canonical.to_lowercase(), substrate.clone());
         by_key

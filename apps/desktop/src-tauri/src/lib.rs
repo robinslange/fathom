@@ -1,6 +1,5 @@
 use fathom_core::runtime::{ManifestBook, Runtime, SearchHit, Shard};
 use fathom_core::{bootstrap, fathom_with_judge, judge, FathomResult, JudgeMode, Mode, Tier};
-use fathom_embed;
 use fathom_engine::LlamaCppBackend;
 use once_cell::sync::OnceCell;
 use serde::{Deserialize, Serialize};

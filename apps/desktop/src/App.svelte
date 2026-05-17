@@ -684,14 +684,11 @@
 </main>
 
 <style>
-  :global(:root) {
-    color-scheme: light dark;
-  }
   :global(body) {
     margin: 0;
     font-family: "Iowan Old Style", "Charter", "Georgia", serif;
-    background: #faf8f3;
-    color: #1f1a13;
+    background: var(--paper);
+    color: var(--ink);
   }
   :global(*) {
     box-sizing: border-box;
@@ -702,8 +699,8 @@
     align-items: center;
     gap: 2rem;
     padding: 0.75rem 1.25rem;
-    border-bottom: 1px solid rgba(31, 26, 19, 0.12);
-    background: #fffdf8;
+    border-bottom: 1px solid var(--rule);
+    background: var(--panel);
   }
   .brand h1 {
     font-family: "IBM Plex Sans", sans-serif;
@@ -727,18 +724,19 @@
     padding: 0.55rem 0.8rem;
     font: inherit;
     font-size: 0.95rem;
-    background: #fff;
-    border: 1px solid rgba(31, 26, 19, 0.18);
+    background: var(--panel);
+    color: var(--ink);
+    border: 1px solid var(--rule-strong);
     border-radius: 4px;
   }
   .search input:focus {
-    outline: 2px solid #b3793e;
+    outline: 2px solid var(--accent);
     outline-offset: -1px;
     border-color: transparent;
   }
   .search input:disabled {
-    background: rgba(31, 26, 19, 0.04);
-    color: rgba(31, 26, 19, 0.5);
+    background: var(--surface-mute);
+    color: var(--ink-fade);
     cursor: progress;
   }
   .searching {
@@ -747,7 +745,7 @@
     font-family: "IBM Plex Mono", monospace;
   }
   .searching.error {
-    color: #6c2f10;
+    color: var(--error-ink);
     opacity: 0.85;
   }
 
@@ -760,8 +758,8 @@
 
   .left-column {
     overflow-y: auto;
-    border-right: 1px solid rgba(31, 26, 19, 0.12);
-    background: #fcfaf5;
+    border-right: 1px solid var(--rule);
+    background: var(--panel-soft);
   }
   .left-column ul {
     list-style: none;
@@ -772,31 +770,32 @@
     width: 100%;
     text-align: left;
     background: transparent;
+    color: inherit;
     border: 0;
     padding: 0.65rem 0.9rem;
     cursor: pointer;
-    border-bottom: 1px solid rgba(31, 26, 19, 0.05);
+    border-bottom: 1px solid var(--rule-faint);
     font: inherit;
   }
   .hit:hover {
-    background: rgba(179, 121, 62, 0.06);
+    background: var(--accent-wash);
   }
   .hit.active {
-    background: rgba(179, 121, 62, 0.14);
+    background: var(--accent-wash-active);
   }
   .hit:focus-visible,
   .tier-btn:focus-visible,
   .page-btn:focus-visible,
   .fathom-trigger:focus-visible,
   .retry:focus-visible {
-    outline: 2px solid #b3793e;
+    outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
   .fathom-trigger {
     width: 100%;
-    background: #b3793e;
-    color: #fffdf8;
-    border: 1px solid #b3793e;
+    background: var(--accent);
+    color: var(--accent-contrast);
+    border: 1px solid var(--accent);
     padding: 0.45rem 0.7rem;
     font: inherit;
     font-weight: 600;
@@ -805,7 +804,8 @@
     margin-bottom: 0.7rem;
   }
   .fathom-trigger:hover:not(:disabled) {
-    background: #9d6831;
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
   }
   .fathom-trigger:disabled {
     opacity: 0.55;
@@ -853,7 +853,8 @@
   }
   .retry {
     background: transparent;
-    border: 1px solid rgba(31, 26, 19, 0.25);
+    color: inherit;
+    border: 1px solid var(--rule-stronger);
     padding: 0.3rem 0.7rem;
     font: inherit;
     font-size: 0.85rem;
@@ -861,7 +862,7 @@
     cursor: pointer;
   }
   .retry:hover {
-    background: rgba(179, 121, 62, 0.08);
+    background: var(--accent-wash-hover);
   }
 
   .reader {
@@ -872,7 +873,7 @@
   .reader .book-header {
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(31, 26, 19, 0.12);
+    border-bottom: 1px solid var(--rule);
   }
   .reader h2 {
     font-family: "IBM Plex Sans", sans-serif;
@@ -894,7 +895,7 @@
   }
   .page-btn {
     background: transparent;
-    border: 1px solid rgba(31, 26, 19, 0.2);
+    border: 1px solid var(--ink-fade-strong);
     padding: 0.15rem 0.55rem;
     font: inherit;
     font-size: 1rem;
@@ -904,7 +905,7 @@
     color: inherit;
   }
   .page-btn:hover:not(:disabled) {
-    background: rgba(179, 121, 62, 0.08);
+    background: var(--accent-wash-hover);
   }
   .page-btn:disabled {
     opacity: 0.3;
@@ -923,14 +924,14 @@
     white-space: pre-wrap;
   }
   .paragraphs p::selection {
-    background: rgba(179, 121, 62, 0.28);
+    background: var(--accent-selection);
   }
 
   .paraphrase-pane {
     overflow-y: auto;
     padding: 1.25rem 1.25rem 2rem;
-    border-left: 1px solid rgba(31, 26, 19, 0.12);
-    background: #fffdf8;
+    border-left: 1px solid var(--rule);
+    background: var(--panel);
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -953,7 +954,8 @@
   }
   .tier-btn {
     background: transparent;
-    border: 1px solid rgba(31, 26, 19, 0.18);
+    color: inherit;
+    border: 1px solid var(--rule-strong);
     padding: 0.25rem 0.55rem;
     font: inherit;
     font-size: 0.8rem;
@@ -961,9 +963,9 @@
     border-radius: 3px;
   }
   .tier-btn.active {
-    background: #b3793e;
-    color: #fffdf8;
-    border-color: #b3793e;
+    background: var(--accent);
+    color: var(--accent-contrast);
+    border-color: var(--accent);
   }
 
   .selection-preview h3 {
@@ -1003,13 +1005,13 @@
   }
   .bar {
     height: 3px;
-    background: rgba(31, 26, 19, 0.1);
+    background: var(--surface-fill);
     overflow: hidden;
     border-radius: 1.5px;
   }
   .bar-fill {
     height: 100%;
-    background: #b3793e;
+    background: var(--accent);
     transition: width 0.2s;
   }
   @media (prefers-reduced-motion: reduce) {

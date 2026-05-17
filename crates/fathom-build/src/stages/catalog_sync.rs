@@ -25,7 +25,7 @@ pub struct Args {
 
 pub async fn run(args: Args) -> Result<()> {
     let csv_path = catalog_csv_path();
-    ensure_dir(&csv_path.parent().unwrap().to_path_buf())?;
+    ensure_dir(csv_path.parent().unwrap())?;
 
     if !args.offline || !csv_path.exists() {
         let url = args.catalog_url.unwrap_or_else(|| CATALOG_URL.to_string());

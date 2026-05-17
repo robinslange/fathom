@@ -1,9 +1,10 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Default, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
 pub enum Tier {
     Simple,
+    #[default]
     Standard,
     Scholarly,
 }
@@ -27,12 +28,6 @@ impl Tier {
     }
 }
 
-impl Default for Tier {
-    fn default() -> Self {
-        Tier::Standard
-    }
-}
-
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "kebab-case")]
 pub enum Resolution {
@@ -41,19 +36,14 @@ pub enum Resolution {
     NoSubstrate,
 }
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, Default, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "kebab-case")]
 pub enum Mode {
+    #[default]
     Auto,
     Curated,
     Jit,
     NoSubstrate,
-}
-
-impl Default for Mode {
-    fn default() -> Self {
-        Mode::Auto
-    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

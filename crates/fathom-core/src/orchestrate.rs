@@ -296,8 +296,6 @@ impl From<&str> for Passage {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
     fn global_substrate_map_builds_without_panic() {
         let m = crate::lexicon::global_substrate_map();

@@ -63,16 +63,11 @@ fn parse_single_agent(entry: &str) -> Agent {
     // BCE detection: if "BCE" appears before the dash for birth, negate.
     let (birth_year, death_year) = match years {
         Some((b, d)) => {
-            let has_bce_birth = without_role
-                .splitn(2, '-')
-                .next()
-                .map(|s| s.contains("BCE"))
-                .unwrap_or(false);
-            let has_bce_death = without_role
-                .splitn(2, '-')
-                .nth(1)
-                .map(|s| s.contains("BCE"))
-                .unwrap_or(false);
+            let (before_dash, after_dash) = without_role
+                .split_once('-')
+                .unwrap_or((without_role.as_str(), ""));
+            let has_bce_birth = before_dash.contains("BCE");
+            let has_bce_death = after_dash.contains("BCE");
             (
                 b.map(|y| if has_bce_birth { -y.abs() } else { y }),
                 d.map(|y| if has_bce_death { -y.abs() } else { y }),
