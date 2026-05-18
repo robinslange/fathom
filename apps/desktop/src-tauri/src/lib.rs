@@ -387,7 +387,9 @@ async fn library_themes() -> Result<Vec<ThemeView>, AppError> {
     let mut views: Vec<ThemeView> = themes::all_themes()
         .iter()
         .filter_map(|t| {
-            let count = *counts.get(&t.slug).unwrap_or(&0);
+            let count = *counts
+                .get(&t.slug)
+                .expect("theme_counts() seeds every declared theme slug");
             if count == 0 && t.slug != "other" {
                 return None;
             }
