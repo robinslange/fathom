@@ -4,17 +4,24 @@
   import LeftRail from "./lib/LeftRail.svelte";
   import Reader from "./lib/Reader.svelte";
   import ParaphrasePane from "./lib/ParaphrasePane.svelte";
+  import Onboarding from "./lib/Onboarding.svelte";
   import { library } from "./lib/use-library.svelte.js";
   import { search } from "./lib/use-search.svelte.js";
   import { paraphrase } from "./lib/use-paraphrase.svelte.js";
+  import { themes } from "./lib/use-themes.svelte.js";
+  import { onboarding } from "./lib/use-onboarding.svelte.js";
 
   onMount(() => {
     library.initEffects();
     search.initEffects();
     paraphrase.initEffects();
+    onboarding.init();
     library.init();
+    themes.init();
   });
 </script>
+
+<Onboarding />
 
 <Header />
 
