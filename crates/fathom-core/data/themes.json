@@ -55,11 +55,448 @@
   ],
   "assignments": [
     {
+      "gutenberg_id": 59,
+      "themes": [
+        "knowledge",
+        "reality",
+        "how-to-live"
+      ]
+    },
+    {
       "gutenberg_id": 1177,
       "themes": [
         "how-to-live",
         "mind-and-self",
         "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 1572,
+      "themes": [
+        "reality",
+        "knowledge",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 1579,
+      "themes": [
+        "love-and-friendship",
+        "knowledge",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 1580,
+      "themes": [
+        "knowledge",
+        "how-to-live",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 1584,
+      "themes": [
+        "how-to-live",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 1591,
+      "themes": [
+        "how-to-live",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 1598,
+      "themes": [
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 1600,
+      "themes": [
+        "love-and-friendship",
+        "meaning",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 1616,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 1636,
+      "themes": [
+        "love-and-friendship",
+        "knowledge",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 1642,
+      "themes": [
+        "religion",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 1643,
+      "themes": [
+        "knowledge",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 1656,
+      "themes": [
+        "how-to-live",
+        "power-and-justice"
+      ]
+    },
+    {
+      "gutenberg_id": 1657,
+      "themes": [
+        "how-to-live",
+        "power-and-justice"
+      ]
+    },
+    {
+      "gutenberg_id": 1658,
+      "themes": [
+        "mind-and-self",
+        "reality",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 1672,
+      "themes": [
+        "power-and-justice",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 1673,
+      "themes": [
+        "knowledge",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 1682,
+      "themes": [
+        "power-and-justice",
+        "other"
+      ]
+    },
+    {
+      "gutenberg_id": 1687,
+      "themes": [
+        "reality",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 1735,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 1744,
+      "themes": [
+        "how-to-live",
+        "mind-and-self",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 1998,
+      "themes": [
+        "meaning",
+        "how-to-live",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 2412,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 2680,
+      "themes": [
+        "how-to-live",
+        "mind-and-self",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 2940,
+      "themes": [
+        "how-to-live",
+        "power-and-justice"
+      ]
+    },
+    {
+      "gutenberg_id": 3150,
+      "themes": [
+        "how-to-live",
+        "mind-and-self",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 3290,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 4225,
+      "themes": [
+        "how-to-live",
+        "religion",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 4278,
+      "themes": [
+        "mind-and-self",
+        "religion",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 4280,
+      "themes": [
+        "knowledge",
+        "reality",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 4320,
+      "themes": [
+        "how-to-live",
+        "power-and-justice",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 4363,
+      "themes": [
+        "how-to-live",
+        "power-and-justice",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 4583,
+      "themes": [
+        "religion",
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 4705,
+      "themes": [
+        "mind-and-self",
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 4722,
+      "themes": [
+        "mind-and-self",
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 4723,
+      "themes": [
+        "reality",
+        "knowledge",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 4724,
+      "themes": [
+        "reality",
+        "knowledge",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 4763,
+      "themes": [
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 5116,
+      "themes": [
+        "knowledge",
+        "reality",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 5117,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 5500,
+      "themes": [
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 5652,
+      "themes": [
+        "meaning",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 5682,
+      "themes": [
+        "how-to-live",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 5683,
+      "themes": [
+        "how-to-live",
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 5684,
+      "themes": [
+        "how-to-live",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 5827,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 6101,
+      "themes": [
+        "how-to-live",
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 6366,
+      "themes": [
+        "knowledge",
+        "meaning",
+        "other"
+      ]
+    },
+    {
+      "gutenberg_id": 6842,
+      "themes": [
+        "religion",
+        "meaning",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 7175,
+      "themes": [
+        "reality",
+        "religion",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 7819,
+      "themes": [
+        "power-and-justice",
+        "how-to-live",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 8103,
+      "themes": [
+        "how-to-live",
+        "power-and-justice"
+      ]
+    },
+    {
+      "gutenberg_id": 8438,
+      "themes": [
+        "how-to-live",
+        "power-and-justice",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 8909,
+      "themes": [
+        "reality",
+        "religion",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 8910,
+      "themes": [
+        "reality",
+        "religion",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 9199,
+      "themes": [
+        "reality",
+        "religion",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 9306,
+      "themes": [
+        "knowledge",
+        "reality",
+        "other"
+      ]
+    },
+    {
+      "gutenberg_id": 9662,
+      "themes": [
+        "knowledge",
+        "mind-and-self",
+        "reality"
       ]
     },
     {
@@ -77,32 +514,44 @@
       ]
     },
     {
+      "gutenberg_id": 10417,
+      "themes": [
+        "how-to-live",
+        "love-and-friendship"
+      ]
+    },
+    {
+      "gutenberg_id": 10591,
+      "themes": [
+        "how-to-live",
+        "knowledge"
+      ]
+    },
+    {
       "gutenberg_id": 10615,
       "themes": [
         "knowledge",
-        "mind-and-self",
-        "reality"
+        "mind-and-self"
       ]
     },
     {
       "gutenberg_id": 10616,
       "themes": [
         "knowledge",
-        "reality"
+        "mind-and-self"
       ]
     },
     {
       "gutenberg_id": 10661,
       "themes": [
         "how-to-live",
-        "suffering-and-loss",
         "mind-and-self"
       ]
     },
     {
       "gutenberg_id": 10714,
       "themes": [
-        "knowledge",
+        "how-to-live",
         "other"
       ]
     },
@@ -116,8 +565,8 @@
     {
       "gutenberg_id": 10731,
       "themes": [
-        "knowledge",
-        "how-to-live"
+        "how-to-live",
+        "knowledge"
       ]
     },
     {
@@ -132,8 +581,8 @@
       "gutenberg_id": 10739,
       "themes": [
         "mind-and-self",
-        "how-to-live",
-        "power-and-justice"
+        "power-and-justice",
+        "how-to-live"
       ]
     },
     {
@@ -160,16 +609,16 @@
     {
       "gutenberg_id": 11557,
       "themes": [
-        "how-to-live",
-        "power-and-justice"
+        "power-and-justice",
+        "how-to-live"
       ]
     },
     {
       "gutenberg_id": 11945,
       "themes": [
-        "suffering-and-loss",
         "how-to-live",
-        "mind-and-self"
+        "suffering-and-loss",
+        "reality"
       ]
     },
     {
@@ -191,8 +640,8 @@
       "gutenberg_id": 12096,
       "themes": [
         "how-to-live",
-        "power-and-justice",
-        "religion"
+        "religion",
+        "power-and-justice"
       ]
     },
     {
@@ -206,8 +655,6 @@
     {
       "gutenberg_id": 12896,
       "themes": [
-        "meaning",
-        "reality",
         "other"
       ]
     },
@@ -215,8 +662,8 @@
       "gutenberg_id": 13726,
       "themes": [
         "how-to-live",
-        "mind-and-self",
-        "meaning"
+        "meaning",
+        "reality"
       ]
     },
     {
@@ -226,23 +673,1714 @@
         "how-to-live",
         "meaning"
       ]
+    },
+    {
+      "gutenberg_id": 14636,
+      "themes": [
+        "suffering-and-loss",
+        "religion",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 15000,
+      "themes": [
+        "how-to-live",
+        "meaning",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 15877,
+      "themes": [
+        "how-to-live",
+        "meaning",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 16831,
+      "themes": [
+        "knowledge",
+        "religion",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 17201,
+      "themes": [
+        "meaning",
+        "suffering-and-loss",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 17239,
+      "themes": [
+        "meaning",
+        "religion",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 17490,
+      "themes": [
+        "how-to-live",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 17522,
+      "themes": [
+        "how-to-live",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 17771,
+      "themes": [
+        "meaning",
+        "reality",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 18269,
+      "themes": [
+        "religion",
+        "meaning",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 18440,
+      "themes": [
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 18569,
+      "themes": [
+        "religion",
+        "knowledge",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 19322,
+      "themes": [
+        "religion",
+        "power-and-justice",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 20768,
+      "themes": [
+        "mind-and-self",
+        "meaning",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 21668,
+      "themes": [
+        "reality",
+        "mind-and-self",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 21789,
+      "themes": [
+        "suffering-and-loss",
+        "how-to-live",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 21981,
+      "themes": [
+        "religion",
+        "how-to-live",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 21995,
+      "themes": [
+        "religion",
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 22135,
+      "themes": [
+        "how-to-live",
+        "knowledge",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 22283,
+      "themes": [
+        "mind-and-self",
+        "reality",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 22364,
+      "themes": [
+        "mind-and-self",
+        "how-to-live",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 23136,
+      "themes": [
+        "mind-and-self",
+        "meaning",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 24328,
+      "themes": [
+        "religion",
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 24372,
+      "themes": [
+        "how-to-live",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 25012,
+      "themes": [
+        "meaning",
+        "reality",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 25447,
+      "themes": [
+        "knowledge",
+        "reality",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 25830,
+      "themes": [
+        "knowledge",
+        "mind-and-self",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 26163,
+      "themes": [
+        "reality",
+        "mind-and-self",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 26495,
+      "themes": [
+        "knowledge",
+        "reality",
+        "other"
+      ]
+    },
+    {
+      "gutenberg_id": 26659,
+      "themes": [
+        "knowledge",
+        "reality",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 26842,
+      "themes": [
+        "other",
+        "mind-and-self",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 26942,
+      "themes": [
+        "other",
+        "mind-and-self",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 27571,
+      "themes": [
+        "religion",
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 27942,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 28484,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 28696,
+      "themes": [
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 29478,
+      "themes": [
+        "how-to-live",
+        "power-and-justice"
+      ]
+    },
+    {
+      "gutenberg_id": 29510,
+      "themes": [
+        "reality",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 29869,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 29917,
+      "themes": [
+        "reality",
+        "knowledge",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 31354,
+      "themes": [
+        "suffering-and-loss",
+        "meaning",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 31622,
+      "themes": [
+        "how-to-live",
+        "suffering-and-loss",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 31796,
+      "themes": [
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 32547,
+      "themes": [
+        "reality",
+        "knowledge",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 33727,
+      "themes": [
+        "knowledge",
+        "how-to-live",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 34198,
+      "themes": [
+        "knowledge",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 34654,
+      "themes": [
+        "mind-and-self",
+        "how-to-live",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 35354,
+      "themes": [
+        "how-to-live",
+        "religion",
+        "power-and-justice"
+      ]
+    },
+    {
+      "gutenberg_id": 35420,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 35421,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 35722,
+      "themes": [
+        "reality",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 35875,
+      "themes": [
+        "suffering-and-loss",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 36120,
+      "themes": [
+        "power-and-justice",
+        "knowledge",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 36208,
+      "themes": [
+        "knowledge",
+        "reality",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 36801,
+      "themes": [
+        "knowledge",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 37090,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 37358,
+      "themes": [
+        "knowledge",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 37864,
+      "themes": [
+        "knowledge",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 38091,
+      "themes": [
+        "mind-and-self",
+        "knowledge",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 38145,
+      "themes": [
+        "how-to-live",
+        "knowledge",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 38427,
+      "themes": [
+        "reality",
+        "mind-and-self",
+        "suffering-and-loss"
+      ]
+    },
+    {
+      "gutenberg_id": 39064,
+      "themes": [
+        "mind-and-self",
+        "reality",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 39273,
+      "themes": [
+        "power-and-justice",
+        "religion",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 39535,
+      "themes": [
+        "religion",
+        "how-to-live",
+        "power-and-justice"
+      ]
+    },
+    {
+      "gutenberg_id": 39746,
+      "themes": [
+        "reality",
+        "knowledge",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 39855,
+      "themes": [
+        "how-to-live",
+        "mind-and-self",
+        "suffering-and-loss"
+      ]
+    },
+    {
+      "gutenberg_id": 39964,
+      "themes": [
+        "knowledge",
+        "reality",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 39977,
+      "themes": [
+        "knowledge",
+        "reality",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 40089,
+      "themes": [
+        "knowledge",
+        "how-to-live",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 40097,
+      "themes": [
+        "reality",
+        "mind-and-self",
+        "suffering-and-loss"
+      ]
+    },
+    {
+      "gutenberg_id": 40307,
+      "themes": [
+        "mind-and-self",
+        "knowledge",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 40665,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 40794,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 40845,
+      "themes": [
+        "how-to-live",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 40868,
+      "themes": [
+        "reality",
+        "mind-and-self",
+        "suffering-and-loss"
+      ]
+    },
+    {
+      "gutenberg_id": 41042,
+      "themes": [
+        "mind-and-self",
+        "suffering-and-loss",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 41319,
+      "themes": [
+        "mind-and-self",
+        "knowledge",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 41633,
+      "themes": [
+        "how-to-live",
+        "religion",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 41838,
+      "themes": [
+        "knowledge",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 42083,
+      "themes": [
+        "how-to-live",
+        "suffering-and-loss",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 42208,
+      "themes": [
+        "power-and-justice",
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 42930,
+      "themes": [
+        "reality",
+        "mind-and-self",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 42931,
+      "themes": [
+        "reality",
+        "mind-and-self",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 42932,
+      "themes": [
+        "reality",
+        "mind-and-self",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 42933,
+      "themes": [
+        "reality",
+        "mind-and-self",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 42968,
+      "themes": [
+        "reality",
+        "religion",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 43116,
+      "themes": [
+        "mind-and-self",
+        "how-to-live",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 43409,
+      "themes": [
+        "religion",
+        "how-to-live",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 43484,
+      "themes": [
+        "reality",
+        "religion",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 43544,
+      "themes": [
+        "mind-and-self",
+        "meaning",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 43719,
+      "themes": [
+        "meaning",
+        "how-to-live",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 43800,
+      "themes": [
+        "how-to-live",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 43967,
+      "themes": [
+        "power-and-justice",
+        "religion",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 44388,
+      "themes": [
+        "reality",
+        "knowledge",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 44655,
+      "themes": [
+        "religion",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 44867,
+      "themes": [
+        "meaning",
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 44883,
+      "themes": [
+        "love-and-friendship",
+        "meaning",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 45109,
+      "themes": [
+        "how-to-live",
+        "mind-and-self",
+        "suffering-and-loss"
+      ]
+    },
+    {
+      "gutenberg_id": 45387,
+      "themes": [
+        "religion",
+        "how-to-live",
+        "power-and-justice"
+      ]
+    },
+    {
+      "gutenberg_id": 45913,
+      "themes": [
+        "how-to-live",
+        "power-and-justice"
+      ]
+    },
+    {
+      "gutenberg_id": 45988,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 46129,
+      "themes": [
+        "how-to-live",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 46544,
+      "themes": [
+        "religion",
+        "reality",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 46743,
+      "themes": [
+        "how-to-live",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 46759,
+      "themes": [
+        "how-to-live",
+        "meaning",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 46921,
+      "themes": [
+        "religion",
+        "meaning",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 47025,
+      "themes": [
+        "religion",
+        "reality",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 47658,
+      "themes": [
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 48027,
+      "themes": [
+        "how-to-live",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 48149,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 48431,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 48433,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 49244,
+      "themes": [
+        "knowledge",
+        "reality",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 49263,
+      "themes": [
+        "how-to-live",
+        "power-and-justice",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 50086,
+      "themes": [
+        "reality",
+        "knowledge",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 50141,
+      "themes": [
+        "knowledge",
+        "reality",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 50189,
+      "themes": [
+        "how-to-live",
+        "knowledge",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 51459,
+      "themes": [
+        "reality",
+        "knowledge",
+        "other"
+      ]
+    },
+    {
+      "gutenberg_id": 51525,
+      "themes": [
+        "knowledge",
+        "reality",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 51555,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 51935,
+      "themes": [
+        "how-to-live",
+        "mind-and-self",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 52090,
+      "themes": [
+        "mind-and-self",
+        "reality",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 52124,
+      "themes": [
+        "how-to-live",
+        "knowledge",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 52166,
+      "themes": [
+        "how-to-live",
+        "meaning",
+        "other"
+      ]
+    },
+    {
+      "gutenberg_id": 52190,
+      "themes": [
+        "mind-and-self",
+        "how-to-live",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 52263,
+      "themes": [
+        "how-to-live",
+        "reality",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 52319,
+      "themes": [
+        "how-to-live",
+        "power-and-justice",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 52821,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 52914,
+      "themes": [
+        "meaning",
+        "reality",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 52915,
+      "themes": [
+        "knowledge",
+        "power-and-justice",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 53395,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 53430,
+      "themes": [
+        "how-to-live",
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 53791,
+      "themes": [
+        "knowledge",
+        "reality",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 53792,
+      "themes": [
+        "mind-and-self",
+        "how-to-live",
+        "love-and-friendship"
+      ]
+    },
+    {
+      "gutenberg_id": 53799,
+      "themes": [
+        "how-to-live",
+        "religion",
+        "power-and-justice"
+      ]
+    },
+    {
+      "gutenberg_id": 54076,
+      "themes": [
+        "power-and-justice",
+        "how-to-live",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 54137,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 54618,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 54938,
+      "themes": [
+        "how-to-live",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 55046,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 55108,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 55317,
+      "themes": [
+        "how-to-live",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 55761,
+      "themes": [
+        "mind-and-self",
+        "reality",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 55898,
+      "themes": [
+        "how-to-live",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 56075,
+      "themes": [
+        "how-to-live",
+        "suffering-and-loss"
+      ]
+    },
+    {
+      "gutenberg_id": 56441,
+      "themes": [
+        "mind-and-self",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 56758,
+      "themes": [
+        "meaning",
+        "how-to-live",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 56869,
+      "themes": [
+        "how-to-live",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 57071,
+      "themes": [
+        "how-to-live",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 57260,
+      "themes": [
+        "power-and-justice",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 57359,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 57369,
+      "themes": [
+        "how-to-live",
+        "meaning",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 57749,
+      "themes": [
+        "how-to-live",
+        "love-and-friendship",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 57752,
+      "themes": [
+        "how-to-live",
+        "meaning",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 57998,
+      "themes": [
+        "knowledge",
+        "mind-and-self",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 58136,
+      "themes": [
+        "how-to-live",
+        "power-and-justice",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 58559,
+      "themes": [
+        "knowledge",
+        "other"
+      ]
+    },
+    {
+      "gutenberg_id": 58977,
+      "themes": [
+        "religion",
+        "mind-and-self",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 59590,
+      "themes": [
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 60068,
+      "themes": [
+        "how-to-live",
+        "meaning",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 60212,
+      "themes": [
+        "mind-and-self",
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 60422,
+      "themes": [
+        "how-to-live",
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 60831,
+      "themes": [
+        "religion",
+        "suffering-and-loss",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 63598,
+      "themes": [
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 64858,
+      "themes": [
+        "religion",
+        "power-and-justice",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 64908,
+      "themes": [
+        "meaning",
+        "reality",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 65274,
+      "themes": [
+        "knowledge",
+        "reality",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 65714,
+      "themes": [
+        "how-to-live",
+        "meaning",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 65720,
+      "themes": [
+        "reality",
+        "religion",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 67017,
+      "themes": [
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 67363,
+      "themes": [
+        "how-to-live",
+        "love-and-friendship",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 67463,
+      "themes": [
+        "how-to-live",
+        "meaning",
+        "power-and-justice"
+      ]
+    },
+    {
+      "gutenberg_id": 67799,
+      "themes": [
+        "how-to-live",
+        "power-and-justice",
+        "love-and-friendship"
+      ]
+    },
+    {
+      "gutenberg_id": 68817,
+      "themes": [
+        "how-to-live",
+        "meaning",
+        "suffering-and-loss"
+      ]
+    },
+    {
+      "gutenberg_id": 69512,
+      "themes": [
+        "knowledge",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 70091,
+      "themes": [
+        "mind-and-self",
+        "reality",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 70666,
+      "themes": [
+        "how-to-live",
+        "mind-and-self",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 71885,
+      "themes": [
+        "reality",
+        "mind-and-self",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 72368,
+      "themes": [
+        "reality",
+        "religion",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 72981,
+      "themes": [
+        "knowledge",
+        "reality",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 73782,
+      "themes": [
+        "how-to-live",
+        "meaning",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 73877,
+      "themes": [
+        "power-and-justice",
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 73906,
+      "themes": [
+        "power-and-justice",
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 73957,
+      "themes": [
+        "power-and-justice",
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 74236,
+      "themes": [
+        "knowledge",
+        "mind-and-self",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 74254,
+      "themes": [
+        "suffering-and-loss",
+        "how-to-live",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 74315,
+      "themes": [
+        "power-and-justice",
+        "how-to-live",
+        "meaning"
+      ]
+    },
+    {
+      "gutenberg_id": 74732,
+      "themes": [
+        "knowledge",
+        "reality",
+        "other"
+      ]
+    },
+    {
+      "gutenberg_id": 75184,
+      "themes": [
+        "power-and-justice",
+        "how-to-live",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 76464,
+      "themes": [
+        "knowledge",
+        "reality",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 76650,
+      "themes": [
+        "knowledge",
+        "power-and-justice",
+        "mind-and-self"
+      ]
+    },
+    {
+      "gutenberg_id": 77014,
+      "themes": [
+        "how-to-live",
+        "reality",
+        "religion"
+      ]
+    },
+    {
+      "gutenberg_id": 77019,
+      "themes": [
+        "meaning",
+        "religion",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 77155,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 77338,
+      "themes": [
+        "power-and-justice",
+        "knowledge"
+      ]
+    },
+    {
+      "gutenberg_id": 77393,
+      "themes": [
+        "religion",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 77894,
+      "themes": [
+        "how-to-live",
+        "suffering-and-loss"
+      ]
+    },
+    {
+      "gutenberg_id": 78230,
+      "themes": [
+        "reality",
+        "meaning",
+        "how-to-live"
+      ]
+    },
+    {
+      "gutenberg_id": 78618,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
+    },
+    {
+      "gutenberg_id": 78674,
+      "themes": [
+        "knowledge",
+        "reality"
+      ]
     }
   ],
   "dropped": [
+    {
+      "gutenberg_id": 368,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 455,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 935,
+      "reason": "intro-textbook"
+    },
     {
       "gutenberg_id": 1275,
       "reason": "history-of-philosophy"
     },
     {
+      "gutenberg_id": 2274,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 2541,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 3351,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 3352,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 3353,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 3354,
+      "reason": "duplicate"
+    },
+    {
+      "gutenberg_id": 3355,
+      "reason": "duplicate"
+    },
+    {
+      "gutenberg_id": 3356,
+      "reason": "duplicate"
+    },
+    {
+      "gutenberg_id": 3357,
+      "reason": "duplicate"
+    },
+    {
+      "gutenberg_id": 3358,
+      "reason": "duplicate"
+    },
+    {
+      "gutenberg_id": 3359,
+      "reason": "duplicate"
+    },
+    {
+      "gutenberg_id": 3360,
+      "reason": "duplicate"
+    },
+    {
+      "gutenberg_id": 3361,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 4095,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 4391,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 4701,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 4754,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 5068,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 5078,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 5246,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 5621,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 5717,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 5775,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 6336,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 6463,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 6920,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 6925,
+      "reason": "biography"
+    },
+    {
+      "gutenberg_id": 7495,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 7539,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 7952,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 8399,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 8450,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 8904,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 8932,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 9054,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 9304,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 9402,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 9469,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 9996,
+      "reason": "history-of-philosophy"
+    },
+    {
       "gutenberg_id": 10214,
-      "reason": "intro-textbook"
-    },
-    {
-      "gutenberg_id": 10417,
-      "reason": "intro-textbook"
-    },
-    {
-      "gutenberg_id": 10591,
       "reason": "intro-textbook"
     },
     {
@@ -255,7 +2393,7 @@
     },
     {
       "gutenberg_id": 10970,
-      "reason": "history-of-philosophy"
+      "reason": "intro-textbook"
     },
     {
       "gutenberg_id": 11100,
@@ -283,7 +2421,7 @@
     },
     {
       "gutenberg_id": 12492,
-      "reason": "history-of-philosophy"
+      "reason": "intro-textbook"
     },
     {
       "gutenberg_id": 12811,
@@ -295,7 +2433,7 @@
     },
     {
       "gutenberg_id": 12913,
-      "reason": "history-of-philosophy"
+      "reason": "intro-textbook"
     },
     {
       "gutenberg_id": 12956,
@@ -331,17 +2469,821 @@
     },
     {
       "gutenberg_id": 14357,
-      "reason": "biography"
+      "reason": "history-of-philosophy"
     },
     {
       "gutenberg_id": 14418,
       "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 14657,
+      "reason": "biography"
+    },
+    {
+      "gutenberg_id": 14679,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 15098,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 15419,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 15510,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 16306,
+      "reason": "biography"
+    },
+    {
+      "gutenberg_id": 16406,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 16712,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 16833,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 16835,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 16937,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 17087,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 17110,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 17195,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 17274,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 17556,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 17781,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 17956,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 18394,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 18533,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 18712,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 18819,
+      "reason": "biography"
+    },
+    {
+      "gutenberg_id": 19432,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 19610,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 19696,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 19872,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 20137,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 20500,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 20608,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 20819,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 20861,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 20887,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 22050,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 22105,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 22417,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 22797,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 23025,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 23640,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 23659,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 23860,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 24406,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 24524,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 25110,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 25540,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 25788,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 26321,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 26334,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 26597,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 26726,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 27531,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 27597,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 27814,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 27821,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 27830,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 29033,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 29441,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 30866,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 31205,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 31340,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 31768,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 31941,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 32421,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 32438,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 32701,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 33411,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 33815,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 34125,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 34258,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 34283,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 34511,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 34656,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 35460,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 35761,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 35890,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 36664,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 36695,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 36993,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 37068,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 37988,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 38117,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 38283,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 38907,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 38943,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 39002,
+      "reason": "biography"
+    },
+    {
+      "gutenberg_id": 39005,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 39065,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 39551,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 40079,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 40435,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 40436,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 40437,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 40438,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 40901,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 40957,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 41412,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 41632,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 41707,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 41901,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 42843,
+      "reason": "biography"
+    },
+    {
+      "gutenberg_id": 42844,
+      "reason": "biography"
+    },
+    {
+      "gutenberg_id": 43062,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 43359,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 43572,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 44949,
+      "reason": "biography"
+    },
+    {
+      "gutenberg_id": 45851,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 46130,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 46777,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 47136,
+      "reason": "duplicate"
+    },
+    {
+      "gutenberg_id": 47588,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 47880,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 47993,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 48002,
+      "reason": "duplicate"
+    },
+    {
+      "gutenberg_id": 48495,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 48565,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 49203,
+      "reason": "biography"
+    },
+    {
+      "gutenberg_id": 49316,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 50058,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 51374,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 51635,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 51636,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 51710,
+      "reason": "duplicate"
+    },
+    {
+      "gutenberg_id": 52106,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 52534,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 52660,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 52814,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 52881,
+      "reason": "duplicate"
+    },
+    {
+      "gutenberg_id": 53011,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 53260,
+      "reason": "biography"
+    },
+    {
+      "gutenberg_id": 53369,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 53401,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 53443,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 53620,
+      "reason": "biography"
+    },
+    {
+      "gutenberg_id": 53622,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 54860,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 54992,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 56263,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 56287,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 56306,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 56517,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 56821,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 56824,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 57126,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 57342,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 57651,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 58025,
+      "reason": "duplicate"
+    },
+    {
+      "gutenberg_id": 58169,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 58224,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 58392,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 58583,
+      "reason": "duplicate"
+    },
+    {
+      "gutenberg_id": 58685,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 58925,
+      "reason": "duplicate"
+    },
+    {
+      "gutenberg_id": 59023,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 59024,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 59091,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 59163,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 59393,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 59784,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 59844,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 59995,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 60071,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 60399,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 60484,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 60826,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 61151,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 61593,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 61651,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 62663,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 62712,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 62856,
+      "reason": "duplicate"
+    },
+    {
+      "gutenberg_id": 63300,
+      "reason": "biography"
+    },
+    {
+      "gutenberg_id": 63995,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 64295,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 64488,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 65545,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 65638,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 65970,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 66820,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 67097,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 67553,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 68481,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 69531,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 69614,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 69736,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 69855,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 72074,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 72765,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 73116,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 73430,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 74250,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 74899,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 75300,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 75448,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 75723,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 75928,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 76483,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 76522,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 77134,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 77186,
+      "reason": "intro-textbook"
+    },
+    {
+      "gutenberg_id": 77777,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 78320,
+      "reason": "history-of-philosophy"
+    },
+    {
+      "gutenberg_id": 78670,
+      "reason": "history-of-philosophy"
     }
   ],
   "metadata": {
-    "books_classified": 23,
-    "books_in_other": 2,
-    "books_dropped": 27,
+    "books_classified": 283,
+    "books_in_other": 12,
+    "books_dropped": 268,
     "model": "claude-sonnet-4-6"
   }
 }
