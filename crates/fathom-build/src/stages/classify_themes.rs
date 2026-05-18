@@ -12,14 +12,14 @@
 //! output JSON (`build-state/themes-output.jsonl`), then assembles the
 //! final `themes.json`.
 
-use crate::fs_state::build_state_dir;
+use crate::fs_state::{build_state_dir, write_json};
 use crate::shard_format::Shard;
 use crate::stages::manifest::Manifest;
 use crate::stages::shard::dist_dir;
 use anyhow::{Context, Result};
 use clap::Args as ClapArgs;
 use serde::{Deserialize, Serialize};
-use std::io::{BufWriter, Write};
+use std::io::{BufRead, BufWriter, Write};
 use std::path::PathBuf;
 
 #[derive(Debug, ClapArgs)]
@@ -66,6 +66,43 @@ pub struct ThemeInputRecord {
     pub translators: Vec<String>,
     pub locc: Vec<String>,
     pub first_page: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ThemeOutputRecord {
+    pub gutenberg_id: u32,
+    pub themes: Vec<String>,
+    pub confidence: String,
+    pub reasoning: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ThemesFile {
+    pub version: u32,
+    pub generated_at: String,
+    pub themes: Vec<ThemeEntry>,
+    pub assignments: Vec<ThemeAssignment>,
+    pub metadata: ThemesMetadata,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ThemeEntry {
+    pub slug: String,
+    pub label: String,
+    pub order: u32,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ThemeAssignment {
+    pub gutenberg_id: u32,
+    pub themes: Vec<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ThemesMetadata {
+    pub books_classified: usize,
+    pub books_in_other: usize,
+    pub model: String,
 }
 
 pub fn themes_input_path() -> PathBuf {
@@ -139,8 +176,81 @@ fn prepare_input(limit: Option<usize>) -> Result<()> {
 }
 
 fn assemble_output() -> Result<()> {
-    // Implemented in Task 3.
-    anyhow::bail!("assemble_output not yet implemented")
+    let output_path = themes_output_path();
+    let file = std::fs::File::open(&output_path)
+        .with_context(|| format!("open {}", output_path.display()))?;
+    let reader = std::io::BufReader::new(file);
+
+    let known: std::collections::HashSet<&str> =
+        SEED_TAXONOMY.iter().map(|(s, _)| *s).collect();
+
+    let mut assignments: Vec<ThemeAssignment> = Vec::new();
+    let mut books_in_other: usize = 0;
+
+    for line in reader.lines() {
+        let line = line.context("read line from themes-output.jsonl")?;
+        if line.trim().is_empty() {
+            continue;
+        }
+        let record: ThemeOutputRecord = serde_json::from_str(&line)
+            .with_context(|| format!("parse ThemeOutputRecord from: {}", line))?;
+
+        for slug in &record.themes {
+            if !known.contains(slug.as_str()) {
+                anyhow::bail!(
+                    "unknown theme slug '{}' for pg{} — taxonomy drift",
+                    slug,
+                    record.gutenberg_id
+                );
+            }
+        }
+
+        if record.themes.iter().any(|t| t == "other") {
+            books_in_other += 1;
+        }
+
+        assignments.push(ThemeAssignment {
+            gutenberg_id: record.gutenberg_id,
+            themes: record.themes,
+        });
+    }
+
+    assignments.sort_by_key(|a| a.gutenberg_id);
+
+    let themes: Vec<ThemeEntry> = SEED_TAXONOMY
+        .iter()
+        .enumerate()
+        .map(|(i, (slug, label))| ThemeEntry {
+            slug: slug.to_string(),
+            label: label.to_string(),
+            order: if *slug == "other" { 99 } else { i as u32 + 1 },
+        })
+        .collect();
+
+    let out_path = PathBuf::from("crates/fathom-core/data/themes.json");
+    let books_classified = assignments.len();
+    let themes_file = ThemesFile {
+        version: 1,
+        generated_at: chrono::Utc::now().format("%Y-%m-%d").to_string(),
+        themes,
+        assignments,
+        metadata: ThemesMetadata {
+            books_classified,
+            books_in_other,
+            model: "claude-sonnet-4-6".to_string(),
+        },
+    };
+
+    write_json(&out_path, &themes_file)
+        .with_context(|| format!("write {}", out_path.display()))?;
+
+    eprintln!(
+        "classify-themes: wrote {} assignments ({} other) → {}",
+        books_classified,
+        books_in_other,
+        out_path.display()
+    );
+    Ok(())
 }
 
 #[cfg(test)]
@@ -167,5 +277,38 @@ mod tests {
         let slugs: Vec<&str> = SEED_TAXONOMY.iter().map(|(s, _)| *s).collect();
         assert!(slugs.contains(&"other"), "misfit bucket required");
         assert_eq!(SEED_TAXONOMY.len(), 10, "9 content themes + other");
+    }
+
+    #[test]
+    fn assembler_rejects_unknown_theme_slugs() {
+        let bad_record = ThemeOutputRecord {
+            gutenberg_id: 1,
+            themes: vec!["mind-and-self".into(), "phlogiston".into()],
+            confidence: "high".into(),
+            reasoning: "test".into(),
+        };
+        let known: std::collections::HashSet<&str> =
+            SEED_TAXONOMY.iter().map(|(s, _)| *s).collect();
+        let unknown: Vec<&String> = bad_record
+            .themes
+            .iter()
+            .filter(|t| !known.contains(t.as_str()))
+            .collect();
+        assert_eq!(unknown, vec![&"phlogiston".to_string()]);
+    }
+
+    #[test]
+    fn other_bucket_gets_order_99() {
+        let themes: Vec<ThemeEntry> = SEED_TAXONOMY
+            .iter()
+            .enumerate()
+            .map(|(i, (slug, label))| ThemeEntry {
+                slug: slug.to_string(),
+                label: label.to_string(),
+                order: if *slug == "other" { 99 } else { i as u32 + 1 },
+            })
+            .collect();
+        let other = themes.iter().find(|t| t.slug == "other").unwrap();
+        assert_eq!(other.order, 99);
     }
 }
