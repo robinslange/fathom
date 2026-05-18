@@ -15,8 +15,8 @@ mod translators;
 mod types;
 
 use stages::{
-    catalog_sync, chunk_stage, deploy, embed_stage, enrich_translators, fetch_corpus, filter_stage,
-    harvest_substrate, manifest, shard, sign, verify,
+    catalog_sync, chunk_stage, classify_themes, deploy, embed_stage, enrich_translators,
+    fetch_corpus, filter_stage, harvest_substrate, manifest, shard, sign, verify,
 };
 
 #[derive(Parser)]
@@ -50,6 +50,9 @@ enum Stage {
     /// Harvest substrate-term candidates from the chunked corpus into
     /// pending-lexicon.jsonl for operator review.
     HarvestSubstrate(harvest_substrate::Args),
+    /// Classify books into beginner-facing themes via Sonnet 4.6 subagents.
+    /// Operator-driven; input/output JSONL passes through build-state/.
+    ClassifyThemes(classify_themes::Args),
     /// Upload the signed dist tree to R2 via the locally authenticated wrangler CLI.
     Deploy(deploy::Args),
     /// Run the full pipeline end-to-end.
@@ -72,6 +75,7 @@ async fn main() -> anyhow::Result<()> {
         Stage::Manifest(args) => manifest::run(args).await,
         Stage::Sign(args) => sign::run(args).await,
         Stage::HarvestSubstrate(args) => harvest_substrate::run(args).await,
+        Stage::ClassifyThemes(args) => classify_themes::run(args).await,
         Stage::Deploy(args) => deploy::run(args).await,
         Stage::All => {
             catalog_sync::run(catalog_sync::Args::default()).await?;

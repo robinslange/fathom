@@ -31,5 +31,8 @@ apps/desktop/src-tauri/target/
 # Design notes (kept local, not part of the repo)
 docs/superpowers/
 
+# Visual-companion brainstorm sessions
+.superpowers/
+
 # Wrangler local OAuth cache
 .wrangler/
