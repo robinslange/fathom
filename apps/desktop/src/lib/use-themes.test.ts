@@ -24,27 +24,34 @@ describe("use-themes", () => {
     expect(themes.themesError).toBeNull();
   });
 
-  it("expand fetches books once + caches", async () => {
+  it("expand caches per-slug books across switches", async () => {
     const themesPayload = [
       { slug: "mind-and-self", label: "Who am I really?", count: 2, order: 1 },
+      { slug: "how-to-live", label: "How should I live?", count: 1, order: 2 },
     ];
-    const booksPayload = [
+    const minds = [
       { gutenberg_id: 1, title: "Republic", translators: ["Jowett"] },
       { gutenberg_id: 2, title: "Phaedo", translators: ["Jowett"] },
     ];
+    const ethics = [
+      { gutenberg_id: 3, title: "Nicomachean Ethics", translators: ["Ross"] },
+    ];
     (invoke as unknown as ReturnType<typeof vi.fn>)
       .mockResolvedValueOnce(themesPayload)
-      .mockResolvedValueOnce(booksPayload);
+      .mockResolvedValueOnce(minds)
+      .mockResolvedValueOnce(ethics);
     await themes.init();
     await themes.expand("mind-and-self");
+    await themes.expand("how-to-live");
     await themes.expand("mind-and-self");
-    expect(themes.expandedSlug).toBeNull();
+    expect(themes.expandedSlug).toBe("mind-and-self");
     expect(themes.booksByTheme["mind-and-self"]?.length).toBe(2);
+    expect(themes.booksByTheme["how-to-live"]?.length).toBe(1);
     expect(
       (invoke as unknown as ReturnType<typeof vi.fn>).mock.calls.filter(
         (c) => c[0] === "library_books_in_theme",
       ).length,
-    ).toBe(1);
+    ).toBe(2);
   });
 
   it("collapses when expanding the same slug twice (toggle)", async () => {
