@@ -569,6 +569,41 @@ async fn write_favourites_inner(path: &Path, v: &[u32]) -> Result<(), AppError> 
     Ok(())
 }
 
+fn onboarding_sentinel_path() -> Result<PathBuf, AppError> {
+    use directories::ProjectDirs;
+    let proj = ProjectDirs::from("nz", "omit", "fathom").ok_or_else(|| AppError {
+        message: "could not resolve OS project directories".to_string(),
+    })?;
+    Ok(proj.data_dir().join("onboarding-completed"))
+}
+
+#[derive(Serialize)]
+pub struct OnboardingStatus {
+    pub completed: bool,
+}
+
+#[tauri::command]
+async fn onboarding_status() -> Result<OnboardingStatus, AppError> {
+    let path = onboarding_sentinel_path()?;
+    Ok(OnboardingStatus {
+        completed: path.exists(),
+    })
+}
+
+#[tauri::command]
+async fn onboarding_complete() -> Result<(), AppError> {
+    let path = onboarding_sentinel_path()?;
+    if let Some(parent) = path.parent() {
+        std::fs::create_dir_all(parent).map_err(|e| AppError {
+            message: format!("create onboarding dir: {}", e),
+        })?;
+    }
+    std::fs::write(&path, b"").map_err(|e| AppError {
+        message: format!("write onboarding sentinel: {}", e),
+    })?;
+    Ok(())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     // Log RAM tier once, at process start, before any Tauri / webview /
@@ -590,6 +625,8 @@ pub fn run() {
             library_favourites,
             library_themes,
             library_books_in_theme,
+            onboarding_status,
+            onboarding_complete,
         ])
         .build(tauri::generate_context!())
         .expect("error while building fathom desktop");
