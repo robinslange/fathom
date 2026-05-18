@@ -2,6 +2,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
 import { getPage, pageForChunk, type Paragraph } from "./pagination.js";
 import { utf8ByteLength } from "./utf8.js";
+import { isBoilerplate } from "./boilerplate.js";
 
 export type TranslatorEntry = {
   name: string;
@@ -75,11 +76,13 @@ class LibraryStore {
       const chunk = this.loadedBook.chunks.find(
         (c) => c.byte_offset_start <= offset && offset < c.byte_offset_end,
       );
-      result.push({
-        chunkId: chunk?.chunk_id ?? "",
-        byteStart: offset,
-        text: para,
-      });
+      if (!isBoilerplate(para)) {
+        result.push({
+          chunkId: chunk?.chunk_id ?? "",
+          byteStart: offset,
+          text: para,
+        });
+      }
       offset += utf8ByteLength(para) + SEPARATOR_BYTES;
     }
     return result;

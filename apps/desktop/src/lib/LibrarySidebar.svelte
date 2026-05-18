@@ -1,21 +1,24 @@
 <script lang="ts">
   import { library } from "./use-library.svelte.js";
   import { search } from "./use-search.svelte.js";
+  import { isBoilerplate } from "./boilerplate.js";
 
   let leftListItems = $derived.by(() => {
     if (search.query.trim().length > 0) {
-      return search.searchHits.map((h) => {
-        const book = library.manifest.find((b) => b.gutenberg_id === h.gutenberg_id);
-        return {
-          kind: "hit" as const,
-          gutenberg_id: h.gutenberg_id,
-          title: book?.title ?? `pg${h.gutenberg_id}`,
-          author: book?.translators[0]?.name ?? "",
-          excerpt: h.excerpt,
-          similarity: h.similarity,
-          chunk_id: h.chunk_id,
-        };
-      });
+      return search.searchHits
+        .filter((h) => !isBoilerplate(h.excerpt))
+        .map((h) => {
+          const book = library.manifest.find((b) => b.gutenberg_id === h.gutenberg_id);
+          return {
+            kind: "hit" as const,
+            gutenberg_id: h.gutenberg_id,
+            title: book?.title ?? `pg${h.gutenberg_id}`,
+            author: book?.translators[0]?.name ?? "",
+            excerpt: h.excerpt,
+            similarity: h.similarity,
+            chunk_id: h.chunk_id,
+          };
+        });
     }
     return [...library.manifest]
       .sort((a, b) => {
