@@ -10,12 +10,16 @@
 use anyhow::{anyhow, bail, Context, Result};
 use directories::ProjectDirs;
 use futures_util::StreamExt;
+use once_cell::sync::Lazy;
 use reqwest::header::{CONTENT_RANGE, RANGE};
 use reqwest::StatusCode;
 use sha2::{Digest, Sha256};
+use std::collections::HashMap;
 use std::path::{Path, PathBuf};
+use std::sync::{Arc, Mutex as StdMutex};
 use tokio::fs::{File, OpenOptions};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
+use tokio::sync::Mutex as AsyncMutex;
 
 #[derive(Debug, Clone, Copy)]
 pub struct ModelManifestEntry {
@@ -98,12 +102,38 @@ pub fn is_downloaded(id: &str) -> Result<bool> {
 /// `(bytes_downloaded, total_bytes_if_known)`.
 pub type ProgressCallback = Box<dyn Fn(u64, Option<u64>) + Send + Sync>;
 
+/// Per-model-id locks. Concurrent callers for the same model serialise on the
+/// inner `AsyncMutex`; the first finishes the download and the rest fast-path
+/// out via the on-disk SHA check. Without this, two concurrent invocations
+/// race on the shared `.partial` file — both append the response body, and
+/// the partial grows to ~2-4× the expected size with interleaved garbage,
+/// guaranteeing a SHA mismatch and an `ENOENT` from one task whose partial
+/// got deleted out from under it by the other's failure path.
+///
+/// The outer `StdMutex` is held only for the get-or-insert HashMap op; it is
+/// never held across an `.await`. The inner `AsyncMutex` is what callers
+/// actually contend on.
+type DownloadLockMap = HashMap<&'static str, Arc<AsyncMutex<()>>>;
+
+static DOWNLOAD_LOCKS: Lazy<StdMutex<DownloadLockMap>> =
+    Lazy::new(|| StdMutex::new(HashMap::new()));
+
+fn lock_for(id: &'static str) -> Arc<AsyncMutex<()>> {
+    let mut map = DOWNLOAD_LOCKS.lock().expect("download lock map poisoned");
+    map.entry(id)
+        .or_insert_with(|| Arc::new(AsyncMutex::new(())))
+        .clone()
+}
+
 pub async fn ensure_model_downloaded(
     id: &str,
     progress: Option<ProgressCallback>,
 ) -> Result<PathBuf> {
     let entry = lookup_manifest(id).ok_or_else(|| anyhow!("unknown model id: {id}"))?;
     let dest = model_dir()?.join(entry.filename);
+
+    let lock = lock_for(entry.id);
+    let _guard = lock.lock().await;
 
     if dest.exists() {
         match entry.sha256 {
@@ -290,6 +320,127 @@ mod tests {
         assert_eq!(parse_content_range_total("bytes 0-499/*"), None);
         assert_eq!(parse_content_range_total("bytes */12345"), Some(12345));
         assert_eq!(parse_content_range_total("garbage"), None);
+    }
+
+    #[test]
+    fn lock_for_returns_same_arc_per_id() {
+        let a1 = lock_for("gemma3-4b");
+        let a2 = lock_for("gemma3-4b");
+        let b1 = lock_for("deberta-nli");
+        assert!(
+            Arc::ptr_eq(&a1, &a2),
+            "lock_for must return the same Arc for the same id so concurrent callers coalesce"
+        );
+        assert!(
+            !Arc::ptr_eq(&a1, &b1),
+            "lock_for must return distinct Arcs for distinct ids so independent models don't serialise"
+        );
+    }
+
+    #[tokio::test]
+    async fn concurrent_ensure_for_same_id_serialises() -> Result<()> {
+        use tokio::net::TcpListener;
+
+        // 256 bytes deterministic content + its known SHA-256
+        let payload: Vec<u8> = (0..=255u8).collect();
+        let payload_sha = {
+            use sha2::{Digest, Sha256};
+            let mut h = Sha256::new();
+            h.update(&payload);
+            format!("{:x}", h.finalize())
+        };
+
+        // Minimal HTTP/1.1 server. Counts hits so we can assert the lock
+        // coalesced 8 callers into a single network fetch.
+        let listener = TcpListener::bind("127.0.0.1:0").await?;
+        let addr = listener.local_addr()?;
+        let hits = Arc::new(std::sync::atomic::AtomicUsize::new(0));
+        let hits_srv = hits.clone();
+        let payload_srv = payload.clone();
+        tokio::spawn(async move {
+            loop {
+                let (mut sock, _) = match listener.accept().await {
+                    Ok(v) => v,
+                    Err(_) => return,
+                };
+                hits_srv.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
+                let payload = payload_srv.clone();
+                tokio::spawn(async move {
+                    use tokio::io::AsyncReadExt as _;
+                    let mut buf = [0u8; 1024];
+                    let _ = sock.read(&mut buf).await;
+                    let header = format!(
+                        "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nContent-Type: application/octet-stream\r\n\r\n",
+                        payload.len()
+                    );
+                    let mut resp = header.into_bytes();
+                    resp.extend_from_slice(&payload);
+                    let _ = tokio::io::AsyncWriteExt::write_all(&mut sock, &resp).await;
+                    let _ = tokio::io::AsyncWriteExt::shutdown(&mut sock).await;
+                });
+            }
+        });
+
+        // Sanity: tighter test that doesn't depend on the real manifest — we
+        // exercise lock_for + download_streaming through a private helper that
+        // mirrors ensure_model_downloaded's body but takes an explicit url +
+        // dest + lock-id. This keeps the test hermetic.
+        let dir = tempfile_dir()?.join(format!("concurrent-{}", std::process::id()));
+        let _ = tokio::fs::remove_dir_all(&dir).await;
+        tokio::fs::create_dir_all(&dir).await?;
+        let dest = dir.join("payload.bin");
+        let url = format!("http://{addr}/payload.bin");
+
+        async fn one(
+            id: &'static str,
+            url: String,
+            dest: PathBuf,
+            expected: String,
+        ) -> Result<PathBuf> {
+            let lock = lock_for(id);
+            let _guard = lock.lock().await;
+            if dest.exists() {
+                let actual = sha256_file(&dest).await?;
+                if actual.eq_ignore_ascii_case(&expected) {
+                    return Ok(dest);
+                }
+                tokio::fs::remove_file(&dest).await.ok();
+            }
+            let partial = download_streaming(&url, &dest, None).await?;
+            let actual = sha256_file(&partial).await?;
+            if !actual.eq_ignore_ascii_case(&expected) {
+                tokio::fs::remove_file(&partial).await.ok();
+                bail!("sha mismatch: expected {expected} got {actual}");
+            }
+            tokio::fs::rename(&partial, &dest).await?;
+            Ok(dest)
+        }
+
+        let mut joins = Vec::new();
+        for _ in 0..8 {
+            let u = url.clone();
+            let d = dest.clone();
+            let s = payload_sha.clone();
+            joins.push(tokio::spawn(async move {
+                one("__concurrent-test-id", u, d, s).await
+            }));
+        }
+        for j in joins {
+            let path = j.await??;
+            // Every caller observes the same final file.
+            let bytes = tokio::fs::read(&path).await?;
+            assert_eq!(bytes, payload, "final file must equal canonical payload");
+        }
+
+        // The whole point: 8 concurrent callers must produce exactly 1 fetch.
+        let n = hits.load(std::sync::atomic::Ordering::SeqCst);
+        assert_eq!(
+            n, 1,
+            "expected 1 HTTP request (callers coalesce via per-id lock), got {n}"
+        );
+
+        tokio::fs::remove_dir_all(&dir).await.ok();
+        Ok(())
     }
 
     #[tokio::test]
