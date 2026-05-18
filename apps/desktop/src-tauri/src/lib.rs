@@ -133,12 +133,25 @@ fn total_ram_bytes() -> u64 {
     0
 }
 
+/// Cutover threshold. Hosts strictly under this go tier 2 (sequential).
+const LOW_RAM_THRESHOLD_BYTES: u64 = 12 * 1024 * 1024 * 1024;
+
 /// True when the host has less RAM than we want for concurrent cold-load.
-/// 12GB is the cutover: an 8GB MacBook Air freezes if judge ONNX + llama
-/// GGUF load simultaneously; a 16GB machine has comfortable headroom.
+/// An 8GB MacBook Air freezes if judge ONNX + llama GGUF load
+/// simultaneously; a 16GB machine has comfortable headroom.
+///
+/// `FATHOM_FORCE_LOW_RAM=1` overrides detection and forces tier 2 so we
+/// can validate the sequential path on a beefier dev machine without
+/// having to redownload the bundle on the actual low-RAM target.
 fn is_low_ram_host() -> bool {
+    if std::env::var("FATHOM_FORCE_LOW_RAM")
+        .map(|v| v == "1" || v.eq_ignore_ascii_case("true"))
+        .unwrap_or(false)
+    {
+        return true;
+    }
     let bytes = total_ram_bytes();
-    bytes > 0 && bytes < 12 * 1024 * 1024 * 1024
+    bytes > 0 && bytes < LOW_RAM_THRESHOLD_BYTES
 }
 
 /// Log once at startup so support can confirm the RAM tier from console
@@ -149,7 +162,12 @@ fn log_ram_tier_once() {
     LOG.call_once(|| {
         let bytes = total_ram_bytes();
         let gb = bytes as f64 / 1024.0 / 1024.0 / 1024.0;
-        let tier = if bytes == 0 {
+        let forced = std::env::var("FATHOM_FORCE_LOW_RAM")
+            .map(|v| v == "1" || v.eq_ignore_ascii_case("true"))
+            .unwrap_or(false);
+        let tier = if forced {
+            "tier 2 (FORCED via FATHOM_FORCE_LOW_RAM)"
+        } else if bytes == 0 {
             "unknown (sysctl failed) — assuming tier 1"
         } else if is_low_ram_host() {
             "tier 2 (sequential cold-load)"
@@ -158,6 +176,71 @@ fn log_ram_tier_once() {
         };
         eprintln!("[fathom] host RAM: {gb:.1}GB → {tier}");
     });
+}
+
+#[cfg(test)]
+mod tier_tests {
+    use super::*;
+
+    /// The detection threshold should classify the canonical Apple Silicon
+    /// RAM tiers exactly the way we describe in the comments. If someone
+    /// changes the constant, this test forces them to update both the
+    /// constant and the documented contract.
+    fn classify(bytes: u64) -> bool {
+        bytes > 0 && bytes < LOW_RAM_THRESHOLD_BYTES
+    }
+
+    #[test]
+    fn unknown_ram_treated_as_tier_one() {
+        assert!(!classify(0), "sysctl failure must not force tier 2");
+    }
+
+    #[test]
+    fn eight_gb_is_tier_two() {
+        // Barsha's M2 Air: 8 * 1024^3 = 8589934592
+        assert!(classify(8 * 1024 * 1024 * 1024));
+    }
+
+    #[test]
+    fn eleven_gb_is_tier_two() {
+        // Just under the cutover.
+        assert!(classify(11 * 1024 * 1024 * 1024));
+    }
+
+    #[test]
+    fn twelve_gb_is_tier_one() {
+        // At the cutover the host is fine for concurrent load.
+        assert!(!classify(12 * 1024 * 1024 * 1024));
+    }
+
+    #[test]
+    fn sixteen_gb_is_tier_one() {
+        assert!(!classify(16 * 1024 * 1024 * 1024));
+    }
+
+    #[test]
+    fn thirty_two_gb_is_tier_one() {
+        assert!(!classify(32 * 1024 * 1024 * 1024));
+    }
+
+    #[test]
+    fn env_override_forces_tier_two() {
+        // Save + restore so this test doesn't leak state into others if
+        // they ever read the same var.
+        let prev = std::env::var("FATHOM_FORCE_LOW_RAM").ok();
+        // SAFETY: tests are single-threaded for this module by default
+        // under cargo test --lib --bins; set/unset is fine here.
+        unsafe {
+            std::env::set_var("FATHOM_FORCE_LOW_RAM", "1");
+        }
+        assert!(is_low_ram_host(), "env override must force tier 2");
+        unsafe {
+            match prev {
+                Some(v) => std::env::set_var("FATHOM_FORCE_LOW_RAM", v),
+                None => std::env::remove_var("FATHOM_FORCE_LOW_RAM"),
+            }
+        }
+    }
 }
 
 #[tauri::command]
@@ -170,13 +253,7 @@ async fn paraphrase(app: AppHandle, args: ParaphraseArgs) -> Result<FathomResult
     // (small, fast), then llama. Trades a few seconds of wall-clock for
     // a peak RSS that stays inside 8GB.
     log_ram_tier_once();
-    let llama = if is_low_ram_host() {
-        ensure_judge(&app).await?;
-        ensure_llama(&app).await?
-    } else {
-        let (_, llama) = tokio::try_join!(ensure_judge(&app), ensure_llama(&app))?;
-        llama
-    };
+    let llama = cold_load(&app).await?;
     Ok(fathom_with_judge(
         args.text,
         args.tier,
@@ -185,6 +262,31 @@ async fn paraphrase(app: AppHandle, args: ParaphraseArgs) -> Result<FathomResult
         JudgeMode::Always(None),
     )
     .await?)
+}
+
+/// RAM-tier-aware cold-load orchestrator. Factored out so both paraphrase
+/// entry points share the exact same branching and tracing.
+async fn cold_load(app: &AppHandle) -> Result<Arc<LlamaCppBackend>, AppError> {
+    use std::time::Instant;
+    if is_low_ram_host() {
+        let t0 = Instant::now();
+        eprintln!("[fathom] cold-load: tier 2 — judge first");
+        ensure_judge(app).await?;
+        eprintln!(
+            "[fathom] cold-load: judge ready in {:?}, loading llama",
+            t0.elapsed()
+        );
+        let t1 = Instant::now();
+        let llama = ensure_llama(app).await?;
+        eprintln!("[fathom] cold-load: llama ready in {:?}", t1.elapsed());
+        Ok(llama)
+    } else {
+        let t0 = Instant::now();
+        eprintln!("[fathom] cold-load: tier 1 — judge + llama concurrently");
+        let (_, llama) = tokio::try_join!(ensure_judge(app), ensure_llama(app))?;
+        eprintln!("[fathom] cold-load: both ready in {:?}", t0.elapsed());
+        Ok(llama)
+    }
 }
 
 #[derive(Serialize)]
@@ -292,15 +394,7 @@ async fn library_paraphrase_selection(
     let shard = rt.ensure_shard(args.gutenberg_id).await?;
     let text = shard.canonical_text[snapped.0..snapped.1].to_string();
 
-    // RAM-tier-aware bootstrap; see comment in paraphrase().
-    log_ram_tier_once();
-    let llama = if is_low_ram_host() {
-        ensure_judge(&app).await?;
-        ensure_llama(&app).await?
-    } else {
-        let (_, llama) = tokio::try_join!(ensure_judge(&app), ensure_llama(&app))?;
-        llama
-    };
+    let llama = cold_load(&app).await?;
     // Mode::Auto: try the curated 135-passage seed lexicon by fingerprint
     // first (rare hit on arbitrary Gutenberg prose), fall through to JIT
     // identification + gloss-with-guard (Gemma identifies terms-of-art in
@@ -477,6 +571,12 @@ async fn write_favourites_inner(path: &Path, v: &[u32]) -> Result<(), AppError> 
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    // Log RAM tier once, at process start, before any Tauri / webview /
+    // model machinery spins up. This lands deterministically in Console.app
+    // so support can read it without depending on the user clicking
+    // paraphrase first.
+    log_ram_tier_once();
+
     let app = tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             paraphrase,
