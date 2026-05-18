@@ -53,12 +53,17 @@ class OnboardingStore {
     }
   }
 
+  completeError = $state<string | null>(null);
+
   async complete(): Promise<void> {
     if (!this.canDismiss) return;
     this.dismissing = true;
+    this.completeError = null;
     try {
       await invoke("onboarding_complete");
       this.completed = true;
+    } catch (e) {
+      this.completeError = e instanceof Error ? e.message : String(e);
     } finally {
       this.dismissing = false;
     }
