@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "generated_at": "2026-05-18",
+  "themes": [
+    { "slug": "mind-and-self", "label": "Who am I really?", "order": 1 },
+    { "slug": "how-to-live", "label": "How should I live?", "order": 2 },
+    { "slug": "suffering-and-loss", "label": "Suffering and loss", "order": 3 },
+    { "slug": "love-and-friendship", "label": "Love and friendship", "order": 4 },
+    { "slug": "power-and-justice", "label": "Power and justice", "order": 5 },
+    { "slug": "knowledge", "label": "What can we know?", "order": 6 },
+    { "slug": "reality", "label": "What is real?", "order": 7 },
+    { "slug": "meaning", "label": "Why are we here?", "order": 8 },
+    { "slug": "religion", "label": "God, faith, doubt", "order": 9 },
+    { "slug": "other", "label": "Other", "order": 99 }
+  ],
+  "assignments": [],
+  "metadata": {
+    "books_classified": 0,
+    "books_in_other": 0,
+    "model": "stub"
+  }
+}

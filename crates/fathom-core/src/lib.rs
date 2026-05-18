@@ -6,6 +6,7 @@ pub mod orchestrate;
 pub mod parser;
 pub mod prompts;
 pub mod runtime;
+pub mod themes;
 pub mod types;
 
 pub use orchestrate::{fathom, fathom_with_global_substrate, fathom_with_judge, JudgeMode};
