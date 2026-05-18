@@ -103,6 +103,9 @@
     display: inline-block;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) {
+    .spinner { animation: none; }
+  }
   .bar-row { margin-top: 0.9rem; }
   .bar-meta {
     display: flex;
