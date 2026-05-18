@@ -14,9 +14,11 @@
     { "slug": "other", "label": "Other", "order": 99 }
   ],
   "assignments": [],
+  "dropped": [],
   "metadata": {
     "books_classified": 0,
     "books_in_other": 0,
+    "books_dropped": 0,
     "model": "stub"
   }
 }

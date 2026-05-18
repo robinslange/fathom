@@ -45,6 +45,13 @@ impl Default for Args {
     }
 }
 
+const ALLOWED_DROP_REASONS: &[&str] = &[
+    "duplicate",
+    "history-of-philosophy",
+    "biography",
+    "intro-textbook",
+];
+
 /// Seed taxonomy. Slugs are stable; labels may iterate during validation pass.
 pub const SEED_TAXONOMY: &[(&str, &str)] = &[
     ("mind-and-self", "Who am I really?"),
@@ -74,6 +81,20 @@ pub struct ThemeOutputRecord {
     pub themes: Vec<String>,
     pub confidence: String,
     pub reasoning: String,
+    #[serde(default = "default_keep")]
+    pub keep: bool,
+    #[serde(default)]
+    pub drop_reason: Option<String>,
+}
+
+fn default_keep() -> bool {
+    true
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct DroppedBook {
+    pub gutenberg_id: u32,
+    pub reason: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -82,6 +103,7 @@ pub struct ThemesFile {
     pub generated_at: String,
     pub themes: Vec<ThemeEntry>,
     pub assignments: Vec<ThemeAssignment>,
+    pub dropped: Vec<DroppedBook>,
     pub metadata: ThemesMetadata,
 }
 
@@ -102,6 +124,7 @@ pub struct ThemeAssignment {
 pub struct ThemesMetadata {
     pub books_classified: usize,
     pub books_in_other: usize,
+    pub books_dropped: usize,
     pub model: String,
 }
 
@@ -185,6 +208,7 @@ fn assemble_output() -> Result<()> {
         SEED_TAXONOMY.iter().map(|(s, _)| *s).collect();
 
     let mut assignments: Vec<ThemeAssignment> = Vec::new();
+    let mut dropped: Vec<DroppedBook> = Vec::new();
     let mut books_in_other: usize = 0;
 
     for line in reader.lines() {
@@ -194,6 +218,23 @@ fn assemble_output() -> Result<()> {
         }
         let record: ThemeOutputRecord = serde_json::from_str(&line)
             .with_context(|| format!("parse ThemeOutputRecord from: {}", line))?;
+
+        if !record.keep {
+            match &record.drop_reason {
+                Some(reason) if ALLOWED_DROP_REASONS.contains(&reason.as_str()) => {
+                    dropped.push(DroppedBook {
+                        gutenberg_id: record.gutenberg_id,
+                        reason: reason.clone(),
+                    });
+                }
+                _ => anyhow::bail!(
+                    "invalid drop_reason '{:?}' for pg{}",
+                    record.drop_reason,
+                    record.gutenberg_id
+                ),
+            }
+            continue;
+        }
 
         for slug in &record.themes {
             if !known.contains(slug.as_str()) {
@@ -216,6 +257,7 @@ fn assemble_output() -> Result<()> {
     }
 
     assignments.sort_by_key(|a| a.gutenberg_id);
+    dropped.sort_by_key(|d| d.gutenberg_id);
 
     let themes: Vec<ThemeEntry> = SEED_TAXONOMY
         .iter()
@@ -229,14 +271,17 @@ fn assemble_output() -> Result<()> {
 
     let out_path = PathBuf::from("crates/fathom-core/data/themes.json");
     let books_classified = assignments.len();
+    let books_dropped = dropped.len();
     let themes_file = ThemesFile {
         version: 1,
         generated_at: chrono::Utc::now().format("%Y-%m-%d").to_string(),
         themes,
         assignments,
+        dropped,
         metadata: ThemesMetadata {
             books_classified,
             books_in_other,
+            books_dropped,
             model: "claude-sonnet-4-6".to_string(),
         },
     };
@@ -245,9 +290,10 @@ fn assemble_output() -> Result<()> {
         .with_context(|| format!("write {}", out_path.display()))?;
 
     eprintln!(
-        "classify-themes: wrote {} assignments ({} other) → {}",
+        "classify-themes: wrote {} assignments ({} other, {} dropped) → {}",
         books_classified,
         books_in_other,
+        books_dropped,
         out_path.display()
     );
     Ok(())
@@ -286,6 +332,8 @@ mod tests {
             themes: vec!["mind-and-self".into(), "phlogiston".into()],
             confidence: "high".into(),
             reasoning: "test".into(),
+            keep: true,
+            drop_reason: None,
         };
         let known: std::collections::HashSet<&str> =
             SEED_TAXONOMY.iter().map(|(s, _)| *s).collect();
@@ -310,5 +358,14 @@ mod tests {
             .collect();
         let other = themes.iter().find(|t| t.slug == "other").unwrap();
         assert_eq!(other.order, 99);
+    }
+
+    #[test]
+    fn drop_reason_must_be_in_allowlist() {
+        let unknown = "made-up-reason";
+        assert!(!ALLOWED_DROP_REASONS.contains(&unknown));
+        for r in ALLOWED_DROP_REASONS {
+            assert!(!r.is_empty());
+        }
     }
 }

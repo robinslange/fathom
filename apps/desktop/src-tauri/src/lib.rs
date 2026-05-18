@@ -221,13 +221,28 @@ pub struct ThemeBookSummary {
 #[tauri::command]
 async fn library_manifest() -> Result<Vec<ManifestBook>, AppError> {
     let rt = ensure_runtime().await?;
-    Ok(rt.manifest().books.clone())
+    let dropped = themes::dropped_ids();
+    let books: Vec<ManifestBook> = rt
+        .manifest()
+        .books
+        .iter()
+        .filter(|b| !dropped.contains(&b.gutenberg_id))
+        .cloned()
+        .collect();
+    Ok(books)
 }
 
 #[tauri::command]
 async fn library_search(query: String, top_n: usize) -> Result<Vec<SearchHit>, AppError> {
     let rt = ensure_runtime().await?;
-    Ok(rt.search(&query, top_n).await?)
+    let dropped = themes::dropped_ids();
+    let hits: Vec<SearchHit> = rt
+        .search(&query, top_n)
+        .await?
+        .into_iter()
+        .filter(|h| !dropped.contains(&h.gutenberg_id))
+        .collect();
+    Ok(hits)
 }
 
 #[tauri::command]
@@ -408,10 +423,12 @@ async fn library_themes() -> Result<Vec<ThemeView>, AppError> {
 #[tauri::command]
 async fn library_books_in_theme(slug: String) -> Result<Vec<ThemeBookSummary>, AppError> {
     let rt = ensure_runtime().await?;
+    let dropped = themes::dropped_ids();
     let ids = themes::books_in_theme(&slug);
     let manifest = rt.manifest();
     let mut out: Vec<ThemeBookSummary> = ids
         .iter()
+        .filter(|id| !dropped.contains(id))
         .filter_map(|id| manifest.books.iter().find(|b| b.gutenberg_id == *id))
         .map(|b| ThemeBookSummary {
             gutenberg_id: b.gutenberg_id,

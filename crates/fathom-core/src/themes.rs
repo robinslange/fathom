@@ -25,9 +25,16 @@ pub struct ThemeAssignment {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct DroppedBook {
+    pub gutenberg_id: u32,
+    pub reason: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ThemesMetadata {
     pub books_classified: usize,
     pub books_in_other: usize,
+    pub books_dropped: usize,
     pub model: String,
 }
 
@@ -37,6 +44,7 @@ pub struct ThemesFile {
     pub generated_at: String,
     pub themes: Vec<ThemeEntry>,
     pub assignments: Vec<ThemeAssignment>,
+    pub dropped: Vec<DroppedBook>,
     pub metadata: ThemesMetadata,
 }
 
@@ -79,6 +87,12 @@ pub fn books_in_theme(slug: &str) -> Vec<u32> {
         .collect()
 }
 
+/// Set of gutenberg_ids that were curated out of the user-visible library
+/// (duplicates / history-of-philosophy / biography / intro-textbook).
+pub fn dropped_ids() -> std::collections::HashSet<u32> {
+    themes_file().dropped.iter().map(|d| d.gutenberg_id).collect()
+}
+
 pub fn parse_themes_bytes(bytes: &[u8]) -> Result<ThemesFile> {
     serde_json::from_slice(bytes).context("parse themes.json")
 }
@@ -113,5 +127,12 @@ mod tests {
         for theme in all_themes() {
             assert!(counts.contains_key(&theme.slug), "missing {}", theme.slug);
         }
+    }
+
+    #[test]
+    fn dropped_ids_is_empty_for_stub() {
+        // The stub themes.json ships with no dropped books;
+        // real classification populates this list.
+        assert!(dropped_ids().is_empty());
     }
 }
