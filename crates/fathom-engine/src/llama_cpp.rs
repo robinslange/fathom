@@ -33,12 +33,14 @@ use std::num::NonZeroU32;
 use std::path::PathBuf;
 use tokio::sync::{mpsc, oneshot};
 
-// Gemma 3 4B's native context is ~131k tokens. We use 32k to give plenty of
-// headroom for the global substrate map (~20k tokens once Slice 1's harvest
-// landed) plus passage + output, without paying the full KV-cache cost of
-// the native limit. v0.21 plans to swap "inject all terms" for a semantic-
-// ranked subset that fits in ~4k, at which point this can drop back down.
-const N_CTX: u32 = 32768;
+// Gemma 3 4B's native context is ~131k tokens. We use 8k: plenty for a
+// long Gutenberg passage (~2k tokens) + paraphrase output (cap 2k) + system
+// prompt, with slack. The previous 32k value was sized for a "global
+// substrate map" feature that doesn't exist yet, and the extra KV cache
+// (~800MB-1GB on Q4 4B) was pushing 8GB Apple Silicon into swap during
+// cold load. When semantic-substrate retrieval lands we'll size this to
+// the largest plausible ranked-subset budget, not the worst case.
+const N_CTX: u32 = 8192;
 /// Default cap for plain-prose paraphrase output.
 const MAX_NEW_TOKENS: u32 = 2000;
 /// Cap for the JIT identify pass — short JSON like

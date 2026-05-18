@@ -114,12 +114,69 @@ async fn ensure_judge(handle: &AppHandle) -> Result<(), AppError> {
     Ok(())
 }
 
+/// Total physical RAM in bytes on macOS via sysctl. Returns 0 if the
+/// sysctl call fails — callers should treat that as "unknown, assume tier 1."
+#[cfg(target_os = "macos")]
+fn total_ram_bytes() -> u64 {
+    use std::process::Command;
+    Command::new("/usr/sbin/sysctl")
+        .args(["-n", "hw.memsize"])
+        .output()
+        .ok()
+        .and_then(|o| String::from_utf8(o.stdout).ok())
+        .and_then(|s| s.trim().parse::<u64>().ok())
+        .unwrap_or(0)
+}
+
+#[cfg(not(target_os = "macos"))]
+fn total_ram_bytes() -> u64 {
+    0
+}
+
+/// True when the host has less RAM than we want for concurrent cold-load.
+/// 12GB is the cutover: an 8GB MacBook Air freezes if judge ONNX + llama
+/// GGUF load simultaneously; a 16GB machine has comfortable headroom.
+fn is_low_ram_host() -> bool {
+    let bytes = total_ram_bytes();
+    bytes > 0 && bytes < 12 * 1024 * 1024 * 1024
+}
+
+/// Log once at startup so support can confirm the RAM tier from console
+/// output without users needing to flip a flag.
+fn log_ram_tier_once() {
+    use std::sync::Once;
+    static LOG: Once = Once::new();
+    LOG.call_once(|| {
+        let bytes = total_ram_bytes();
+        let gb = bytes as f64 / 1024.0 / 1024.0 / 1024.0;
+        let tier = if bytes == 0 {
+            "unknown (sysctl failed) — assuming tier 1"
+        } else if is_low_ram_host() {
+            "tier 2 (sequential cold-load)"
+        } else {
+            "tier 1 (concurrent cold-load)"
+        };
+        eprintln!("[fathom] host RAM: {gb:.1}GB → {tier}");
+    });
+}
+
 #[tauri::command]
 async fn paraphrase(app: AppHandle, args: ParaphraseArgs) -> Result<FathomResult, AppError> {
-    // Cold-start optimisation: judge ONNX (~270MB) and Gemma GGUF (~2.5GB)
-    // are independent downloads with independent in-memory init costs. Run
-    // them concurrently so total bootstrap is max(judge, llama) not sum.
-    let (_, llama) = tokio::try_join!(ensure_judge(&app), ensure_llama(&app))?;
+    // Cold-load strategy is RAM-tier-aware. On 16GB+ machines we load the
+    // ~270MB judge ONNX and the ~2.5GB Gemma GGUF concurrently so first-
+    // paraphrase wall-clock is max(judge, llama) not sum. On <12GB hosts
+    // that peak (~3GB resident plus webview + ORT runtime + macOS) tips
+    // the system into swap and freezes it, so we serialise: judge first
+    // (small, fast), then llama. Trades a few seconds of wall-clock for
+    // a peak RSS that stays inside 8GB.
+    log_ram_tier_once();
+    let llama = if is_low_ram_host() {
+        ensure_judge(&app).await?;
+        ensure_llama(&app).await?
+    } else {
+        let (_, llama) = tokio::try_join!(ensure_judge(&app), ensure_llama(&app))?;
+        llama
+    };
     Ok(fathom_with_judge(
         args.text,
         args.tier,
@@ -205,8 +262,15 @@ async fn library_paraphrase_selection(
     let shard = rt.ensure_shard(args.gutenberg_id).await?;
     let text = shard.canonical_text[snapped.0..snapped.1].to_string();
 
-    // Concurrent bootstrap; see comment in paraphrase().
-    let (_, llama) = tokio::try_join!(ensure_judge(&app), ensure_llama(&app))?;
+    // RAM-tier-aware bootstrap; see comment in paraphrase().
+    log_ram_tier_once();
+    let llama = if is_low_ram_host() {
+        ensure_judge(&app).await?;
+        ensure_llama(&app).await?
+    } else {
+        let (_, llama) = tokio::try_join!(ensure_judge(&app), ensure_llama(&app))?;
+        llama
+    };
     // Mode::Auto: try the curated 135-passage seed lexicon by fingerprint
     // first (rare hit on arbitrary Gutenberg prose), fall through to JIT
     // identification + gloss-with-guard (Gemma identifies terms-of-art in
