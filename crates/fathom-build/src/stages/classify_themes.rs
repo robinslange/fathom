@@ -165,7 +165,7 @@ fn prepare_input(limit: Option<usize>) -> Result<()> {
     let mut writer = BufWriter::new(file);
 
     for book in books {
-        let shard_path = dist_dir().join(&book.shard_filename);
+        let shard_path = dist_dir().join("shards").join(&book.shard_filename);
         let compressed = std::fs::read(&shard_path)
             .with_context(|| format!("read shard {}", shard_path.display()))?;
         let mp = zstd::decode_all(&compressed[..])
