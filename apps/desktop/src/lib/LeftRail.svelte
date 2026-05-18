@@ -181,6 +181,10 @@
   .book.active {
     background: var(--accent-wash-active);
   }
+  .book:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
   .book .author { opacity: 0.7; }
   .book .dot { margin: 0 0.35em; opacity: 0.5; }
   .hit {
@@ -196,6 +200,10 @@
   }
   .hit:hover { background: var(--accent-wash); }
   .hit.active { background: var(--accent-wash-active); }
+  .hit:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
   .hit-meta { font-family: "IBM Plex Sans", sans-serif; font-size: 0.85rem; opacity: 0.75; }
   .hit-meta .title { font-weight: 500; }
   .hit-meta .dot { margin: 0 0.4em; opacity: 0.5; }
@@ -207,4 +215,8 @@
   .offline p { margin: 0; opacity: 0.7; }
   .retry { background: transparent; color: inherit; border: 1px solid var(--rule-strong); padding: 0.3rem 0.7rem; font: inherit; font-size: 0.85rem; border-radius: 3px; cursor: pointer; }
   .retry:hover { background: var(--accent-wash-hover); }
+  .retry:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
 </style>
