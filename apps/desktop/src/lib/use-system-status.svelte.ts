@@ -82,7 +82,11 @@ class SystemStatusStore {
     return "green";
   });
 
+  private effectsInitialised = false;
+
   init(): void {
+    if (this.effectsInitialised) return;
+    this.effectsInitialised = true;
     $effect.root(() => {
       $effect(() => {
         if (library.embedderReady) this.lastChecked.embedder = Date.now();
