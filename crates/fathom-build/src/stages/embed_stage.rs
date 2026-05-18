@@ -16,7 +16,7 @@ use std::path::PathBuf;
 
 const DEFAULT_BATCH: usize = 32;
 
-#[derive(Debug, ClapArgs, Default)]
+#[derive(Debug, ClapArgs)]
 pub struct Args {
     /// Directory containing bge-small.onnx + tokenizer.json. Required.
     #[arg(long, env = "FATHOM_BGE_MODEL_DIR")]
@@ -31,6 +31,17 @@ pub struct Args {
     /// Force re-embed even if .bin exists.
     #[arg(long)]
     pub force: bool,
+}
+
+impl Default for Args {
+    fn default() -> Self {
+        Self {
+            model_dir: PathBuf::new(),
+            batch: DEFAULT_BATCH,
+            limit: None,
+            force: false,
+        }
+    }
 }
 
 pub async fn run(args: Args) -> Result<()> {

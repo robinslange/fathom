@@ -37,7 +37,7 @@ use std::collections::{HashMap, HashSet};
 use std::io::Write;
 use std::path::PathBuf;
 
-#[derive(Debug, ClapArgs, Default)]
+#[derive(Debug, ClapArgs)]
 pub struct Args {
     /// Directory containing gemma3-4b-it Q4_K_M GGUF + DeBERTa NLI ONNX +
     /// tokenizer. Defaults to the user's standard fathom model dir.
@@ -49,6 +49,16 @@ pub struct Args {
     /// Maximum candidates per chunk to gate. Default 5.
     #[arg(long, default_value_t = 5)]
     pub max_candidates_per_chunk: usize,
+}
+
+impl Default for Args {
+    fn default() -> Self {
+        Self {
+            model_dir: None,
+            limit: None,
+            max_candidates_per_chunk: 5,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

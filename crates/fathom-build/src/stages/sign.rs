@@ -18,7 +18,7 @@ use minisign::{KeyPair, SecretKeyBox};
 use std::io::Cursor;
 use std::path::PathBuf;
 
-#[derive(Debug, ClapArgs, Default)]
+#[derive(Debug, ClapArgs)]
 pub struct Args {
     /// Path to the minisign secret key. Defaults to
     /// `$HOME/.config/fathom/minisign.key` (overridable via FATHOM_MINISIGN_KEY).
@@ -30,6 +30,16 @@ pub struct Args {
     /// Generate a new keypair on first use if absent.
     #[arg(long, default_value_t = true)]
     pub auto_generate: bool,
+}
+
+impl Default for Args {
+    fn default() -> Self {
+        Self {
+            key: None,
+            pub_key: None,
+            auto_generate: true,
+        }
+    }
 }
 
 pub async fn run(args: Args) -> Result<()> {

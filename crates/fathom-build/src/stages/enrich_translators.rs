@@ -21,7 +21,7 @@ use tokio::time::sleep;
 const RDF_URL_PREFIX: &str = "https://www.gutenberg.org/cache/epub";
 const USER_AGENT: &str = "Fathom-Build/0.2 (https://fathom.app contact@robinslange.dev)";
 
-#[derive(Debug, ClapArgs, Default)]
+#[derive(Debug, ClapArgs)]
 pub struct Args {
     /// Minimum delay between RDF fetches (milliseconds). Default 1000ms.
     #[arg(long, default_value_t = 1000)]
@@ -32,6 +32,16 @@ pub struct Args {
     /// Reuse cached RDFs in build-state/rdf-cache/ where present.
     #[arg(long, default_value_t = true)]
     pub use_cache: bool,
+}
+
+impl Default for Args {
+    fn default() -> Self {
+        Self {
+            delay_ms: 1000,
+            limit: None,
+            use_cache: true,
+        }
+    }
 }
 
 pub async fn run(args: Args) -> Result<()> {

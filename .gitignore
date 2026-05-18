@@ -24,6 +24,10 @@ apps/desktop/src-tauri/target/
 .venv/
 *.log
 
+# fathom-build cwd-default state dir — canonical state lives at
+# $FATHOM_BUILD_STATE (~/Library/Application Support/nz.omit.fathom/build-state)
+/build-state/
+
 # Design notes (kept local, not part of the repo)
 docs/superpowers/
 

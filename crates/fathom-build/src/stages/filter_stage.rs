@@ -12,12 +12,20 @@ use std::collections::HashMap;
 
 const NZ_CUTOFF_YEAR: i32 = 1975;
 
-#[derive(Debug, ClapArgs, Default)]
+#[derive(Debug, ClapArgs)]
 pub struct Args {
     /// Cutoff year for translator death date. Defaults to NZ life+50 = 1975
     /// (works become PD in NZ on 1 Jan of cutoff+50+1 = 2026).
     #[arg(long, default_value_t = NZ_CUTOFF_YEAR)]
     pub cutoff: i32,
+}
+
+impl Default for Args {
+    fn default() -> Self {
+        Self {
+            cutoff: NZ_CUTOFF_YEAR,
+        }
+    }
 }
 
 pub async fn run(args: Args) -> Result<()> {
@@ -103,5 +111,31 @@ pub async fn run(args: Args) -> Result<()> {
         out_path.display()
     );
 
+    const MIN_PLAUSIBLE_KEPT: usize = 100;
+    if kept.len() < MIN_PLAUSIBLE_KEPT {
+        anyhow::bail!(
+            "filter produced only {} books — below sanity floor of {}. \
+             Refusing to proceed; downstream stages (chunk/embed) would waste hours \
+             on a near-empty corpus. Check the cutoff arg and translator data.",
+            kept.len(),
+            MIN_PLAUSIBLE_KEPT
+        );
+    }
+
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn args_default_matches_clap_default() {
+        assert_eq!(
+            Args::default().cutoff,
+            NZ_CUTOFF_YEAR,
+            "Args::default() must use NZ_CUTOFF_YEAR — Stage::All calls this and \
+             a mismatched default silently rejects every translated work post-BCE."
+        );
+    }
 }
