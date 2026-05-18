@@ -1,5 +1,5 @@
 use fathom_core::runtime::{ManifestBook, Runtime, SearchHit, Shard};
-use fathom_core::{bootstrap, fathom_with_judge, judge, FathomResult, JudgeMode, Mode, Tier};
+use fathom_core::{bootstrap, fathom_with_judge, judge, themes, FathomResult, JudgeMode, Mode, Tier};
 use fathom_engine::LlamaCppBackend;
 use once_cell::sync::OnceCell;
 use serde::{Deserialize, Serialize};
@@ -203,6 +203,21 @@ pub struct ChunkRefView {
     pub byte_offset_end: usize,
 }
 
+#[derive(Serialize)]
+pub struct ThemeView {
+    pub slug: String,
+    pub label: String,
+    pub count: usize,
+    pub order: u32,
+}
+
+#[derive(Serialize)]
+pub struct ThemeBookSummary {
+    pub gutenberg_id: u32,
+    pub title: String,
+    pub translators: Vec<String>,
+}
+
 #[tauri::command]
 async fn library_manifest() -> Result<Vec<ManifestBook>, AppError> {
     let rt = ensure_runtime().await?;
@@ -366,6 +381,50 @@ async fn library_favourites() -> Result<Vec<u32>, AppError> {
     Ok(read_favourites_inner(&path).await.unwrap_or_default())
 }
 
+#[tauri::command]
+async fn library_themes() -> Result<Vec<ThemeView>, AppError> {
+    let counts = themes::theme_counts();
+    let mut views: Vec<ThemeView> = themes::all_themes()
+        .iter()
+        .filter_map(|t| {
+            let count = *counts.get(&t.slug).unwrap_or(&0);
+            if count == 0 && t.slug != "other" {
+                return None;
+            }
+            Some(ThemeView {
+                slug: t.slug.clone(),
+                label: t.label.clone(),
+                count,
+                order: t.order,
+            })
+        })
+        .collect();
+    views.sort_by_key(|v| v.order);
+    Ok(views)
+}
+
+#[tauri::command]
+async fn library_books_in_theme(slug: String) -> Result<Vec<ThemeBookSummary>, AppError> {
+    let rt = ensure_runtime().await?;
+    let ids = themes::books_in_theme(&slug);
+    let manifest = rt.manifest();
+    let mut out: Vec<ThemeBookSummary> = ids
+        .iter()
+        .filter_map(|id| manifest.books.iter().find(|b| b.gutenberg_id == *id))
+        .map(|b| ThemeBookSummary {
+            gutenberg_id: b.gutenberg_id,
+            title: b.title.clone(),
+            translators: b.translators.iter().map(|t| t.name.clone()).collect(),
+        })
+        .collect();
+    out.sort_by(|a, b| {
+        let aa = a.translators.first().cloned().unwrap_or_default();
+        let bb = b.translators.first().cloned().unwrap_or_default();
+        aa.cmp(&bb).then_with(|| a.title.cmp(&b.title))
+    });
+    Ok(out)
+}
+
 fn favourites_path() -> Result<PathBuf, AppError> {
     let proj = directories::ProjectDirs::from("nz", "omit", "fathom").ok_or_else(|| AppError {
         message: "project dirs unavailable".to_string(),
@@ -410,6 +469,8 @@ pub fn run() {
             library_prewarm_shards,
             library_favourite,
             library_favourites,
+            library_themes,
+            library_books_in_theme,
         ])
         .build(tauri::generate_context!())
         .expect("error while building fathom desktop");
