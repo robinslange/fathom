@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import Header from "./lib/Header.svelte";
-  import LibrarySidebar from "./lib/LibrarySidebar.svelte";
+  import LeftRail from "./lib/LeftRail.svelte";
   import Reader from "./lib/Reader.svelte";
   import ParaphrasePane from "./lib/ParaphrasePane.svelte";
   import { library } from "./lib/use-library.svelte.js";
@@ -19,7 +19,7 @@
 <Header />
 
 <main class="library">
-  <LibrarySidebar />
+  <LeftRail />
   <Reader />
   <ParaphrasePane />
 </main>
