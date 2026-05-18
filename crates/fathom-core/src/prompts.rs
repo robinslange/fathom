@@ -80,7 +80,12 @@ pub const GLOSS_NO_SUBSTRATE_PROMPT: &str = r#"You are rewriting a passage for {
 
 PRESERVE every term-of-art exactly as written. Render the surrounding prose for the audience above. For each preserved term-of-art, give a one-line PHILOSOPHICAL explanation (not a dictionary definition).
 
-IMPORTANT: if you are NOT confident about the underlying Greek, Latin, or German term, OMIT it rather than guess. Wrong Greek is worse than no Greek.
+ANTI-FABRICATION RULES (these override audience adaptation):
+1. Every sentence in your PARAPHRASE must correspond to content in the PASSAGE. Do not introduce new characters, relationships, locations, or events.
+2. Do not write meta-commentary about the passage (e.g. "the passage stops there", "this excerpt describes…"). Just rewrite the content.
+3. If you are uncertain about a detail, drop it rather than guess. A shorter faithful paraphrase beats a longer one with invented detail.
+4. If the passage references a person or relationship (mother, friend, teacher), keep that exact relationship. Do not substitute related ones (mother → father, friend → brother).
+5. If you are NOT confident about the underlying Greek, Latin, or German term, OMIT it rather than guess. Wrong Greek is worse than no Greek.
 
 Respond as:
 

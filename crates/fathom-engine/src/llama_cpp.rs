@@ -47,7 +47,13 @@ const MAX_NEW_TOKENS: u32 = 2000;
 /// `{"terms": ["eudaimonia", "logos"]}`. The 2000-token default was
 /// generous enough to hide a noticeable identify-pass tail.
 const JSON_MAX_NEW_TOKENS: u32 = 256;
-const TEMPERATURE: f32 = 0.2;
+// 0.1 is the lowest we go without dropping to pure greedy decoding. Our
+// prompts ask for faithful rewriting, not creative writing — at 0.2 the
+// model occasionally drifts into "what a story like this usually sounds
+// like" territory (invents characters, adds meta-commentary). Greedy
+// (0.0) is fine quality-wise but loses all sampling diversity, which can
+// loop the model on certain prompt structures. 0.1 is the sweet spot.
+const TEMPERATURE: f32 = 0.1;
 const SEED: u32 = 1234;
 
 static LLAMA_BACKEND: OnceCell<LlamaBackend> = OnceCell::new();

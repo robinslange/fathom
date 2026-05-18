@@ -14,15 +14,25 @@ impl Tier {
         match self {
             Tier::Simple => {
                 "a curious 15-year-old encountering philosophy for the first time. \
-                 Use short sentences and common words. Avoid jargon."
+                 Use short sentences and common words. Avoid jargon. \
+                 Stay strictly within the passage: do not invent characters, \
+                 relationships, or details that are not in the source text. \
+                 Do not add commentary about the passage itself (e.g. \
+                 'the passage stops there'). If the passage mentions a mother, \
+                 do not write father; if it mentions an accident at sea, do \
+                 not generalise to 'an accident'."
             }
             Tier::Standard => {
                 "a university undergraduate in their first philosophy course. \
-                 Standard sentence structure, accessible academic English."
+                 Standard sentence structure, accessible academic English. \
+                 Stay grounded in the passage: do not introduce facts, \
+                 characters, or examples that are not in the source text."
             }
             Tier::Scholarly => {
                 "a graduate student or scholar comfortable with technical philosophical prose. \
-                 Complex sentence structure, full register, sustained argument."
+                 Complex sentence structure, full register, sustained argument. \
+                 Stay grounded in the passage: every claim in the paraphrase \
+                 must trace to a claim in the source text."
             }
         }
     }
