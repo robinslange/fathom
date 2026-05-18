@@ -52,6 +52,12 @@ jobs:
         working-directory: apps/desktop
         run: pnpm tauri build
 
+      - name: Ad-hoc codesign the bundle
+        working-directory: target/release/bundle/macos
+        run: |
+          codesign --force --deep --sign - Fathom.app
+          codesign --verify --deep --strict --verbose=2 Fathom.app
+
       - name: Zip the .app
         working-directory: target/release/bundle/macos
         run: ditto -c -k --sequesterRsrc --keepParent Fathom.app Fathom-macos.zip
