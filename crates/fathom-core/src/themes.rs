@@ -130,9 +130,13 @@ mod tests {
     }
 
     #[test]
-    fn dropped_ids_is_empty_for_stub() {
-        // The stub themes.json ships with no dropped books;
-        // real classification populates this list.
-        assert!(dropped_ids().is_empty());
+    fn dropped_ids_matches_dropped_list() {
+        // Whatever themes.json ships, dropped_ids() must return exactly
+        // the gutenberg_ids present in the dropped list — no more, no less.
+        let f = themes_file();
+        let expected: std::collections::HashSet<u32> =
+            f.dropped.iter().map(|d| d.gutenberg_id).collect();
+        assert_eq!(dropped_ids(), expected);
+        assert_eq!(dropped_ids().len(), f.metadata.books_dropped);
     }
 }
