@@ -58,6 +58,10 @@ class LibraryStore {
   embedderReady = $state(false);
   embedderError = $state<string | null>(null);
 
+  judgeReady = $state(false);
+  llamaReady = $state(false);
+  warmupError = $state<string | null>(null);
+
   downloadProgress = $state<Record<string, DownloadProgress>>({});
 
   loadedBook = $state<BookView | null>(null);
@@ -127,13 +131,23 @@ class LibraryStore {
       }
     })();
 
+    const warmupPromise = (async () => {
+      try {
+        await invoke("library_warmup_models");
+        this.judgeReady = true;
+        this.llamaReady = true;
+      } catch (e) {
+        this.warmupError = e instanceof Error ? e.message : String(e);
+      }
+    })();
+
     try {
       await invoke<number>("library_prewarm_shards", { limit: 64 });
     } catch (e) {
       console.warn("prewarm failed:", e);
     }
 
-    await embedderPromise;
+    await Promise.all([embedderPromise, warmupPromise]);
   }
 
   async retryManifest(): Promise<void> {

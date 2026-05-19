@@ -27,16 +27,32 @@ class SystemStatusStore {
       {
         key: "paraphrase",
         label: "Paraphrase model",
-        detail: "Gemma 3 4B",
-        status: "idle",
+        detail: library.warmupError
+          ? "Gemma 3 4B · error"
+          : library.llamaReady
+            ? "Gemma 3 4B"
+            : `Gemma 3 4B · loading ${gemmaPercent()}%`,
+        status: library.warmupError
+          ? "error"
+          : library.llamaReady
+            ? "ready"
+            : "loading",
         lastCheckedAt: this.lastChecked.paraphrase,
         canRetry: false,
       },
       {
         key: "judge",
         label: "Faithfulness model",
-        detail: "DeBERTa",
-        status: "idle",
+        detail: library.warmupError
+          ? "DeBERTa · error"
+          : library.judgeReady
+            ? "DeBERTa"
+            : `DeBERTa · loading ${debertaPercent()}%`,
+        status: library.warmupError
+          ? "error"
+          : library.judgeReady
+            ? "ready"
+            : "loading",
         lastCheckedAt: this.lastChecked.judge,
         canRetry: false,
       },
@@ -92,6 +108,12 @@ class SystemStatusStore {
         if (library.embedderReady) this.lastChecked.embedder = Date.now();
       });
       $effect(() => {
+        if (library.judgeReady) this.lastChecked.judge = Date.now();
+      });
+      $effect(() => {
+        if (library.llamaReady) this.lastChecked.paraphrase = Date.now();
+      });
+      $effect(() => {
         if (library.manifest.length > 0 && !library.manifestError) {
           this.lastChecked.catalogue = Date.now();
         }
@@ -102,6 +124,18 @@ class SystemStatusStore {
 
 function embedderPercent(): number {
   const p = library.downloadProgress["bge-small"];
+  if (!p || !p.total) return 0;
+  return Math.min(100, Math.round((p.bytes / p.total) * 100));
+}
+
+function gemmaPercent(): number {
+  const p = library.downloadProgress["gemma3-4b"];
+  if (!p || !p.total) return 0;
+  return Math.min(100, Math.round((p.bytes / p.total) * 100));
+}
+
+function debertaPercent(): number {
+  const p = library.downloadProgress["deberta-nli"];
   if (!p || !p.total) return 0;
   return Math.min(100, Math.round((p.bytes / p.total) * 100));
 }

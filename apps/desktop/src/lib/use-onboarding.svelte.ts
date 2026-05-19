@@ -31,7 +31,9 @@ class OnboardingStore {
     return Math.min(100, Math.round((bytes / total) * 100));
   });
 
-  modelsReady = $derived(library.embedderReady);
+  modelsReady = $derived(
+    library.embedderReady && library.judgeReady && library.llamaReady,
+  );
 
   shouldShow = $derived.by(() => {
     if (this.checking) return false;
