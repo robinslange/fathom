@@ -133,29 +133,40 @@ class LibraryStore {
       }
     };
 
-    const warmupModels = async () => {
+    const ensureJudge = async () => {
       try {
-        await invoke("library_warmup_models");
+        await invoke("library_ensure_judge");
         this.judgeReady = true;
+      } catch (e) {
+        this.warmupError = e instanceof Error ? e.message : String(e);
+      }
+    };
+
+    const ensureLlama = async () => {
+      try {
+        await invoke("library_ensure_llama");
         this.llamaReady = true;
       } catch (e) {
         this.warmupError = e instanceof Error ? e.message : String(e);
       }
     };
 
-    // On low-RAM hosts (<12GB), serialise embedder → warmup so peak RSS
-    // never holds bge-small + DeBERTa + Gemma simultaneously. cold_load
-    // inside warmup already serialises judge → llama on the same hosts.
-    // Tier 1 hosts run the two paths concurrently so first-paraphrase
-    // wall-clock stays max(embedder, warmup) not sum.
+    // On low-RAM hosts (<12GB) hold peak RSS to one model load at a time.
+    // Order: embedder (smallest, ~50MB) → judge (~270MB) → llama (~2.5GB).
+    // On tier 1 hosts run all three concurrently so first-paraphrase
+    // wall-clock stays max(embedder, judge, llama) not sum. Each ready
+    // flag flips the moment its own primitive returns, so the onboarding
+    // bars surface ready independently — Gemma still downloading does
+    // not block the DeBERTa row from going green.
     let modelsPromise: Promise<unknown>;
     if (ramTier === "low") {
       modelsPromise = (async () => {
         await ensureEmbedder();
-        await warmupModels();
+        await ensureJudge();
+        await ensureLlama();
       })();
     } else {
-      modelsPromise = Promise.all([ensureEmbedder(), warmupModels()]);
+      modelsPromise = Promise.all([ensureEmbedder(), ensureJudge(), ensureLlama()]);
     }
 
     try {

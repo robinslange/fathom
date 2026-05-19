@@ -439,16 +439,22 @@ async fn library_ensure_embedder(app: AppHandle) -> Result<(), AppError> {
 /// first-launch wall-clock under ~5s on typical home broadband for the
 /// default limit=64. Sequential awaits would be ~13s due to per-request
 /// round-trip overhead.
-/// Warm up the paraphrase + faithfulness models so the onboarding popup
-/// can honestly gate "Get started" on the full 2.7GB download being on
-/// disk. Without this, Gemma + DeBERTa only fetch on first paraphrase
-/// click and the modal flips to "ready" after the ~50MB bge-small
-/// download alone. Idempotent: `ensure_judge` and `ensure_llama` both
-/// short-circuit when the model is already loaded, so the `paraphrase`
-/// command path is a no-op once warmup has run.
+/// Pre-fetch and load DeBERTa NLI so the onboarding popup can flip the
+/// faithfulness-model row to ready as soon as the file is on disk and
+/// the runtime has parsed it — independently of whether Gemma has
+/// finished. Idempotent via `judge::ensure_loaded`.
 #[tauri::command]
-async fn library_warmup_models(app: AppHandle) -> Result<(), AppError> {
-    cold_load(&app).await?;
+async fn library_ensure_judge(app: AppHandle) -> Result<(), AppError> {
+    ensure_judge(&app).await?;
+    Ok(())
+}
+
+/// Pre-fetch and load Gemma so the onboarding popup can flip the
+/// paraphrase-model row to ready independently of DeBERTa. Idempotent
+/// via the LLAMA OnceCell guard.
+#[tauri::command]
+async fn library_ensure_llama(app: AppHandle) -> Result<(), AppError> {
+    ensure_llama(&app).await?;
     Ok(())
 }
 
@@ -647,7 +653,8 @@ pub fn run() {
             library_load_book,
             library_paraphrase_selection,
             library_ensure_embedder,
-            library_warmup_models,
+            library_ensure_judge,
+            library_ensure_llama,
             host_ram_tier,
             library_prewarm_shards,
             library_favourite,

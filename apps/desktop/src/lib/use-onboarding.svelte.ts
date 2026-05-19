@@ -122,10 +122,14 @@ class OnboardingStore {
     library.embedderReady && library.judgeReady && library.llamaReady,
   );
 
+  // Show the modal whenever onboarding hasn't been explicitly completed.
+  // Don't auto-dismiss when models finish — the user has to click "Get
+  // started" so they get a beat to read the privacy paragraph and so the
+  // "everything runs on your machine" promise actually lands. The
+  // sentinel write inside complete() is what flips this off.
   shouldShow = $derived.by(() => {
     if (this.checking) return false;
     if (this.completed) return false;
-    if (this.catalogueReady && this.modelsReady) return false;
     return true;
   });
 
