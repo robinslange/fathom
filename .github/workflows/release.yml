@@ -3,8 +3,6 @@ name: Release
 on:
   push:
     branches: [main]
-    tags:
-      - "v*"
   workflow_dispatch:
 
 permissions:
@@ -20,6 +18,56 @@ jobs:
       CARGO_TERM_COLOR: always
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Need full history so we can find the previous tag and generate
+          # a changelog spanning all commits since it.
+          fetch-depth: 0
+
+      - name: Compute date-based tag + changelog
+        if: github.ref == 'refs/heads/main'
+        id: bump
+        run: |
+          set -euo pipefail
+          today="v$(date -u +%Y.%m.%d)"
+          # Pick the next ordinal for today: v2026.05.19.1, .2, .3, ...
+          # `git tag -l` works on the local repo only, which is fine because
+          # fetch-depth: 0 above pulled all tags too.
+          existing=$(git tag -l "${today}.*" | wc -l | tr -d ' ')
+          n=$((existing + 1))
+          new_tag="${today}.${n}"
+          echo "tag=${new_tag}" >> "$GITHUB_OUTPUT"
+
+          # Find the most recent prior dated tag. On the very first run
+          # there won't be one; cap the changelog at the last 20 commits
+          # rather than dumping the entire history.
+          prev_tag=$(git describe --tags --abbrev=0 --match='v[0-9]*' 2>/dev/null || true)
+          if [ -n "$prev_tag" ]; then
+            range="${prev_tag}..HEAD"
+            range_label="since \`${prev_tag}\`"
+          else
+            range="HEAD~20..HEAD"
+            range_label="(initial dated release, last 20 commits)"
+          fi
+
+          changelog=$(git log "$range" --no-merges --pretty=format:'- %s' | sed 's/`/\\`/g')
+          if [ -z "$changelog" ]; then
+            changelog="- (no new commits — rebuild of the same source tree)"
+          fi
+
+          {
+            echo "## What's in this build"
+            echo
+            echo "Built from \`${GITHUB_SHA}\` on \`$(date -u +%Y-%m-%dT%H:%M:%SZ)\`."
+            echo
+            echo "### Changes ${range_label}"
+            echo
+            echo "$changelog"
+            echo
+          } > release_body.md
+
+          echo "body_file=release_body.md" >> "$GITHUB_OUTPUT"
+          echo "Computed tag: ${new_tag}"
+          echo "Changelog range: ${range}"
 
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -62,26 +110,25 @@ jobs:
         working-directory: target/release/bundle/macos
         run: ditto -c -k --sequesterRsrc --keepParent Fathom.app Fathom-macos.zip
 
+      - name: Publish dated tagged release
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.bump.outputs.tag }}
+          name: ${{ steps.bump.outputs.tag }}
+          body_path: ${{ steps.bump.outputs.body_file }}
+          files: target/release/bundle/macos/Fathom-macos.zip
+          fail_on_unmatched_files: true
+
       - name: Publish rolling `latest` prerelease
         if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
           name: "Latest build from main"
-          body: |
-            Rolling build from the latest commit on `main` (${{ github.sha }}).
-
-            This is a prerelease that is replaced on every push to `main`. For a
-            pinned, versioned build, watch for `v*` tags on the Releases page.
+          body_path: ${{ steps.bump.outputs.body_file }}
           prerelease: true
           make_latest: "false"
           files: target/release/bundle/macos/Fathom-macos.zip
           fail_on_unmatched_files: true
 
-      - name: Publish tagged release
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: target/release/bundle/macos/Fathom-macos.zip
-          generate_release_notes: true
-          fail_on_unmatched_files: true
