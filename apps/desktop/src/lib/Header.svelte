@@ -12,6 +12,7 @@
   } from "./theme.js";
   import { library } from "./use-library.svelte.js";
   import { search } from "./use-search.svelte.js";
+  import StatusDot from "./StatusDot.svelte";
 
   let themePref: ThemePreference = $state(readStoredPreference());
 
@@ -30,11 +31,6 @@
     themePref = nextPreference(themePref);
     storePreference(themePref);
   }
-
-  function pctOrNull(p?: { bytes: number; total: number | null }) {
-    if (!p || !p.total) return null;
-    return Math.min(100, Math.round((p.bytes / p.total) * 100));
-  }
 </script>
 
 <header class="app-header">
@@ -42,23 +38,17 @@
     <h1>Fathom</h1>
     <p>Read philosophy at your depth without losing the words.</p>
   </div>
+  <StatusDot />
   <div class="search">
     <input
       type="search"
       bind:value={search.query}
-      placeholder={library.embedderReady ? "Search the library…" : "Loading embedding model…"}
+      placeholder="Search across all books"
       aria-label="Search the library"
       disabled={!library.embedderReady}
     />
     {#if search.searching}
       <span class="searching">searching…</span>
-    {:else if !library.embedderReady && !library.embedderError}
-      {@const m = library.downloadProgress["bge-small"]}
-      <span class="searching">
-        loading model{m && m.total ? ` · ${pctOrNull(m) ?? 0}%` : "…"}
-      </span>
-    {:else if library.embedderError}
-      <span class="searching error" title={library.embedderError}>embedder offline</span>
     {/if}
   </div>
   <button
@@ -123,10 +113,6 @@
     font-size: 0.8rem;
     opacity: 0.6;
     font-family: "IBM Plex Mono", monospace;
-  }
-  .searching.error {
-    color: var(--error-ink);
-    opacity: 0.85;
   }
   .theme-toggle {
     display: inline-flex;

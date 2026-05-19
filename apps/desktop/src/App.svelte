@@ -10,11 +10,13 @@
   import { paraphrase } from "./lib/use-paraphrase.svelte.js";
   import { themes } from "./lib/use-themes.svelte.js";
   import { onboarding } from "./lib/use-onboarding.svelte.js";
+  import { systemStatus } from "./lib/use-system-status.svelte.js";
 
   onMount(() => {
     library.initEffects();
     search.initEffects();
     paraphrase.initEffects();
+    systemStatus.init();
     onboarding.init();
     library.init();
     themes.init();
