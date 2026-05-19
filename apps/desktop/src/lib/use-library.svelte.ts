@@ -1,6 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listen } from "@tauri-apps/api/event";
-import { getPage, pageForChunk, type Paragraph } from "./pagination.js";
+import { type Paragraph } from "./pagination.js";
 import { utf8ByteLength } from "./utf8.js";
 import { isBoilerplate } from "./boilerplate.js";
 
@@ -69,6 +69,8 @@ class LibraryStore {
   loadBookError = $state<string | null>(null);
 
   currentPage = $state(0);
+  pageCount = $state(1);
+  pendingScrollChunk = $state<string | null>(null);
 
   paragraphs = $derived.by((): Paragraph[] => {
     if (!this.loadedBook) return [];
@@ -91,8 +93,6 @@ class LibraryStore {
     }
     return result;
   });
-
-  currentPageBounds = $derived(getPage(this.paragraphs, this.currentPage));
 
   private effectsInitialised = false;
 
@@ -192,21 +192,17 @@ class LibraryStore {
 
   async openBook(gutenberg_id: number, chunkIdToScrollTo?: string): Promise<void> {
     if (this.loadedBook?.gutenberg_id === gutenberg_id) {
-      if (chunkIdToScrollTo) scrollToChunk(chunkIdToScrollTo);
+      if (chunkIdToScrollTo) this.pendingScrollChunk = chunkIdToScrollTo;
       return;
     }
     this.loadingBook = true;
     this.loadBookError = null;
+    this.currentPage = 0;
+    this.pendingScrollChunk = chunkIdToScrollTo ?? null;
     try {
       this.loadedBook = await invoke<BookView>("library_load_book", {
         gutenbergId: gutenberg_id,
       });
-      if (chunkIdToScrollTo) {
-        setTimeout(() => {
-          this.currentPage = pageForChunk(this.paragraphs, chunkIdToScrollTo);
-          scrollToChunk(chunkIdToScrollTo);
-        }, 0);
-      }
     } catch (e) {
       this.loadBookError =
         e instanceof Error
@@ -221,31 +217,35 @@ class LibraryStore {
     }
   }
 
+  setPageCount(n: number): void {
+    this.pageCount = Math.max(1, n);
+  }
+
+  setPage(n: number): void {
+    const clamped = Math.max(0, Math.min(n, this.pageCount - 1));
+    if (clamped !== this.currentPage) {
+      this.currentPage = clamped;
+      window.getSelection()?.removeAllRanges();
+    }
+  }
+
+  clearPendingScroll(): void {
+    this.pendingScrollChunk = null;
+  }
+
   pageBack(): void {
     if (this.currentPage > 0) {
       this.currentPage -= 1;
       window.getSelection()?.removeAllRanges();
-      setTimeout(scrollReaderToTop, 0);
     }
   }
 
   pageForward(): void {
-    if (this.currentPage < this.currentPageBounds.pageCount - 1) {
+    if (this.currentPage < this.pageCount - 1) {
       this.currentPage += 1;
       window.getSelection()?.removeAllRanges();
-      setTimeout(scrollReaderToTop, 0);
     }
   }
-}
-
-function scrollReaderToTop() {
-  const el = document.querySelector(".reader") as HTMLElement | null;
-  if (el) el.scrollTop = 0;
-}
-
-function scrollToChunk(chunkId: string) {
-  const el = document.querySelector(`[data-chunk-id="${chunkId}"]`);
-  if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 export const library = new LibraryStore();

@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { library } from "./use-library.svelte.js";
+import { snapToSentences } from "./snap-sentence.js";
 import { utf8ByteLength } from "./utf8.js";
 
 export type Tier = "simple" | "standard" | "scholarly";
@@ -33,13 +34,31 @@ export type FathomResult = {
   faithfulness_verdict?: FaithfulnessVerdict | null;
 };
 
+type SelectionAnchor = {
+  paraEl: HTMLElement;
+  paraText: string;
+  paraByteStart: number;
+  snappedStartChar: number;
+  snappedEndChar: number;
+  selText: string;
+  rect: DOMRect;
+};
+
 class ParaphraseStore {
   tier = $state<Tier>("standard");
   paraphraseResult = $state<FathomResult | null>(null);
   paraphraseBusy = $state(false);
   paraphraseError = $state<string | null>(null);
   lastSelectionText = $state("");
+  selectionRect = $state<DOMRect | null>(null);
+  popoverOpen = $state(false);
 
+  /**
+   * Identity of the last fired request, used to dedupe and to discard stale
+   * completions. Keyed by (gutenbergId, byteStart, byteEnd, tier).
+   */
+  private lastRequestKey: string | null = null;
+  private requestSeq = 0;
   private effectsInitialised = false;
 
   initEffects(): void {
@@ -48,51 +67,62 @@ class ParaphraseStore {
     $effect.root(() => {
       $effect(() => {
         library.loadedBook?.gutenberg_id;
-        this.paraphraseResult = null;
-        this.paraphraseError = null;
+        this.reset();
       });
     });
   }
 
-  async paraphraseSelection(): Promise<void> {
+  reset(): void {
+    this.paraphraseResult = null;
+    this.paraphraseError = null;
+    this.lastSelectionText = "";
+    this.selectionRect = null;
+    this.popoverOpen = false;
+    this.lastRequestKey = null;
+  }
+
+  closePopover(): void {
+    this.popoverOpen = false;
+    this.selectionRect = null;
+  }
+
+  /**
+   * Entry point from the reader's mouseup. Snaps the visible selection to
+   * whole-sentence boundaries, opens the popover, and fires the paraphrase
+   * if the snapped range is new.
+   */
+  async handleSelection(): Promise<void> {
     const loadedBook = library.loadedBook;
     if (!loadedBook) return;
-    const selection = window.getSelection();
-    if (!selection || selection.isCollapsed) return;
-    const range = selection.getRangeAt(0);
-    const selText = selection.toString();
-    if (selText.trim().length === 0) return;
+    const anchor = computeAnchor();
+    if (!anchor) return;
 
-    const paragraphs = library.paragraphs;
+    applySnappedRange(anchor);
+    this.lastSelectionText = anchor.selText;
+    this.selectionRect = anchor.rect;
+    this.popoverOpen = true;
 
-    let startByte = endpointToByte(range.startContainer, range.startOffset, "start", paragraphs);
-    let endByte = endpointToByte(range.endContainer, range.endOffset, "end", paragraphs);
-
-    const startParaEl = (range.startContainer.nodeType === Node.TEXT_NODE
-      ? range.startContainer.parentElement
-      : (range.startContainer as HTMLElement)
-    )?.closest("[data-byte-start]") as HTMLElement | null;
-    const endParaEl = (range.endContainer.nodeType === Node.TEXT_NODE
-      ? range.endContainer.parentElement
-      : (range.endContainer as HTMLElement)
-    )?.closest("[data-byte-start]") as HTMLElement | null;
-    if (!startParaEl && endParaEl) {
-      startByte = Number(endParaEl.dataset.byteStart ?? "0");
-    }
-    if (!endParaEl && startParaEl) {
-      const spByteStart = Number(startParaEl.dataset.byteStart ?? "0");
-      const sp = paragraphs.find((p) => p.byteStart === spByteStart);
-      if (sp) endByte = spByteStart + utf8ByteLength(sp.text);
-    }
-
+    const startByte =
+      anchor.paraByteStart + utf8ByteLength(anchor.paraText.slice(0, anchor.snappedStartChar));
+    const endByte =
+      anchor.paraByteStart + utf8ByteLength(anchor.paraText.slice(0, anchor.snappedEndChar));
     if (endByte <= startByte) return;
 
-    this.lastSelectionText = selText;
+    const key = `${loadedBook.gutenberg_id}:${startByte}:${endByte}:${this.tier}`;
+
+    if (key === this.lastRequestKey && this.paraphraseResult) {
+      // Same snapped range + tier as the existing result — nothing to do.
+      return;
+    }
+    this.lastRequestKey = key;
+
+    const myRequestId = ++this.requestSeq;
     this.paraphraseBusy = true;
     this.paraphraseError = null;
     this.paraphraseResult = null;
+
     try {
-      this.paraphraseResult = await invoke<FathomResult>("library_paraphrase_selection", {
+      const result = await invoke<FathomResult>("library_paraphrase_selection", {
         args: {
           gutenbergId: loadedBook.gutenberg_id,
           startByte,
@@ -100,7 +130,10 @@ class ParaphraseStore {
           tier: this.tier,
         },
       });
+      if (myRequestId !== this.requestSeq) return; // superseded
+      this.paraphraseResult = result;
     } catch (e) {
+      if (myRequestId !== this.requestSeq) return;
       const msg =
         e instanceof Error
           ? e.message
@@ -111,48 +144,144 @@ class ParaphraseStore {
               : JSON.stringify(e);
       this.paraphraseError = msg || "paraphrase failed";
     } finally {
-      this.paraphraseBusy = false;
+      if (myRequestId === this.requestSeq) this.paraphraseBusy = false;
     }
+  }
+
+  /**
+   * Re-fire the current selection (used when the user changes tier inside
+   * the popover). No-op if there is no active selection.
+   */
+  async retryWithCurrentTier(): Promise<void> {
+    if (!this.lastSelectionText) return;
+    // Force the next handleSelection to fire even if the byte-range matches
+    // (because the tier slug is part of the key, this is already handled —
+    // but we also need to bypass the "result already present" early return
+    // by clearing the cached key).
+    this.lastRequestKey = null;
+    await this.handleSelection();
   }
 }
 
-function endpointToByte(
-  container: Node,
-  charOffset: number,
-  fallback: "start" | "end",
-  paragraphs: { chunkId: string; byteStart: number; text: string }[],
-): number {
-  const paraEl = (container.nodeType === Node.TEXT_NODE
-    ? container.parentElement
-    : (container as HTMLElement)
-  )?.closest("[data-byte-start]") as HTMLElement | null;
+function computeAnchor(): SelectionAnchor | null {
+  const selection = window.getSelection();
+  if (!selection || selection.isCollapsed) return null;
+  const range = selection.getRangeAt(0);
+  if (range.toString().trim().length === 0) return null;
 
-  if (!paraEl) {
-    if (paragraphs.length === 0) return 0;
-    if (fallback === "start") return paragraphs[0].byteStart;
-    const last = paragraphs[paragraphs.length - 1];
-    return last.byteStart + utf8ByteLength(last.text);
-  }
+  const startParaEl = nearestParagraph(range.startContainer);
+  const endParaEl = nearestParagraph(range.endContainer);
+  // For now we only handle selections within a single paragraph element.
+  // A cross-paragraph selection collapses to whichever endpoint we can
+  // resolve a paragraph for; both endpoints get snapped to that paragraph.
+  const paraEl = startParaEl ?? endParaEl;
+  if (!paraEl) return null;
 
+  const paraText = paraEl.textContent ?? "";
   const paraByteStart = Number(paraEl.dataset.byteStart ?? "0");
 
-  if (container.nodeType === Node.TEXT_NODE) {
-    let bytes = 0;
-    for (const sib of Array.from(paraEl.childNodes)) {
-      if (sib === container) break;
-      bytes += utf8ByteLength(sib.textContent ?? "");
+  const rawStart = startParaEl === paraEl
+    ? charOffsetInParagraph(paraEl, range.startContainer, range.startOffset)
+    : 0;
+  const rawEnd = endParaEl === paraEl
+    ? charOffsetInParagraph(paraEl, range.endContainer, range.endOffset)
+    : paraText.length;
+
+  const snapped = snapToSentences(paraText, rawStart, rawEnd);
+  const selText = paraText.slice(snapped.start, snapped.end);
+  const rect = range.getBoundingClientRect();
+
+  return {
+    paraEl,
+    paraText,
+    paraByteStart,
+    snappedStartChar: snapped.start,
+    snappedEndChar: snapped.end,
+    selText,
+    rect,
+  };
+}
+
+function nearestParagraph(node: Node): HTMLElement | null {
+  const el = node.nodeType === Node.TEXT_NODE ? node.parentElement : (node as HTMLElement);
+  return (el?.closest("[data-byte-start]") as HTMLElement | null) ?? null;
+}
+
+/**
+ * Map a (container, offset) pair from a DOM Range to a char (UTF-16) offset
+ * within `paraEl`'s textContent. Walks the paragraph's descendants in order
+ * accumulating textContent lengths.
+ */
+function charOffsetInParagraph(
+  paraEl: HTMLElement,
+  container: Node,
+  offset: number,
+): number {
+  if (container === paraEl) {
+    // Element container: offset is a child index.
+    let chars = 0;
+    const limit = Math.min(offset, paraEl.childNodes.length);
+    for (let i = 0; i < limit; i++) {
+      chars += paraEl.childNodes[i].textContent?.length ?? 0;
     }
-    bytes += utf8ByteLength((container as Text).data.slice(0, charOffset));
-    return paraByteStart + bytes;
+    return chars;
   }
 
-  const el = container as HTMLElement;
-  const limit = Math.min(charOffset, el.childNodes.length);
-  let bytes = 0;
-  for (let i = 0; i < limit; i++) {
-    bytes += utf8ByteLength(el.childNodes[i].textContent ?? "");
+  let chars = 0;
+  const walker = document.createTreeWalker(paraEl, NodeFilter.SHOW_TEXT);
+  let n: Node | null = walker.nextNode();
+  while (n) {
+    if (n === container) {
+      return chars + offset;
+    }
+    chars += (n as Text).data.length;
+    n = walker.nextNode();
   }
-  return paraByteStart + bytes;
+  return chars;
+}
+
+/**
+ * Replace the current window selection with a Range that spans
+ * [snappedStartChar, snappedEndChar) within `paraEl`. This is the "selection
+ * visibly grows to match what we're paraphrasing" UX moment.
+ */
+function applySnappedRange(anchor: SelectionAnchor): void {
+  const sel = window.getSelection();
+  if (!sel) return;
+  const range = document.createRange();
+  const start = locateCharOffset(anchor.paraEl, anchor.snappedStartChar);
+  const end = locateCharOffset(anchor.paraEl, anchor.snappedEndChar);
+  if (!start || !end) return;
+  try {
+    range.setStart(start.node, start.offset);
+    range.setEnd(end.node, end.offset);
+  } catch {
+    return;
+  }
+  sel.removeAllRanges();
+  sel.addRange(range);
+  anchor.rect = range.getBoundingClientRect();
+}
+
+function locateCharOffset(
+  paraEl: HTMLElement,
+  charOffset: number,
+): { node: Node; offset: number } | null {
+  const walker = document.createTreeWalker(paraEl, NodeFilter.SHOW_TEXT);
+  let n: Node | null = walker.nextNode();
+  let remaining = charOffset;
+  let last: Text | null = null;
+  while (n) {
+    const len = (n as Text).data.length;
+    if (remaining <= len) {
+      return { node: n, offset: remaining };
+    }
+    remaining -= len;
+    last = n as Text;
+    n = walker.nextNode();
+  }
+  if (last) return { node: last, offset: last.data.length };
+  return null;
 }
 
 export const paraphrase = new ParaphraseStore();

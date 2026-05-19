@@ -3,7 +3,7 @@
   import Header from "./lib/Header.svelte";
   import LeftRail from "./lib/LeftRail.svelte";
   import Reader from "./lib/Reader.svelte";
-  import ParaphrasePane from "./lib/ParaphrasePane.svelte";
+  import SelectionPopover from "./lib/SelectionPopover.svelte";
   import Onboarding from "./lib/Onboarding.svelte";
   import { library } from "./lib/use-library.svelte.js";
   import { search } from "./lib/use-search.svelte.js";
@@ -30,8 +30,8 @@
 <main class="library">
   <LeftRail />
   <Reader />
-  <ParaphrasePane />
 </main>
+<SelectionPopover />
 
 <style>
   :global(body) {
@@ -46,7 +46,7 @@
 
   .library {
     display: grid;
-    grid-template-columns: 22rem 1fr 24rem;
+    grid-template-columns: 22rem 1fr;
     height: calc(100vh - 4rem);
     overflow: hidden;
   }
