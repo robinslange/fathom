@@ -1,8 +1,18 @@
 <script lang="ts">
   import { onboarding } from "./use-onboarding.svelte.js";
 
-  function bytesToGb(b: number): string {
-    return (b / 1_000_000_000).toFixed(1);
+  function formatBytes(b: number): string {
+    if (b >= 1_000_000_000) return `${(b / 1_000_000_000).toFixed(1)} GB`;
+    if (b >= 1_000_000) return `${(b / 1_000_000).toFixed(0)} MB`;
+    if (b >= 1_000) return `${(b / 1_000).toFixed(0)} KB`;
+    return `${b} B`;
+  }
+
+  function formatSpeed(bps: number): string {
+    if (bps < 1) return "";
+    if (bps >= 1_000_000) return `${(bps / 1_000_000).toFixed(1)} MB/s`;
+    if (bps >= 1_000) return `${(bps / 1_000).toFixed(0)} KB/s`;
+    return `${Math.round(bps)} B/s`;
   }
 </script>
 
@@ -26,15 +36,29 @@
       {/if}
     </div>
 
-    <div class="bar-row">
-      <div class="bar-meta">
-        <span>Language models</span>
-        <span class="bytes">
-          {bytesToGb(onboarding.modelsBytes.bytes)} / {bytesToGb(onboarding.modelsBytes.total || 2_700_000_000)}&nbsp;GB
-        </span>
+    {#each onboarding.components as c (c.key)}
+      <div class="bar-row">
+        <div class="bar-meta">
+          <span class="label">
+            {c.label}
+            <span class="model">· {c.detail}</span>
+          </span>
+          <span class="bytes">
+            {#if c.ready}
+              ✓ ready
+            {:else if c.total}
+              {formatBytes(c.bytes)} / {formatBytes(c.total)}
+              {#if c.bytesPerSecond > 0}
+                <span class="speed">· {formatSpeed(c.bytesPerSecond)}</span>
+              {/if}
+            {:else}
+              starting…
+            {/if}
+          </span>
+        </div>
+        <div class="bar"><div class="bar-fill" style:width="{c.percent}%"></div></div>
       </div>
-      <div class="bar"><div class="bar-fill" style:width="{onboarding.modelsPercent}%"></div></div>
-    </div>
+    {/each}
 
     {#if onboarding.completeError}
       <p class="error">Couldn't save: {onboarding.completeError}</p>
@@ -106,16 +130,30 @@
   @media (prefers-reduced-motion: reduce) {
     .spinner { animation: none; }
   }
-  .bar-row { margin-top: 0.9rem; }
+  .bar-row { margin-top: 0.75rem; }
   .bar-meta {
     display: flex;
     justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
     font-family: "IBM Plex Mono", monospace;
     font-size: 0.76rem;
-    opacity: 0.7;
+    opacity: 0.75;
     margin-bottom: 0.3rem;
   }
+  .label {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 0.82rem;
+    opacity: 0.95;
+  }
+  .model {
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.74rem;
+    opacity: 0.6;
+    margin-left: 0.15rem;
+  }
   .bytes { font-variant-numeric: tabular-nums; }
+  .speed { opacity: 0.7; margin-left: 0.15em; }
   .bar {
     height: 4px;
     background: var(--rule);

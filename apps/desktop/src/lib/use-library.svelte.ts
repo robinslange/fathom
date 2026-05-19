@@ -122,16 +122,18 @@ class LibraryStore {
 
     if (this.manifestError) return;
 
-    const embedderPromise = (async () => {
+    const ramTier = await invoke<string>("host_ram_tier").catch(() => "high");
+
+    const ensureEmbedder = async () => {
       try {
         await invoke("library_ensure_embedder");
         this.embedderReady = true;
       } catch (e) {
         this.embedderError = e instanceof Error ? e.message : String(e);
       }
-    })();
+    };
 
-    const warmupPromise = (async () => {
+    const warmupModels = async () => {
       try {
         await invoke("library_warmup_models");
         this.judgeReady = true;
@@ -139,7 +141,22 @@ class LibraryStore {
       } catch (e) {
         this.warmupError = e instanceof Error ? e.message : String(e);
       }
-    })();
+    };
+
+    // On low-RAM hosts (<12GB), serialise embedder → warmup so peak RSS
+    // never holds bge-small + DeBERTa + Gemma simultaneously. cold_load
+    // inside warmup already serialises judge → llama on the same hosts.
+    // Tier 1 hosts run the two paths concurrently so first-paraphrase
+    // wall-clock stays max(embedder, warmup) not sum.
+    let modelsPromise: Promise<unknown>;
+    if (ramTier === "low") {
+      modelsPromise = (async () => {
+        await ensureEmbedder();
+        await warmupModels();
+      })();
+    } else {
+      modelsPromise = Promise.all([ensureEmbedder(), warmupModels()]);
+    }
 
     try {
       await invoke<number>("library_prewarm_shards", { limit: 64 });
@@ -147,7 +164,7 @@ class LibraryStore {
       console.warn("prewarm failed:", e);
     }
 
-    await Promise.all([embedderPromise, warmupPromise]);
+    await modelsPromise;
   }
 
   async retryManifest(): Promise<void> {

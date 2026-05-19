@@ -452,6 +452,20 @@ async fn library_warmup_models(app: AppHandle) -> Result<(), AppError> {
     Ok(())
 }
 
+/// Surface the host's RAM tier to the frontend so it can choose whether
+/// to parallelise or serialise the embedder + warmup paths during boot.
+/// On <12GB hosts, concurrent cold-load of bge-small + DeBERTa + Gemma
+/// pushes peak RSS past 8GB and the system swaps to freezing. The
+/// frontend uses this to await sequentially on low-RAM hosts.
+#[tauri::command]
+fn host_ram_tier() -> &'static str {
+    if is_low_ram_host() {
+        "low"
+    } else {
+        "high"
+    }
+}
+
 #[tauri::command]
 async fn library_prewarm_shards(limit: usize) -> Result<usize, AppError> {
     use futures_util::stream::StreamExt;
@@ -634,6 +648,7 @@ pub fn run() {
             library_paraphrase_selection,
             library_ensure_embedder,
             library_warmup_models,
+            host_ram_tier,
             library_prewarm_shards,
             library_favourite,
             library_favourites,
