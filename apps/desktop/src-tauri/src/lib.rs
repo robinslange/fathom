@@ -1,5 +1,7 @@
 use fathom_core::runtime::{ManifestBook, Runtime, SearchHit, Shard};
-use fathom_core::{bootstrap, fathom_with_judge, judge, themes, FathomResult, JudgeMode, Mode, Tier};
+use fathom_core::{
+    bootstrap, fathom_with_judge, judge, themes, FathomResult, JudgeMode, Mode, Tier,
+};
 use fathom_engine::LlamaCppBackend;
 use once_cell::sync::OnceCell;
 use serde::{Deserialize, Serialize};
@@ -681,18 +683,16 @@ pub fn run() {
     //   - RunEvent::ExitRequested      (app-level, fires after last window)
     //   - RunEvent::Exit               (final, just before process death)
     // Whichever fires first jumps to _exit(0); the others never run.
-    app.run(|_handle, event| {
-        match &event {
-            tauri::RunEvent::ExitRequested { .. } | tauri::RunEvent::Exit => unsafe {
-                libc::_exit(0);
-            },
-            tauri::RunEvent::WindowEvent {
-                event: tauri::WindowEvent::CloseRequested { .. },
-                ..
-            } => unsafe {
-                libc::_exit(0);
-            },
-            _ => {}
-        }
+    app.run(|_handle, event| match &event {
+        tauri::RunEvent::ExitRequested { .. } | tauri::RunEvent::Exit => unsafe {
+            libc::_exit(0);
+        },
+        tauri::RunEvent::WindowEvent {
+            event: tauri::WindowEvent::CloseRequested { .. },
+            ..
+        } => unsafe {
+            libc::_exit(0);
+        },
+        _ => {}
     });
 }

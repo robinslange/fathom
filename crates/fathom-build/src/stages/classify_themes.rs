@@ -149,8 +149,8 @@ pub async fn run(args: Args) -> Result<()> {
 
 fn prepare_input(limit: Option<usize>) -> Result<()> {
     let manifest_path = dist_dir().join("index.msgpack");
-    let mp_bytes =
-        std::fs::read(&manifest_path).with_context(|| format!("read {}", manifest_path.display()))?;
+    let mp_bytes = std::fs::read(&manifest_path)
+        .with_context(|| format!("read {}", manifest_path.display()))?;
     let manifest: Manifest =
         rmp_serde::from_slice(&mp_bytes).context("msgpack decode index.msgpack")?;
 
@@ -204,8 +204,7 @@ fn assemble_output() -> Result<()> {
         .with_context(|| format!("open {}", output_path.display()))?;
     let reader = std::io::BufReader::new(file);
 
-    let known: std::collections::HashSet<&str> =
-        SEED_TAXONOMY.iter().map(|(s, _)| *s).collect();
+    let known: std::collections::HashSet<&str> = SEED_TAXONOMY.iter().map(|(s, _)| *s).collect();
 
     let mut assignments: Vec<ThemeAssignment> = Vec::new();
     let mut dropped: Vec<DroppedBook> = Vec::new();
@@ -286,8 +285,7 @@ fn assemble_output() -> Result<()> {
         },
     };
 
-    write_json(&out_path, &themes_file)
-        .with_context(|| format!("write {}", out_path.display()))?;
+    write_json(&out_path, &themes_file).with_context(|| format!("write {}", out_path.display()))?;
 
     eprintln!(
         "classify-themes: wrote {} assignments ({} other, {} dropped) → {}",

@@ -23,9 +23,9 @@ mod tiebreak_tests {
     fn ties_break_by_gutenberg_id_then_chunk_id() {
         let mut hits: Vec<Hit> = vec![
             (10, "c2".into(), 1.0),
-            (5,  "c1".into(), 1.0),
-            (5,  "c0".into(), 1.0),
-            (3,  "c3".into(), 2.0),
+            (5, "c1".into(), 1.0),
+            (5, "c0".into(), 1.0),
+            (3, "c3".into(), 2.0),
         ];
         sort_with_lexicographic_tiebreak(&mut hits);
         assert_eq!(hits[0], (3, "c3".into(), 2.0));
@@ -85,7 +85,12 @@ mod rrf_tests {
         let fused = rrf_fuse(&dense, &bm25, 10);
         assert_eq!(fused.len(), 1);
         let expected = 1.0_f32 / 11.0;
-        assert!((fused[0].2 - expected).abs() < 1e-6, "got {} expected {}", fused[0].2, expected);
+        assert!(
+            (fused[0].2 - expected).abs() < 1e-6,
+            "got {} expected {}",
+            fused[0].2,
+            expected
+        );
     }
 
     #[test]
@@ -139,7 +144,9 @@ pub fn linear_fuse(dense_hits: &[Hit], bm25_hits: &[Hit], alpha: f32) -> Vec<Hit
     type Key = (u32, String);
 
     fn p99_clip(scores: &[f32]) -> f32 {
-        if scores.is_empty() { return 0.0; }
+        if scores.is_empty() {
+            return 0.0;
+        }
         let mut sorted: Vec<f32> = scores.to_vec();
         sorted.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
         let idx = ((sorted.len() as f32) * 0.99).floor() as usize;
@@ -147,18 +154,25 @@ pub fn linear_fuse(dense_hits: &[Hit], bm25_hits: &[Hit], alpha: f32) -> Vec<Hit
     }
 
     fn normalise(hits: &[Hit]) -> HashMap<Key, f32> {
-        if hits.is_empty() { return HashMap::new(); }
+        if hits.is_empty() {
+            return HashMap::new();
+        }
         let raw: Vec<f32> = hits.iter().map(|h| h.2).collect();
         let max = p99_clip(&raw);
         let min = raw.iter().cloned().fold(f32::INFINITY, f32::min);
         let range = (max - min).max(1e-9);
         hits.iter()
-            .map(|(g, c, s)| ((*g, c.clone()), ((s.min(max) - min) / range).clamp(0.0, 1.0)))
+            .map(|(g, c, s)| {
+                (
+                    (*g, c.clone()),
+                    ((s.min(max) - min) / range).clamp(0.0, 1.0),
+                )
+            })
             .collect()
     }
 
     let dense_norm = normalise(dense_hits);
-    let bm25_norm  = normalise(bm25_hits);
+    let bm25_norm = normalise(bm25_hits);
 
     let mut scores: HashMap<Key, f32> = HashMap::new();
     for (k, v) in dense_norm.iter() {
@@ -179,7 +193,7 @@ mod linear_tests {
     #[test]
     fn alpha_one_is_dense_only() {
         let dense: Vec<Hit> = vec![(1, "c1".into(), 0.9), (2, "c2".into(), 0.5)];
-        let bm25: Vec<Hit>  = vec![(2, "c2".into(), 10.0), (1, "c1".into(), 1.0)];
+        let bm25: Vec<Hit> = vec![(2, "c2".into(), 10.0), (1, "c1".into(), 1.0)];
         let fused = linear_fuse(&dense, &bm25, 1.0);
         assert_eq!(fused[0].1, "c1"); // dense ranking dominates
     }
@@ -187,7 +201,7 @@ mod linear_tests {
     #[test]
     fn alpha_zero_is_bm25_only() {
         let dense: Vec<Hit> = vec![(1, "c1".into(), 0.9), (2, "c2".into(), 0.5)];
-        let bm25: Vec<Hit>  = vec![(2, "c2".into(), 10.0), (1, "c1".into(), 1.0)];
+        let bm25: Vec<Hit> = vec![(2, "c2".into(), 10.0), (1, "c1".into(), 1.0)];
         let fused = linear_fuse(&dense, &bm25, 0.0);
         assert_eq!(fused[0].1, "c2"); // bm25 ranking dominates
     }
@@ -195,7 +209,7 @@ mod linear_tests {
     #[test]
     fn all_zero_list_does_not_panic() {
         let dense: Vec<Hit> = vec![(1, "c1".into(), 0.0), (2, "c2".into(), 0.0)];
-        let bm25: Vec<Hit>  = vec![];
+        let bm25: Vec<Hit> = vec![];
         let fused = linear_fuse(&dense, &bm25, 0.5);
         assert_eq!(fused.len(), 2);
     }
@@ -203,7 +217,7 @@ mod linear_tests {
     #[test]
     fn single_element_list_does_not_div_by_zero() {
         let dense: Vec<Hit> = vec![(1, "c1".into(), 0.5)];
-        let bm25: Vec<Hit>  = vec![];
+        let bm25: Vec<Hit> = vec![];
         let fused = linear_fuse(&dense, &bm25, 0.5);
         assert_eq!(fused.len(), 1);
         assert!(fused[0].2.is_finite());
@@ -237,7 +251,9 @@ pub mod iconic {
     use serde::Deserialize;
 
     #[derive(Debug, Deserialize)]
-    struct File { phrase: Vec<Phrase> }
+    struct File {
+        phrase: Vec<Phrase>,
+    }
 
     #[derive(Debug, Deserialize)]
     struct Phrase {

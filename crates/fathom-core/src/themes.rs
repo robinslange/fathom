@@ -90,7 +90,11 @@ pub fn books_in_theme(slug: &str) -> Vec<u32> {
 /// Set of gutenberg_ids that were curated out of the user-visible library
 /// (duplicates / history-of-philosophy / biography / intro-textbook).
 pub fn dropped_ids() -> std::collections::HashSet<u32> {
-    themes_file().dropped.iter().map(|d| d.gutenberg_id).collect()
+    themes_file()
+        .dropped
+        .iter()
+        .map(|d| d.gutenberg_id)
+        .collect()
 }
 
 pub fn parse_themes_bytes(bytes: &[u8]) -> Result<ThemesFile> {

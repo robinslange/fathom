@@ -8,10 +8,7 @@
 pub fn tokenise(text: &str) -> Vec<String> {
     use unicode_segmentation::UnicodeSegmentation;
 
-    let unigrams: Vec<String> = text
-        .unicode_words()
-        .map(|w| w.to_lowercase())
-        .collect();
+    let unigrams: Vec<String> = text.unicode_words().map(|w| w.to_lowercase()).collect();
 
     if unigrams.is_empty() {
         return Vec::new();
@@ -47,8 +44,8 @@ impl ShardBm25 {
             .into_iter()
             .map(|(id, text)| Document::new(id, text))
             .collect();
-        let engine = SearchEngineBuilder::with_tokenizer_and_documents(FathomTokenizer, docs)
-            .build();
+        let engine =
+            SearchEngineBuilder::with_tokenizer_and_documents(FathomTokenizer, docs).build();
         ShardBm25(engine)
     }
 
@@ -93,7 +90,10 @@ mod build_tests {
     fn build_index_then_score_handles_all_stopword_query() {
         let chunks = vec![
             ("c1".to_string(), "I think therefore I am".to_string()),
-            ("c2".to_string(), "unrelated text about something else".to_string()),
+            (
+                "c2".to_string(),
+                "unrelated text about something else".to_string(),
+            ),
         ];
         let idx = ShardBm25::build(chunks);
         let hits = idx.score("I think therefore I am", 10);

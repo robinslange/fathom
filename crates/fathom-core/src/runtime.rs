@@ -447,15 +447,17 @@ impl Runtime {
 
         let mode = fusion_mode_from_env();
         let fused: Vec<crate::fusion::Hit> = match mode {
-            FusionMode::Rrf       => crate::fusion::rrf_fuse(&dense, &bm25, rrf_k_from_env()),
+            FusionMode::Rrf => crate::fusion::rrf_fuse(&dense, &bm25, rrf_k_from_env()),
             FusionMode::Linear(a) => crate::fusion::linear_fuse(&dense, &bm25, a),
             FusionMode::DenseOnly => dense.iter().take(top_n).cloned().collect(),
-            FusionMode::Bm25Only  => bm25.iter().take(top_n).cloned().collect(),
+            FusionMode::Bm25Only => bm25.iter().take(top_n).cloned().collect(),
         };
 
         use std::collections::HashMap;
-        let dense_lookup: HashMap<(u32, String), f32> =
-            dense.iter().map(|(g, c, s)| ((*g, c.clone()), *s)).collect();
+        let dense_lookup: HashMap<(u32, String), f32> = dense
+            .iter()
+            .map(|(g, c, s)| ((*g, c.clone()), *s))
+            .collect();
         let bm25_lookup: HashMap<(u32, String), f32> =
             bm25.iter().map(|(g, c, s)| ((*g, c.clone()), *s)).collect();
 
@@ -482,7 +484,12 @@ impl Runtime {
         Ok(hits)
     }
 
-    fn alias_hits(&self, gutenberg_ids: &[u32], shards: &[Arc<Shard>], top_n: usize) -> Vec<SearchHit> {
+    fn alias_hits(
+        &self,
+        gutenberg_ids: &[u32],
+        shards: &[Arc<Shard>],
+        top_n: usize,
+    ) -> Vec<SearchHit> {
         gutenberg_ids
             .iter()
             .filter_map(|gid| {
@@ -566,8 +573,8 @@ fn fusion_mode_from_env() -> FusionMode {
             FusionMode::Linear(a.clamp(0.0, 1.0))
         }
         "dense_only" => FusionMode::DenseOnly,
-        "bm25_only"  => FusionMode::Bm25Only,
-        _            => FusionMode::Rrf,
+        "bm25_only" => FusionMode::Bm25Only,
+        _ => FusionMode::Rrf,
     }
 }
 
@@ -749,7 +756,9 @@ mod tests {
 
     #[tokio::test]
     async fn wire_to_shard_builds_searchable_bm25_index() {
-        let canonical = "I think therefore I am, said Descartes. The unrelated chunk talks about cats.".to_string();
+        let canonical =
+            "I think therefore I am, said Descartes. The unrelated chunk talks about cats."
+                .to_string();
         let chunk_one_end = "I think therefore I am, said Descartes.".len();
         let wire = ShardWire {
             format_version: SHARD_FORMAT_VERSION,
@@ -773,7 +782,9 @@ mod tests {
                     paragraph_id: "p2".into(),
                     section_id: None,
                     byte_offset_start: chunk_one_end + 1,
-                    byte_offset_end: chunk_one_end + 1 + "The unrelated chunk talks about cats.".len(),
+                    byte_offset_end: chunk_one_end
+                        + 1
+                        + "The unrelated chunk talks about cats.".len(),
                     token_count: 7,
                     embedding_f16: vec![0u8; 768],
                 },
@@ -784,7 +795,10 @@ mod tests {
         assert_eq!(shard.chunks.len(), 2);
         let hits = shard.bm25.score("I think therefore I am", 10);
         assert!(!hits.is_empty(), "bm25 returned no hits");
-        assert_eq!(hits[0].0, "c1", "expected c1 (Descartes chunk) ranked first");
+        assert_eq!(
+            hits[0].0, "c1",
+            "expected c1 (Descartes chunk) ranked first"
+        );
     }
 
     #[test]
