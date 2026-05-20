@@ -251,6 +251,7 @@ async fn wire_to_shard(wire: ShardWire) -> Result<Shard> {
         .chunks
         .iter()
         .map(|c| {
+            // SAFETY: fathom-chunker writes char-boundary-aligned byte offsets (derived from UAX#29).
             let text = &wire.canonical_text[c.byte_offset_start..c.byte_offset_end];
             (c.chunk_id.clone(), text.to_string())
         })
@@ -512,6 +513,7 @@ fn cosine(a: &[f32], b: &[f32]) -> f32 {
 
 fn chunk_excerpt(canonical: &str, chunk: &ShardChunk) -> String {
     const MAX: usize = 200;
+    // SAFETY: fathom-chunker writes char-boundary-aligned byte offsets (derived from UAX#29).
     let slice = &canonical[chunk.byte_offset_start..chunk.byte_offset_end];
     if slice.len() <= MAX {
         slice.to_string()
