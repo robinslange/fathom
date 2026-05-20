@@ -208,7 +208,7 @@ pub struct Shard {
     pub embed_model_id: String,
     pub canonical_text: String,
     pub chunks: Vec<ShardChunk>,
-    pub bm25: Arc<crate::bm25_index::ShardBm25>,
+    pub(crate) bm25: Arc<crate::bm25_index::ShardBm25>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -647,5 +647,45 @@ mod tests {
         let b = vec![0.0f32, 1.0, 0.0, 0.0];
         let sim = cosine(&a, &b);
         assert!(sim.abs() < 1e-6, "got {sim}");
+    }
+
+    #[tokio::test]
+    async fn wire_to_shard_builds_searchable_bm25_index() {
+        let canonical = "I think therefore I am, said Descartes. The unrelated chunk talks about cats.".to_string();
+        let chunk_one_end = "I think therefore I am, said Descartes.".len();
+        let wire = ShardWire {
+            format_version: SHARD_FORMAT_VERSION,
+            gutenberg_id: 42,
+            title: "test".into(),
+            translators: vec![],
+            embed_model_id: "test".into(),
+            canonical_text: canonical,
+            chunks: vec![
+                ShardChunk {
+                    chunk_id: "c1".into(),
+                    paragraph_id: "p1".into(),
+                    section_id: None,
+                    byte_offset_start: 0,
+                    byte_offset_end: chunk_one_end,
+                    token_count: 8,
+                    embedding_f16: vec![0u8; 768],
+                },
+                ShardChunk {
+                    chunk_id: "c2".into(),
+                    paragraph_id: "p2".into(),
+                    section_id: None,
+                    byte_offset_start: chunk_one_end + 1,
+                    byte_offset_end: chunk_one_end + 1 + "The unrelated chunk talks about cats.".len(),
+                    token_count: 7,
+                    embedding_f16: vec![0u8; 768],
+                },
+            ],
+        };
+        let shard = wire_to_shard(wire).await.expect("wire_to_shard succeeds");
+        assert_eq!(shard.gutenberg_id, 42);
+        assert_eq!(shard.chunks.len(), 2);
+        let hits = shard.bm25.score("I think therefore I am", 10);
+        assert!(!hits.is_empty(), "bm25 returned no hits");
+        assert_eq!(hits[0].0, "c1", "expected c1 (Descartes chunk) ranked first");
     }
 }
