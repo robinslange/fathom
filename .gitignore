@@ -36,3 +36,4 @@ docs/superpowers/
 
 # Wrangler local OAuth cache
 .wrangler/
+crates/fathom-bench/results/v0.21.1-sweep/

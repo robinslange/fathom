@@ -4,6 +4,7 @@
   import { paraphrase } from "./use-paraphrase.svelte.js";
 
   let viewportEl: HTMLDivElement | null = $state(null);
+  let pageWindowEl: HTMLDivElement | null = $state(null);
   let flowEl: HTMLDivElement | null = $state(null);
   let columnStride = $state(0);
 
@@ -25,24 +26,42 @@
     return () => ro.disconnect();
   });
 
-  // Cap the reading measure to a typographically sane width. 65ch ≈ 60-75
-  // chars per line, the standard sweet spot for prose readability. The
-  // remaining horizontal space becomes gutter the popover can occupy.
+  // Reading-measure constants:
+  // - MAX_MEASURE_PX: max column width (~65ch readability sweet spot)
+  // - MIN_MEASURE_PX: floor so we never crush the column unreadable
+  // - MIN_GUTTER_PX: room left for popover on at least one side
   const MAX_MEASURE_PX = 680;
+  const MIN_MEASURE_PX = 480;
+  const MIN_GUTTER_PX = 120;
 
   function measure() {
-    if (!viewportEl || !flowEl) return;
+    if (!viewportEl || !pageWindowEl || !flowEl) return;
     const viewportW = viewportEl.clientWidth;
     const h = viewportEl.clientHeight;
     if (!viewportW || !h) return;
-    const columnW = Math.min(viewportW, MAX_MEASURE_PX);
+
+    const widthAfterGutters = viewportW - MIN_GUTTER_PX * 2;
+    let columnW = Math.max(
+      MIN_MEASURE_PX,
+      Math.min(MAX_MEASURE_PX, widthAfterGutters),
+    );
+    // Narrow viewport: take everything; popover falls back to overlap.
+    if (columnW > viewportW) columnW = viewportW;
+
     const gap = 64;
     columnStride = columnW + gap;
+
+    // Clip tight to the active column so adjacent multi-column overflow
+    // can't bleed into the gutters.
+    pageWindowEl.style.width = `${columnW}px`;
+    pageWindowEl.style.height = `${h}px`;
+
     flowEl.style.height = `${h}px`;
     flowEl.style.columnWidth = `${columnW}px`;
     flowEl.style.columnGap = `${gap}px`;
     flowEl.style.width = `${columnW}px`;
     void flowEl.offsetHeight;
+
     const totalWidth = flowEl.scrollWidth;
     const usableWidth = Math.max(totalWidth - gap, columnW);
     const pageCount = Math.max(1, Math.ceil(usableWidth / columnStride));
@@ -94,18 +113,20 @@
         {/if}
       </header>
       <div class="viewport" bind:this={viewportEl}>
-        <div
-          class="book-flow"
-          bind:this={flowEl}
-          style:transform="translateX(-{library.currentPage * columnStride}px)"
-        >
-          {#each library.paragraphs as p, i (i)}
-            <p
-              data-chunk-id={p.chunkId}
-              data-byte-start={p.byteStart}
-              class:has-chunk={p.chunkId !== ""}
-            >{p.text}</p>
-          {/each}
+        <div class="page-window" bind:this={pageWindowEl}>
+          <div
+            class="book-flow"
+            bind:this={flowEl}
+            style:transform="translateX(-{library.currentPage * columnStride}px)"
+          >
+            {#each library.paragraphs as p, i (i)}
+              <p
+                data-chunk-id={p.chunkId}
+                data-byte-start={p.byteStart}
+                class:has-chunk={p.chunkId !== ""}
+              >{p.text}</p>
+            {/each}
+          </div>
         </div>
       </div>
       <footer class="pagination">
@@ -154,21 +175,24 @@
   .viewport {
     flex: 1 1 auto;
     min-height: 0;
-    overflow: hidden;
     position: relative;
     display: flex;
     justify-content: center;
+    /* No overflow:hidden here so the popover (positioned outside the column)
+       isn't clipped. Clipping happens on .page-window. */
+  }
+
+  .page-window {
+    /* Visible page-sized window. Clips multi-column overflow tightly to
+       the column so adjacent columns can't bleed into the gutters. */
+    overflow: hidden;
+    position: relative;
   }
 
   .book-flow {
-    /* Multi-column horizontal pagination:
-       - column-width = capped measure forces one column per page-stride
-       - column-fill: auto stops the browser balancing across columns
-       - fixed height + width set in JS
-       - content that doesn't fit flows into additional columns laid out
-         to the right; the viewport parent clips overflow-x
-       - centred in the viewport so the gutters either side become space
-         the popover can use without covering the original text */
+    /* Multi-column horizontal pagination: column-width set in JS; columns
+       that don't fit overflow horizontally to the right of .page-window,
+       which clips them. We translateX between pages. */
     column-fill: auto;
     transition: transform 0.18s ease;
     will-change: transform;

@@ -6,6 +6,8 @@ export type SearchHit = {
   chunk_id: string;
   excerpt: string;
   similarity: number;
+  dense_score: number | null;
+  bm25_score: number | null;
 };
 
 class SearchStore {

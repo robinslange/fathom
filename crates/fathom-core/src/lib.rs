@@ -1,4 +1,6 @@
+pub mod bm25_index;
 pub mod bootstrap;
+pub mod fusion;
 pub mod identify;
 pub mod judge;
 pub mod lexicon;

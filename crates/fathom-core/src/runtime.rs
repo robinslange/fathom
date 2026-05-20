@@ -184,9 +184,22 @@ fn verify_signature(manifest_path: &Path, sig_path: &Path) -> Result<()> {
     Ok(())
 }
 
-/// Shard schema as written by `fathom-build shard`. Wire-compat with
-/// `crates/fathom-build/src/shard_format.rs::Shard`.
+/// Wire-format shard (what comes off the network/disk). msgpack/zstd target.
+/// Wire-compat with `crates/fathom-build/src/shard_format.rs::Shard`.
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ShardWire {
+    pub format_version: u32,
+    pub gutenberg_id: u32,
+    pub title: String,
+    pub translators: Vec<TranslatorEntry>,
+    pub embed_model_id: String,
+    pub canonical_text: String,
+    pub chunks: Vec<ShardChunk>,
+}
+
+/// Runtime shard = wire data + per-process BM25 index. The cache stores
+/// `Arc<Shard>` so the index survives evictions only as long as the shard
+/// is live.
 pub struct Shard {
     pub format_version: u32,
     pub gutenberg_id: u32,
@@ -195,6 +208,7 @@ pub struct Shard {
     pub embed_model_id: String,
     pub canonical_text: String,
     pub chunks: Vec<ShardChunk>,
+    pub(crate) bm25: Arc<crate::bm25_index::ShardBm25>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -216,9 +230,9 @@ fn sha256_hex(bytes: &[u8]) -> String {
     format!("{:x}", hasher.finalize())
 }
 
-fn decode_shard(raw: &[u8]) -> Result<Shard> {
+fn decode_shard(raw: &[u8]) -> Result<ShardWire> {
     let decompressed = zstd::decode_all(raw).context("zstd decode shard")?;
-    let shard: Shard = rmp_serde::from_slice(&decompressed).context("decode shard msgpack")?;
+    let shard: ShardWire = rmp_serde::from_slice(&decompressed).context("decode shard msgpack")?;
     if shard.format_version != SHARD_FORMAT_VERSION {
         anyhow::bail!(
             "shard format_version {} != runtime {}",
@@ -227,6 +241,36 @@ fn decode_shard(raw: &[u8]) -> Result<Shard> {
         );
     }
     Ok(shard)
+}
+
+/// Promote a ShardWire to a Shard by building its BM25 index. Runs the
+/// build on the blocking pool so we don't hold the async runtime for the
+/// tokenise pass.
+async fn wire_to_shard(wire: ShardWire) -> Result<Shard> {
+    let chunks_for_bm25: Vec<(String, String)> = wire
+        .chunks
+        .iter()
+        .map(|c| {
+            // SAFETY: fathom-chunker writes char-boundary-aligned byte offsets (derived from UAX#29).
+            let text = &wire.canonical_text[c.byte_offset_start..c.byte_offset_end];
+            (c.chunk_id.clone(), text.to_string())
+        })
+        .collect();
+    let bm25 = tokio::task::spawn_blocking(move || {
+        Arc::new(crate::bm25_index::ShardBm25::build(chunks_for_bm25))
+    })
+    .await
+    .context("bm25 build join")?;
+    Ok(Shard {
+        format_version: wire.format_version,
+        gutenberg_id: wire.gutenberg_id,
+        title: wire.title,
+        translators: wire.translators,
+        embed_model_id: wire.embed_model_id,
+        canonical_text: wire.canonical_text,
+        chunks: wire.chunks,
+        bm25,
+    })
 }
 
 /// Maximum number of decoded shards to keep in memory. 64 covers most search
@@ -346,54 +390,117 @@ impl Runtime {
         }
 
         let raw = raw.expect("loop above must populate raw or bail");
-        let shard = match decode_shard(&raw) {
+        let wire = match decode_shard(&raw) {
             Ok(s) => s,
             Err(e) => {
                 tokio::fs::remove_file(&local).await.ok();
                 return Err(e);
             }
         };
+        let shard = wire_to_shard(wire).await?;
         let arc = Arc::new(shard);
         self.shards.lock().await.put(gutenberg_id, arc.clone());
         Ok(arc)
     }
 
-    /// Embed `query` via fathom-embed and rank chunks across all shards
-    /// currently in the LRU cache. Cold cache → empty result. Caller-driven:
-    /// the desktop UI eagerly `load_book`s the manifest's first N books on
-    /// startup, then re-searches as the user reads.
+    /// Hybrid search: iconic-guard → dense + BM25 fanout → fuse.
+    ///
+    /// Mode and k are read from environment variables at call time so the
+    /// bench can toggle them without rebuilding:
+    ///   FATHOM_FUSION_MODE  = rrf | linear | dense_only | bm25_only  (default: rrf)
+    ///   FATHOM_FUSION_ALPHA = 0.0..1.0  (only for linear mode, default: 0.5)
+    ///   FATHOM_RRF_K        = u32       (default: 30 — see fusion::RRF_K_DEFAULT)
     pub async fn search(&self, query: &str, top_n: usize) -> Result<Vec<SearchHit>> {
-        let q = fathom_embed::embed(query).context("embed query")?;
-        // Snapshot Arc<Shard> handles out of the LRU and release the lock
-        // before the kNN scan. The scan is the bulk of the work; holding the
-        // cache mutex across it would block every concurrent ensure_shard /
-        // search call during a prewarm burst.
         let shards: Vec<Arc<Shard>> = {
             let cache = self.shards.lock().await;
             cache.iter().map(|(_, s)| s.clone()).collect()
         };
-        let mut hits: Vec<SearchHit> = Vec::new();
+
+        let alias_ids = crate::fusion::iconic::lookup(query);
+        if !alias_ids.is_empty() {
+            return Ok(self.alias_hits(&alias_ids, &shards, top_n));
+        }
+
+        const FUSION_FANOUT: usize = 500;
+        let candidates_per_list = top_n.max(FUSION_FANOUT);
+
+        let q_dense = fathom_embed::embed(query).context("embed query")?;
+        let mut dense: Vec<crate::fusion::Hit> = Vec::new();
         for shard in &shards {
             for chunk in &shard.chunks {
                 let v = fathom_embed::from_f16_bytes(&chunk.embedding_f16);
-                let sim = cosine(&q.vector, &v);
-                hits.push(SearchHit {
-                    gutenberg_id: shard.gutenberg_id,
-                    chunk_id: chunk.chunk_id.clone(),
-                    excerpt: chunk_excerpt(&shard.canonical_text, chunk),
-                    similarity: sim,
-                });
+                let sim = cosine(&q_dense.vector, &v);
+                dense.push((shard.gutenberg_id, chunk.chunk_id.clone(), sim));
             }
         }
-        hits.sort_by(|a, b| {
-            b.similarity
-                .partial_cmp(&a.similarity)
-                .unwrap_or(std::cmp::Ordering::Equal)
-                .then_with(|| a.gutenberg_id.cmp(&b.gutenberg_id))
-                .then_with(|| a.chunk_id.cmp(&b.chunk_id))
-        });
-        hits.truncate(top_n);
+        crate::fusion::sort_with_lexicographic_tiebreak(&mut dense);
+        dense.truncate(candidates_per_list);
+
+        let mut bm25: Vec<crate::fusion::Hit> = Vec::new();
+        for shard in &shards {
+            for (cid, score) in shard.bm25.score(query, candidates_per_list) {
+                bm25.push((shard.gutenberg_id, cid, score));
+            }
+        }
+        crate::fusion::sort_with_lexicographic_tiebreak(&mut bm25);
+        bm25.truncate(candidates_per_list);
+
+        let mode = fusion_mode_from_env();
+        let fused: Vec<crate::fusion::Hit> = match mode {
+            FusionMode::Rrf       => crate::fusion::rrf_fuse(&dense, &bm25, rrf_k_from_env()),
+            FusionMode::Linear(a) => crate::fusion::linear_fuse(&dense, &bm25, a),
+            FusionMode::DenseOnly => dense.iter().take(top_n).cloned().collect(),
+            FusionMode::Bm25Only  => bm25.iter().take(top_n).cloned().collect(),
+        };
+
+        use std::collections::HashMap;
+        let dense_lookup: HashMap<(u32, String), f32> =
+            dense.iter().map(|(g, c, s)| ((*g, c.clone()), *s)).collect();
+        let bm25_lookup: HashMap<(u32, String), f32> =
+            bm25.iter().map(|(g, c, s)| ((*g, c.clone()), *s)).collect();
+
+        let hits: Vec<SearchHit> = fused
+            .into_iter()
+            .take(top_n)
+            .map(|(gid, cid, fused_score)| {
+                let shard = shards.iter().find(|s| s.gutenberg_id == gid);
+                let excerpt = shard
+                    .and_then(|s| s.chunks.iter().find(|c| c.chunk_id == cid).map(|c| (s, c)))
+                    .map(|(s, c)| chunk_excerpt(&s.canonical_text, c))
+                    .unwrap_or_default();
+                let key = (gid, cid.clone());
+                SearchHit {
+                    gutenberg_id: gid,
+                    chunk_id: cid,
+                    excerpt,
+                    similarity: fused_score,
+                    dense_score: dense_lookup.get(&key).copied(),
+                    bm25_score: bm25_lookup.get(&key).copied(),
+                }
+            })
+            .collect();
         Ok(hits)
+    }
+
+    fn alias_hits(&self, gutenberg_ids: &[u32], shards: &[Arc<Shard>], top_n: usize) -> Vec<SearchHit> {
+        gutenberg_ids
+            .iter()
+            .filter_map(|gid| {
+                let shard = shards.iter().find(|s| s.gutenberg_id == *gid)?;
+                let chunk = shard.chunks.first()?;
+                Some(SearchHit {
+                    gutenberg_id: *gid,
+                    chunk_id: chunk.chunk_id.clone(),
+                    excerpt: chunk_excerpt(&shard.canonical_text, chunk),
+                    // Sentinel value: alias hits short-circuit fusion and aren't sorted
+                    // against RRF/CC scores. UI treats this as a marker of curated relevance.
+                    similarity: 1.0,
+                    dense_score: None,
+                    bm25_score: None,
+                })
+            })
+            .take(top_n)
+            .collect()
     }
 
     /// Snap a document-absolute byte-offset selection (which may span chunks)
@@ -440,13 +547,49 @@ impl Runtime {
     }
 }
 
-/// Search hit: book + chunk + similarity score + an excerpt for previewing.
+#[derive(Debug, Clone, Copy)]
+enum FusionMode {
+    Rrf,
+    Linear(f32),
+    DenseOnly,
+    Bm25Only,
+}
+
+fn fusion_mode_from_env() -> FusionMode {
+    let mode = std::env::var("FATHOM_FUSION_MODE").unwrap_or_else(|_| "rrf".into());
+    match mode.as_str() {
+        "linear" => {
+            let a: f32 = std::env::var("FATHOM_FUSION_ALPHA")
+                .ok()
+                .and_then(|s| s.parse().ok())
+                .unwrap_or(0.5);
+            FusionMode::Linear(a.clamp(0.0, 1.0))
+        }
+        "dense_only" => FusionMode::DenseOnly,
+        "bm25_only"  => FusionMode::Bm25Only,
+        _            => FusionMode::Rrf,
+    }
+}
+
+fn rrf_k_from_env() -> u32 {
+    std::env::var("FATHOM_RRF_K")
+        .ok()
+        .and_then(|s| s.parse().ok())
+        .unwrap_or(crate::fusion::RRF_K_DEFAULT)
+}
+
+/// Search hit: book + chunk + fused score + an excerpt for previewing.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SearchHit {
     pub gutenberg_id: u32,
     pub chunk_id: String,
     pub excerpt: String,
+    /// Fused score (RRF, linear CC, or single-lane if mode is DenseOnly/Bm25Only).
     pub similarity: f32,
+    /// Dense cosine, set when the dense lane ran. None in `Bm25Only`.
+    pub dense_score: Option<f32>,
+    /// BM25 raw score, set when the BM25 lane ran. None in `DenseOnly`.
+    pub bm25_score: Option<f32>,
 }
 
 /// Cosine similarity of two equal-length f32 vectors. bge-small outputs are
@@ -468,6 +611,7 @@ fn cosine(a: &[f32], b: &[f32]) -> f32 {
 
 fn chunk_excerpt(canonical: &str, chunk: &ShardChunk) -> String {
     const MAX: usize = 200;
+    // SAFETY: fathom-chunker writes char-boundary-aligned byte offsets (derived from UAX#29).
     let slice = &canonical[chunk.byte_offset_start..chunk.byte_offset_end];
     if slice.len() <= MAX {
         slice.to_string()
@@ -543,7 +687,7 @@ mod tests {
     }
 
     fn make_shard(version: u32) -> Vec<u8> {
-        let shard = Shard {
+        let shard = ShardWire {
             format_version: version,
             gutenberg_id: 1,
             title: "test".into(),
@@ -601,5 +745,117 @@ mod tests {
         let b = vec![0.0f32, 1.0, 0.0, 0.0];
         let sim = cosine(&a, &b);
         assert!(sim.abs() < 1e-6, "got {sim}");
+    }
+
+    #[tokio::test]
+    async fn wire_to_shard_builds_searchable_bm25_index() {
+        let canonical = "I think therefore I am, said Descartes. The unrelated chunk talks about cats.".to_string();
+        let chunk_one_end = "I think therefore I am, said Descartes.".len();
+        let wire = ShardWire {
+            format_version: SHARD_FORMAT_VERSION,
+            gutenberg_id: 42,
+            title: "test".into(),
+            translators: vec![],
+            embed_model_id: "test".into(),
+            canonical_text: canonical,
+            chunks: vec![
+                ShardChunk {
+                    chunk_id: "c1".into(),
+                    paragraph_id: "p1".into(),
+                    section_id: None,
+                    byte_offset_start: 0,
+                    byte_offset_end: chunk_one_end,
+                    token_count: 8,
+                    embedding_f16: vec![0u8; 768],
+                },
+                ShardChunk {
+                    chunk_id: "c2".into(),
+                    paragraph_id: "p2".into(),
+                    section_id: None,
+                    byte_offset_start: chunk_one_end + 1,
+                    byte_offset_end: chunk_one_end + 1 + "The unrelated chunk talks about cats.".len(),
+                    token_count: 7,
+                    embedding_f16: vec![0u8; 768],
+                },
+            ],
+        };
+        let shard = wire_to_shard(wire).await.expect("wire_to_shard succeeds");
+        assert_eq!(shard.gutenberg_id, 42);
+        assert_eq!(shard.chunks.len(), 2);
+        let hits = shard.bm25.score("I think therefore I am", 10);
+        assert!(!hits.is_empty(), "bm25 returned no hits");
+        assert_eq!(hits[0].0, "c1", "expected c1 (Descartes chunk) ranked first");
+    }
+
+    #[test]
+    fn fusion_mode_from_env_dispatches_correctly() {
+        use std::env;
+        let prior_mode = env::var("FATHOM_FUSION_MODE").ok();
+        let prior_alpha = env::var("FATHOM_FUSION_ALPHA").ok();
+
+        env::remove_var("FATHOM_FUSION_MODE");
+        env::remove_var("FATHOM_FUSION_ALPHA");
+        assert!(matches!(fusion_mode_from_env(), FusionMode::Rrf));
+
+        env::set_var("FATHOM_FUSION_MODE", "dense_only");
+        assert!(matches!(fusion_mode_from_env(), FusionMode::DenseOnly));
+
+        env::set_var("FATHOM_FUSION_MODE", "bm25_only");
+        assert!(matches!(fusion_mode_from_env(), FusionMode::Bm25Only));
+
+        env::set_var("FATHOM_FUSION_MODE", "linear");
+        env::set_var("FATHOM_FUSION_ALPHA", "0.3");
+        let m = fusion_mode_from_env();
+        match m {
+            FusionMode::Linear(a) => assert!((a - 0.3).abs() < 1e-6),
+            _ => panic!("expected Linear"),
+        }
+
+        match prior_mode {
+            Some(v) => env::set_var("FATHOM_FUSION_MODE", v),
+            None => env::remove_var("FATHOM_FUSION_MODE"),
+        }
+        match prior_alpha {
+            Some(v) => env::set_var("FATHOM_FUSION_ALPHA", v),
+            None => env::remove_var("FATHOM_FUSION_ALPHA"),
+        }
+    }
+
+    #[tokio::test]
+    async fn alias_hits_returns_sentinel_similarity_and_none_components() {
+        let wire = ShardWire {
+            format_version: SHARD_FORMAT_VERSION,
+            gutenberg_id: 42,
+            title: "test".into(),
+            translators: vec![],
+            embed_model_id: "test".into(),
+            canonical_text: "first chunk text.".into(),
+            chunks: vec![ShardChunk {
+                chunk_id: "c1".into(),
+                paragraph_id: "p1".into(),
+                section_id: None,
+                byte_offset_start: 0,
+                byte_offset_end: "first chunk text.".len(),
+                token_count: 3,
+                embedding_f16: vec![0u8; 768],
+            }],
+        };
+        let shard = Arc::new(wire_to_shard(wire).await.unwrap());
+        let manifest = Manifest {
+            manifest_version: 1,
+            build_id: "test".into(),
+            generated: "2026-01-01T00:00:00Z".into(),
+            embed_model_id: "test".into(),
+            embed_dims: 384,
+            book_count: 0,
+            books: vec![],
+        };
+        let runtime = Runtime::new(manifest);
+        let hits = runtime.alias_hits(&[42], &[shard], 10);
+        assert_eq!(hits.len(), 1);
+        assert_eq!(hits[0].gutenberg_id, 42);
+        assert!((hits[0].similarity - 1.0).abs() < 1e-6);
+        assert!(hits[0].dense_score.is_none());
+        assert!(hits[0].bm25_score.is_none());
     }
 }

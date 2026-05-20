@@ -22,6 +22,14 @@ use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use std::time::Instant;
 
+#[derive(Clone, Copy, Debug, clap::ValueEnum)]
+enum FusionModeArg {
+    Rrf,
+    Linear,
+    DenseOnly,
+    Bm25Only,
+}
+
 #[derive(Parser)]
 struct Args {
     /// Limit to the first N books (for smoke testing — recall numbers won't be comparable across runs).
@@ -39,6 +47,16 @@ struct Args {
     /// Override the results output directory.
     #[arg(long)]
     output_dir: Option<PathBuf>,
+    /// Fusion mode for the hybrid retrieval lane.
+    #[arg(long, value_enum, default_value_t = FusionModeArg::Rrf)]
+    fusion_mode: FusionModeArg,
+    /// Alpha for linear convex combination (only used when --fusion-mode=linear).
+    #[arg(long, default_value_t = 0.5)]
+    fusion_alpha: f32,
+    /// k for RRF (only used when --fusion-mode=rrf). Default matches the
+    /// library's `fusion::RRF_K_DEFAULT` after the v0.21.1 calibration sweep.
+    #[arg(long, default_value_t = 30)]
+    rrf_k: u32,
 }
 
 #[derive(Debug, Deserialize)]
@@ -161,6 +179,15 @@ struct Summary {
 #[tokio::main]
 async fn main() -> Result<()> {
     let args = Args::parse();
+
+    match args.fusion_mode {
+        FusionModeArg::Rrf => std::env::set_var("FATHOM_FUSION_MODE", "rrf"),
+        FusionModeArg::Linear => std::env::set_var("FATHOM_FUSION_MODE", "linear"),
+        FusionModeArg::DenseOnly => std::env::set_var("FATHOM_FUSION_MODE", "dense_only"),
+        FusionModeArg::Bm25Only => std::env::set_var("FATHOM_FUSION_MODE", "bm25_only"),
+    }
+    std::env::set_var("FATHOM_FUSION_ALPHA", args.fusion_alpha.to_string());
+    std::env::set_var("FATHOM_RRF_K", args.rrf_k.to_string());
 
     let queries_path = args
         .queries
