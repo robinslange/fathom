@@ -9,50 +9,67 @@
   let popoverEl: HTMLDivElement | null = $state(null);
   let metaOpen = $state(false);
 
-  // Place the popover in whichever vertical or horizontal gutter has room,
-  // preferring the side beside the selection so we never cover the source
-  // text. Order: right gutter → left gutter → above → below.
-  //
-  // The popover is also clamped to a max-height of viewportH minus margins,
-  // and the body scrolls internally when content exceeds that. This keeps
-  // long paraphrases + glossaries inside the viewport regardless of where
-  // the selection sits on the page.
+  // Track measured height so the placement math stays in sync with the
+  // rendered popover. Updated post-mount via a ResizeObserver.
+  let measuredH = $state(260);
+
+  $effect(() => {
+    if (!popoverEl) return;
+    const ro = new ResizeObserver((entries) => {
+      const h = entries[0]?.contentRect.height;
+      if (h && h > 0) measuredH = h;
+    });
+    ro.observe(popoverEl);
+    return () => ro.disconnect();
+  });
+
+  // Place the popover in whichever gutter has room, preferring beside the
+  // selection so we never cover the source text. Order: right → left →
+  // above → below. After choosing `top`, derive `maxH` from the remaining
+  // vertical space so the popover can never extend past the viewport.
   let position = $derived.by(() => {
     const rect = paraphrase.selectionRect;
     if (!rect) return null;
     const viewportW = window.innerWidth;
     const viewportH = window.innerHeight;
-    const maxH = viewportH - VIEWPORT_MARGIN * 2;
-    // Use scrollHeight so the desired (unclamped) height drives placement;
-    // the actual rendered height is capped by max-height in CSS.
-    const desiredH = popoverEl?.scrollHeight ?? 260;
-    const popH = Math.min(desiredH, maxH);
+    const viewportCap = viewportH - VIEWPORT_MARGIN * 2;
+    const popH = Math.min(measuredH, viewportCap);
 
     const rightGutter = viewportW - rect.right - GAP_FROM_SELECTION - VIEWPORT_MARGIN;
     const leftGutter = rect.left - GAP_FROM_SELECTION - VIEWPORT_MARGIN;
 
+    let placement: { top: number; left: number };
     if (rightGutter >= POPOVER_WIDTH) {
-      const top = clampVertical(rect.top + rect.height / 2 - popH / 2, popH, viewportH);
-      return { top, left: rect.right + GAP_FROM_SELECTION, maxH };
-    }
-    if (leftGutter >= POPOVER_WIDTH) {
-      const top = clampVertical(rect.top + rect.height / 2 - popH / 2, popH, viewportH);
-      return { top, left: rect.left - GAP_FROM_SELECTION - POPOVER_WIDTH, maxH };
+      placement = {
+        top: clampVertical(rect.top + rect.height / 2 - popH / 2, popH, viewportH),
+        left: rect.right + GAP_FROM_SELECTION,
+      };
+    } else if (leftGutter >= POPOVER_WIDTH) {
+      placement = {
+        top: clampVertical(rect.top + rect.height / 2 - popH / 2, popH, viewportH),
+        left: rect.left - GAP_FROM_SELECTION - POPOVER_WIDTH,
+      };
+    } else {
+      const preferredTop = rect.top - popH - GAP_FROM_SELECTION;
+      const flipBelow = preferredTop < VIEWPORT_MARGIN;
+      const top = flipBelow ? rect.bottom + GAP_FROM_SELECTION : preferredTop;
+      const center = rect.left + rect.width / 2;
+      let left = center - POPOVER_WIDTH / 2;
+      left = Math.max(VIEWPORT_MARGIN, Math.min(left, viewportW - POPOVER_WIDTH - VIEWPORT_MARGIN));
+      placement = { top: clampVertical(top, popH, viewportH), left };
     }
 
-    // Fall back: above the selection, flipping below if not enough room.
-    const preferredTop = rect.top - popH - GAP_FROM_SELECTION;
-    const flipBelow = preferredTop < VIEWPORT_MARGIN;
-    const top = flipBelow ? rect.bottom + GAP_FROM_SELECTION : preferredTop;
-    const center = rect.left + rect.width / 2;
-    let left = center - POPOVER_WIDTH / 2;
-    left = Math.max(VIEWPORT_MARGIN, Math.min(left, viewportW - POPOVER_WIDTH - VIEWPORT_MARGIN));
+    // Defensive: clamp left horizontally regardless of which branch picked it.
+    placement.left = Math.max(
+      VIEWPORT_MARGIN,
+      Math.min(placement.left, viewportW - POPOVER_WIDTH - VIEWPORT_MARGIN),
+    );
 
-    return {
-      top: clampVertical(top, popH, viewportH),
-      left,
-      maxH,
-    };
+    // max-height is the remaining viewport space below `top`, so the popover
+    // can never extend past the bottom regardless of content length.
+    const maxH = viewportH - placement.top - VIEWPORT_MARGIN;
+
+    return { ...placement, maxH };
   });
 
   function clampVertical(top: number, popH: number, viewportH: number): number {
