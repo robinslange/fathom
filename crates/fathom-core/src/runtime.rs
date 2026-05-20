@@ -403,42 +403,102 @@ impl Runtime {
         Ok(arc)
     }
 
-    /// Embed `query` via fathom-embed and rank chunks across all shards
-    /// currently in the LRU cache. Cold cache → empty result. Caller-driven:
-    /// the desktop UI eagerly `load_book`s the manifest's first N books on
-    /// startup, then re-searches as the user reads.
+    /// Hybrid search: iconic-guard → dense + BM25 fanout → fuse.
+    ///
+    /// Mode and k are read from environment variables at call time so the
+    /// bench can toggle them without rebuilding:
+    ///   FATHOM_FUSION_MODE  = rrf | linear | dense_only | bm25_only  (default: rrf)
+    ///   FATHOM_FUSION_ALPHA = 0.0..1.0  (only for linear mode, default: 0.5)
+    ///   FATHOM_RRF_K        = u32       (default: 10)
     pub async fn search(&self, query: &str, top_n: usize) -> Result<Vec<SearchHit>> {
-        let q = fathom_embed::embed(query).context("embed query")?;
-        // Snapshot Arc<Shard> handles out of the LRU and release the lock
-        // before the kNN scan. The scan is the bulk of the work; holding the
-        // cache mutex across it would block every concurrent ensure_shard /
-        // search call during a prewarm burst.
         let shards: Vec<Arc<Shard>> = {
             let cache = self.shards.lock().await;
             cache.iter().map(|(_, s)| s.clone()).collect()
         };
-        let mut hits: Vec<SearchHit> = Vec::new();
+
+        let alias_ids = crate::fusion::iconic::lookup(query);
+        if !alias_ids.is_empty() {
+            return Ok(self.alias_hits(&alias_ids, &shards, top_n));
+        }
+
+        const FUSION_FANOUT: usize = 500;
+        let candidates_per_list = top_n.max(FUSION_FANOUT);
+
+        let q_dense = fathom_embed::embed(query).context("embed query")?;
+        let mut dense: Vec<crate::fusion::Hit> = Vec::new();
         for shard in &shards {
             for chunk in &shard.chunks {
                 let v = fathom_embed::from_f16_bytes(&chunk.embedding_f16);
-                let sim = cosine(&q.vector, &v);
-                hits.push(SearchHit {
-                    gutenberg_id: shard.gutenberg_id,
-                    chunk_id: chunk.chunk_id.clone(),
-                    excerpt: chunk_excerpt(&shard.canonical_text, chunk),
-                    similarity: sim,
-                });
+                let sim = cosine(&q_dense.vector, &v);
+                dense.push((shard.gutenberg_id, chunk.chunk_id.clone(), sim));
             }
         }
-        hits.sort_by(|a, b| {
-            b.similarity
-                .partial_cmp(&a.similarity)
-                .unwrap_or(std::cmp::Ordering::Equal)
-                .then_with(|| a.gutenberg_id.cmp(&b.gutenberg_id))
-                .then_with(|| a.chunk_id.cmp(&b.chunk_id))
-        });
-        hits.truncate(top_n);
+        crate::fusion::sort_with_lexicographic_tiebreak(&mut dense);
+        dense.truncate(candidates_per_list);
+
+        let mut bm25: Vec<crate::fusion::Hit> = Vec::new();
+        for shard in &shards {
+            for (cid, score) in shard.bm25.score(query, candidates_per_list) {
+                bm25.push((shard.gutenberg_id, cid, score));
+            }
+        }
+        crate::fusion::sort_with_lexicographic_tiebreak(&mut bm25);
+        bm25.truncate(candidates_per_list);
+
+        let mode = fusion_mode_from_env();
+        let fused: Vec<crate::fusion::Hit> = match mode {
+            FusionMode::Rrf       => crate::fusion::rrf_fuse(&dense, &bm25, rrf_k_from_env()),
+            FusionMode::Linear(a) => crate::fusion::linear_fuse(&dense, &bm25, a),
+            FusionMode::DenseOnly => dense.clone(),
+            FusionMode::Bm25Only  => bm25.clone(),
+        };
+
+        use std::collections::HashMap;
+        let dense_lookup: HashMap<(u32, String), f32> =
+            dense.iter().map(|(g, c, s)| ((*g, c.clone()), *s)).collect();
+        let bm25_lookup: HashMap<(u32, String), f32> =
+            bm25.iter().map(|(g, c, s)| ((*g, c.clone()), *s)).collect();
+
+        let hits: Vec<SearchHit> = fused
+            .into_iter()
+            .take(top_n)
+            .map(|(gid, cid, fused_score)| {
+                let shard = shards.iter().find(|s| s.gutenberg_id == gid);
+                let excerpt = shard
+                    .and_then(|s| s.chunks.iter().find(|c| c.chunk_id == cid).map(|c| (s, c)))
+                    .map(|(s, c)| chunk_excerpt(&s.canonical_text, c))
+                    .unwrap_or_default();
+                let key = (gid, cid.clone());
+                SearchHit {
+                    gutenberg_id: gid,
+                    chunk_id: cid,
+                    excerpt,
+                    similarity: fused_score,
+                    dense_score: dense_lookup.get(&key).copied(),
+                    bm25_score: bm25_lookup.get(&key).copied(),
+                }
+            })
+            .collect();
         Ok(hits)
+    }
+
+    fn alias_hits(&self, gutenberg_ids: &[u32], shards: &[Arc<Shard>], top_n: usize) -> Vec<SearchHit> {
+        gutenberg_ids
+            .iter()
+            .filter_map(|gid| {
+                let shard = shards.iter().find(|s| s.gutenberg_id == *gid)?;
+                let chunk = shard.chunks.first()?;
+                Some(SearchHit {
+                    gutenberg_id: *gid,
+                    chunk_id: chunk.chunk_id.clone(),
+                    excerpt: chunk_excerpt(&shard.canonical_text, chunk),
+                    similarity: 1.0,
+                    dense_score: None,
+                    bm25_score: None,
+                })
+            })
+            .take(top_n)
+            .collect()
     }
 
     /// Snap a document-absolute byte-offset selection (which may span chunks)
@@ -485,13 +545,49 @@ impl Runtime {
     }
 }
 
-/// Search hit: book + chunk + similarity score + an excerpt for previewing.
+#[derive(Debug, Clone, Copy)]
+enum FusionMode {
+    Rrf,
+    Linear(f32),
+    DenseOnly,
+    Bm25Only,
+}
+
+fn fusion_mode_from_env() -> FusionMode {
+    let mode = std::env::var("FATHOM_FUSION_MODE").unwrap_or_else(|_| "rrf".into());
+    match mode.as_str() {
+        "linear" => {
+            let a: f32 = std::env::var("FATHOM_FUSION_ALPHA")
+                .ok()
+                .and_then(|s| s.parse().ok())
+                .unwrap_or(0.5);
+            FusionMode::Linear(a.clamp(0.0, 1.0))
+        }
+        "dense_only" => FusionMode::DenseOnly,
+        "bm25_only"  => FusionMode::Bm25Only,
+        _            => FusionMode::Rrf,
+    }
+}
+
+fn rrf_k_from_env() -> u32 {
+    std::env::var("FATHOM_RRF_K")
+        .ok()
+        .and_then(|s| s.parse().ok())
+        .unwrap_or(crate::fusion::RRF_K_DEFAULT)
+}
+
+/// Search hit: book + chunk + fused score + an excerpt for previewing.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SearchHit {
     pub gutenberg_id: u32,
     pub chunk_id: String,
     pub excerpt: String,
+    /// Fused score (RRF, linear CC, or single-lane if mode is DenseOnly/Bm25Only).
     pub similarity: f32,
+    /// Dense cosine, set when the dense lane ran. None in `Bm25Only`.
+    pub dense_score: Option<f32>,
+    /// BM25 raw score, set when the BM25 lane ran. None in `DenseOnly`.
+    pub bm25_score: Option<f32>,
 }
 
 /// Cosine similarity of two equal-length f32 vectors. bge-small outputs are
