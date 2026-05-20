@@ -184,9 +184,22 @@ fn verify_signature(manifest_path: &Path, sig_path: &Path) -> Result<()> {
     Ok(())
 }
 
-/// Shard schema as written by `fathom-build shard`. Wire-compat with
-/// `crates/fathom-build/src/shard_format.rs::Shard`.
+/// Wire-format shard (what comes off the network/disk). msgpack/zstd target.
+/// Wire-compat with `crates/fathom-build/src/shard_format.rs::Shard`.
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ShardWire {
+    pub format_version: u32,
+    pub gutenberg_id: u32,
+    pub title: String,
+    pub translators: Vec<TranslatorEntry>,
+    pub embed_model_id: String,
+    pub canonical_text: String,
+    pub chunks: Vec<ShardChunk>,
+}
+
+/// Runtime shard = wire data + per-process BM25 index. The cache stores
+/// `Arc<Shard>` so the index survives evictions only as long as the shard
+/// is live.
 pub struct Shard {
     pub format_version: u32,
     pub gutenberg_id: u32,
@@ -195,6 +208,7 @@ pub struct Shard {
     pub embed_model_id: String,
     pub canonical_text: String,
     pub chunks: Vec<ShardChunk>,
+    pub bm25: Arc<crate::bm25_index::ShardBm25>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -216,9 +230,9 @@ fn sha256_hex(bytes: &[u8]) -> String {
     format!("{:x}", hasher.finalize())
 }
 
-fn decode_shard(raw: &[u8]) -> Result<Shard> {
+fn decode_shard(raw: &[u8]) -> Result<ShardWire> {
     let decompressed = zstd::decode_all(raw).context("zstd decode shard")?;
-    let shard: Shard = rmp_serde::from_slice(&decompressed).context("decode shard msgpack")?;
+    let shard: ShardWire = rmp_serde::from_slice(&decompressed).context("decode shard msgpack")?;
     if shard.format_version != SHARD_FORMAT_VERSION {
         anyhow::bail!(
             "shard format_version {} != runtime {}",
@@ -227,6 +241,35 @@ fn decode_shard(raw: &[u8]) -> Result<Shard> {
         );
     }
     Ok(shard)
+}
+
+/// Promote a ShardWire to a Shard by building its BM25 index. Runs the
+/// build on the blocking pool so we don't hold the async runtime for the
+/// tokenise pass.
+async fn wire_to_shard(wire: ShardWire) -> Result<Shard> {
+    let chunks_for_bm25: Vec<(String, String)> = wire
+        .chunks
+        .iter()
+        .map(|c| {
+            let text = &wire.canonical_text[c.byte_offset_start..c.byte_offset_end];
+            (c.chunk_id.clone(), text.to_string())
+        })
+        .collect();
+    let bm25 = tokio::task::spawn_blocking(move || {
+        Arc::new(crate::bm25_index::ShardBm25::build(chunks_for_bm25))
+    })
+    .await
+    .context("bm25 build join")?;
+    Ok(Shard {
+        format_version: wire.format_version,
+        gutenberg_id: wire.gutenberg_id,
+        title: wire.title,
+        translators: wire.translators,
+        embed_model_id: wire.embed_model_id,
+        canonical_text: wire.canonical_text,
+        chunks: wire.chunks,
+        bm25,
+    })
 }
 
 /// Maximum number of decoded shards to keep in memory. 64 covers most search
@@ -346,13 +389,14 @@ impl Runtime {
         }
 
         let raw = raw.expect("loop above must populate raw or bail");
-        let shard = match decode_shard(&raw) {
+        let wire = match decode_shard(&raw) {
             Ok(s) => s,
             Err(e) => {
                 tokio::fs::remove_file(&local).await.ok();
                 return Err(e);
             }
         };
+        let shard = wire_to_shard(wire).await?;
         let arc = Arc::new(shard);
         self.shards.lock().await.put(gutenberg_id, arc.clone());
         Ok(arc)
@@ -543,7 +587,7 @@ mod tests {
     }
 
     fn make_shard(version: u32) -> Vec<u8> {
-        let shard = Shard {
+        let shard = ShardWire {
             format_version: version,
             gutenberg_id: 1,
             title: "test".into(),
