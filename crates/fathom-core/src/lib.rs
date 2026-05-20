@@ -1,3 +1,4 @@
+pub mod bm25_index;
 pub mod bootstrap;
 pub mod identify;
 pub mod judge;
