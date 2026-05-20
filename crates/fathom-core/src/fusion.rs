@@ -220,3 +220,85 @@ mod linear_tests {
         assert!(c99.2.is_finite());
     }
 }
+
+/// Curated iconic-phrase alias dictionary, baked into the binary at compile
+/// time via `include_str!`. Match returns the gutenberg_ids associated with
+/// the matched phrase. Empty Vec means no match.
+pub mod iconic {
+    use once_cell::sync::Lazy;
+    use serde::Deserialize;
+
+    #[derive(Debug, Deserialize)]
+    struct File { phrase: Vec<Phrase> }
+
+    #[derive(Debug, Deserialize)]
+    struct Phrase {
+        phrase: String,
+        gutenberg_ids: Vec<u32>,
+        #[allow(dead_code)]
+        source: String,
+    }
+
+    static RAW: &str = include_str!("../data/iconic-phrases.toml");
+
+    static ENTRIES: Lazy<Vec<(String, Vec<u32>)>> = Lazy::new(|| {
+        let f: File = toml::from_str(RAW).expect("iconic-phrases.toml parses");
+        f.phrase
+            .into_iter()
+            .map(|p| (normalise(&p.phrase), p.gutenberg_ids))
+            .collect()
+    });
+
+    pub fn lookup(query: &str) -> Vec<u32> {
+        let n = normalise(query);
+        for (phrase, ids) in ENTRIES.iter() {
+            if n.contains(phrase) || phrase.contains(&n) {
+                return ids.clone();
+            }
+        }
+        Vec::new()
+    }
+
+    fn normalise(s: &str) -> String {
+        use unicode_segmentation::UnicodeSegmentation;
+        s.unicode_words()
+            .map(|w| w.to_lowercase())
+            .collect::<Vec<_>>()
+            .join(" ")
+    }
+}
+
+#[cfg(test)]
+mod iconic_tests {
+    use super::*;
+
+    #[test]
+    fn descartes_query_matches_alias() {
+        let ids = iconic::lookup("I think therefore I am");
+        assert_eq!(ids, vec![59, 25830]);
+    }
+
+    #[test]
+    fn descartes_query_matches_with_punctuation() {
+        let ids = iconic::lookup("I think, therefore I am.");
+        assert_eq!(ids, vec![59, 25830]);
+    }
+
+    #[test]
+    fn latin_descartes_matches() {
+        let ids = iconic::lookup("cogito ergo sum");
+        assert_eq!(ids, vec![59, 25830]);
+    }
+
+    #[test]
+    fn plato_query_matches() {
+        let ids = iconic::lookup("the unexamined life is not worth living");
+        assert_eq!(ids, vec![1656]);
+    }
+
+    #[test]
+    fn arbitrary_query_does_not_match() {
+        let ids = iconic::lookup("what is the meaning of justice");
+        assert!(ids.is_empty());
+    }
+}

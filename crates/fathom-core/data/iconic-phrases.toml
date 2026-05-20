@@ -1,0 +1,29 @@
+# Curated iconic-phrase alias dictionary. Match logic: query normalised
+# (lowercase, NFC, strip punctuation, collapse whitespace), substring match
+# against each phrase normalised the same way. Hit returns the listed
+# gutenberg_ids at rank 1.
+
+[[phrase]]
+phrase = "the unexamined life is not worth living"
+gutenberg_ids = [1656]
+source = "Plato, Apology"
+
+[[phrase]]
+phrase = "i think therefore i am"
+gutenberg_ids = [59, 25830]
+source = "Descartes, Discourse / Meditations"
+
+[[phrase]]
+phrase = "cogito ergo sum"
+gutenberg_ids = [59, 25830]
+source = "Descartes, Discourse / Meditations"
+
+[[phrase]]
+phrase = "the only thing i know is that i know nothing"
+gutenberg_ids = [1656]
+source = "Plato, Apology"
+
+[[phrase]]
+phrase = "appearances are not realities"
+gutenberg_ids = [1497, 1572, 1750]
+source = "Plato, dialogues"
