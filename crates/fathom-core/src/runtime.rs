@@ -449,8 +449,8 @@ impl Runtime {
         let fused: Vec<crate::fusion::Hit> = match mode {
             FusionMode::Rrf       => crate::fusion::rrf_fuse(&dense, &bm25, rrf_k_from_env()),
             FusionMode::Linear(a) => crate::fusion::linear_fuse(&dense, &bm25, a),
-            FusionMode::DenseOnly => dense.clone(),
-            FusionMode::Bm25Only  => bm25.clone(),
+            FusionMode::DenseOnly => dense.iter().take(top_n).cloned().collect(),
+            FusionMode::Bm25Only  => bm25.iter().take(top_n).cloned().collect(),
         };
 
         use std::collections::HashMap;
@@ -492,6 +492,8 @@ impl Runtime {
                     gutenberg_id: *gid,
                     chunk_id: chunk.chunk_id.clone(),
                     excerpt: chunk_excerpt(&shard.canonical_text, chunk),
+                    // Sentinel value: alias hits short-circuit fusion and aren't sorted
+                    // against RRF/CC scores. UI treats this as a marker of curated relevance.
                     similarity: 1.0,
                     dense_score: None,
                     bm25_score: None,
@@ -783,5 +785,77 @@ mod tests {
         let hits = shard.bm25.score("I think therefore I am", 10);
         assert!(!hits.is_empty(), "bm25 returned no hits");
         assert_eq!(hits[0].0, "c1", "expected c1 (Descartes chunk) ranked first");
+    }
+
+    #[test]
+    fn fusion_mode_from_env_dispatches_correctly() {
+        use std::env;
+        let prior_mode = env::var("FATHOM_FUSION_MODE").ok();
+        let prior_alpha = env::var("FATHOM_FUSION_ALPHA").ok();
+
+        env::remove_var("FATHOM_FUSION_MODE");
+        env::remove_var("FATHOM_FUSION_ALPHA");
+        assert!(matches!(fusion_mode_from_env(), FusionMode::Rrf));
+
+        env::set_var("FATHOM_FUSION_MODE", "dense_only");
+        assert!(matches!(fusion_mode_from_env(), FusionMode::DenseOnly));
+
+        env::set_var("FATHOM_FUSION_MODE", "bm25_only");
+        assert!(matches!(fusion_mode_from_env(), FusionMode::Bm25Only));
+
+        env::set_var("FATHOM_FUSION_MODE", "linear");
+        env::set_var("FATHOM_FUSION_ALPHA", "0.3");
+        let m = fusion_mode_from_env();
+        match m {
+            FusionMode::Linear(a) => assert!((a - 0.3).abs() < 1e-6),
+            _ => panic!("expected Linear"),
+        }
+
+        match prior_mode {
+            Some(v) => env::set_var("FATHOM_FUSION_MODE", v),
+            None => env::remove_var("FATHOM_FUSION_MODE"),
+        }
+        match prior_alpha {
+            Some(v) => env::set_var("FATHOM_FUSION_ALPHA", v),
+            None => env::remove_var("FATHOM_FUSION_ALPHA"),
+        }
+    }
+
+    #[tokio::test]
+    async fn alias_hits_returns_sentinel_similarity_and_none_components() {
+        let wire = ShardWire {
+            format_version: SHARD_FORMAT_VERSION,
+            gutenberg_id: 42,
+            title: "test".into(),
+            translators: vec![],
+            embed_model_id: "test".into(),
+            canonical_text: "first chunk text.".into(),
+            chunks: vec![ShardChunk {
+                chunk_id: "c1".into(),
+                paragraph_id: "p1".into(),
+                section_id: None,
+                byte_offset_start: 0,
+                byte_offset_end: "first chunk text.".len(),
+                token_count: 3,
+                embedding_f16: vec![0u8; 768],
+            }],
+        };
+        let shard = Arc::new(wire_to_shard(wire).await.unwrap());
+        let manifest = Manifest {
+            manifest_version: 1,
+            build_id: "test".into(),
+            generated: "2026-01-01T00:00:00Z".into(),
+            embed_model_id: "test".into(),
+            embed_dims: 384,
+            book_count: 0,
+            books: vec![],
+        };
+        let runtime = Runtime::new(manifest);
+        let hits = runtime.alias_hits(&[42], &[shard], 10);
+        assert_eq!(hits.len(), 1);
+        assert_eq!(hits[0].gutenberg_id, 42);
+        assert!((hits[0].similarity - 1.0).abs() < 1e-6);
+        assert!(hits[0].dense_score.is_none());
+        assert!(hits[0].bm25_score.is_none());
     }
 }
