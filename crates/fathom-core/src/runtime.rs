@@ -409,7 +409,7 @@ impl Runtime {
     /// bench can toggle them without rebuilding:
     ///   FATHOM_FUSION_MODE  = rrf | linear | dense_only | bm25_only  (default: rrf)
     ///   FATHOM_FUSION_ALPHA = 0.0..1.0  (only for linear mode, default: 0.5)
-    ///   FATHOM_RRF_K        = u32       (default: 10)
+    ///   FATHOM_RRF_K        = u32       (default: 30 — see fusion::RRF_K_DEFAULT)
     pub async fn search(&self, query: &str, top_n: usize) -> Result<Vec<SearchHit>> {
         let shards: Vec<Arc<Shard>> = {
             let cache = self.shards.lock().await;

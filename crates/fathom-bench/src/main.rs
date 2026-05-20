@@ -53,8 +53,9 @@ struct Args {
     /// Alpha for linear convex combination (only used when --fusion-mode=linear).
     #[arg(long, default_value_t = 0.5)]
     fusion_alpha: f32,
-    /// k for RRF (only used when --fusion-mode=rrf).
-    #[arg(long, default_value_t = 10)]
+    /// k for RRF (only used when --fusion-mode=rrf). Default matches the
+    /// library's `fusion::RRF_K_DEFAULT` after the v0.21.1 calibration sweep.
+    #[arg(long, default_value_t = 30)]
     rrf_k: u32,
 }
 

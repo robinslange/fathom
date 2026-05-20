@@ -104,7 +104,11 @@ mod rrf_tests {
 
     #[test]
     fn low_k_amplifies_rank_one_signal() {
-        // The whole reason we ship k=10 not k=60.
+        // Math property: lower k makes the rank-1 contribution `1/(k+1)` larger.
+        // Calibration (2026-05-20) picked k=30 not k=10, because the dense lane
+        // is strong enough that low-k amplification adds more BM25 noise than
+        // genuine rank-1 rescue. This test still verifies the math; the choice
+        // of default is a separate concern (see fusion::RRF_K_DEFAULT).
         let dense: Vec<Hit> = vec![(1, "c1".into(), 0.9)];
         let bm25: Vec<Hit> = vec![(2, "c2".into(), 5.0)];
         let fused_k10 = rrf_fuse(&dense, &bm25, 10);
