@@ -12,24 +12,32 @@
   // Place the popover in whichever vertical or horizontal gutter has room,
   // preferring the side beside the selection so we never cover the source
   // text. Order: right gutter → left gutter → above → below.
+  //
+  // The popover is also clamped to a max-height of viewportH minus margins,
+  // and the body scrolls internally when content exceeds that. This keeps
+  // long paraphrases + glossaries inside the viewport regardless of where
+  // the selection sits on the page.
   let position = $derived.by(() => {
     const rect = paraphrase.selectionRect;
     if (!rect) return null;
-    const popH = popoverEl?.getBoundingClientRect().height ?? 260;
     const viewportW = window.innerWidth;
     const viewportH = window.innerHeight;
+    const maxH = viewportH - VIEWPORT_MARGIN * 2;
+    // Use scrollHeight so the desired (unclamped) height drives placement;
+    // the actual rendered height is capped by max-height in CSS.
+    const desiredH = popoverEl?.scrollHeight ?? 260;
+    const popH = Math.min(desiredH, maxH);
 
     const rightGutter = viewportW - rect.right - GAP_FROM_SELECTION - VIEWPORT_MARGIN;
     const leftGutter = rect.left - GAP_FROM_SELECTION - VIEWPORT_MARGIN;
 
     if (rightGutter >= POPOVER_WIDTH) {
-      // Sit in the right gutter, vertically aligned with the selection mid.
       const top = clampVertical(rect.top + rect.height / 2 - popH / 2, popH, viewportH);
-      return { top, left: rect.right + GAP_FROM_SELECTION };
+      return { top, left: rect.right + GAP_FROM_SELECTION, maxH };
     }
     if (leftGutter >= POPOVER_WIDTH) {
       const top = clampVertical(rect.top + rect.height / 2 - popH / 2, popH, viewportH);
-      return { top, left: rect.left - GAP_FROM_SELECTION - POPOVER_WIDTH };
+      return { top, left: rect.left - GAP_FROM_SELECTION - POPOVER_WIDTH, maxH };
     }
 
     // Fall back: above the selection, flipping below if not enough room.
@@ -43,6 +51,7 @@
     return {
       top: clampVertical(top, popH, viewportH),
       left,
+      maxH,
     };
   });
 
@@ -69,6 +78,20 @@
     paraphrase.closePopover();
   }
 
+  // Auto-dismiss when the user clears the selection (click blank, arrow
+  // key, select elsewhere). selectionchange also fires for our own snap-
+  // widen on mouseup; we only act when the selection has collapsed.
+  function onSelectionChange() {
+    if (!paraphrase.popoverOpen) return;
+    const sel = document.getSelection();
+    if (!sel) return;
+    const active = document.activeElement as HTMLElement | null;
+    if (active && popoverEl?.contains(active)) return;
+    if (sel.isCollapsed || sel.toString().length === 0) {
+      paraphrase.closePopover();
+    }
+  }
+
   function setTier(t: Tier) {
     if (paraphrase.tier === t) return;
     paraphrase.tier = t;
@@ -77,12 +100,13 @@
 </script>
 
 <svelte:window onkeydown={onKeydown} onmousedown={onOutsideClick} />
+<svelte:document onselectionchange={onSelectionChange} />
 
 {#if paraphrase.popoverOpen && position}
   <div
     bind:this={popoverEl}
     class="popover"
-    style="top: {position.top}px; left: {position.left}px; width: {POPOVER_WIDTH}px"
+    style="top: {position.top}px; left: {position.left}px; width: {POPOVER_WIDTH}px; max-height: {position.maxH}px"
     role="dialog"
     aria-label="Paraphrase"
   >
@@ -220,6 +244,8 @@
     padding: 0.7rem 0.9rem 0.85rem;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
     font-family: "IBM Plex Sans", sans-serif;
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
   .head {
     display: flex;
