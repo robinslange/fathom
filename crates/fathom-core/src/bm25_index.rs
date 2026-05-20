@@ -25,6 +25,89 @@ pub fn tokenise(text: &str) -> Vec<String> {
     out
 }
 
+use bm25::{Document, SearchEngine, SearchEngineBuilder, Tokenizer};
+
+/// Custom tokenizer that delegates to our bigram-aware `tokenise()` function.
+/// This bypasses the bm25 default English stemmer and stopword list entirely.
+struct FathomTokenizer;
+
+impl Tokenizer for FathomTokenizer {
+    fn tokenize(&self, input_text: &str) -> Vec<String> {
+        tokenise(input_text)
+    }
+}
+
+/// Per-shard BM25 engine. One per Shard, built once at shard-decode time.
+pub struct ShardBm25(SearchEngine<String, u32, FathomTokenizer>);
+
+impl ShardBm25 {
+    /// Build a BM25 index over the (chunk_id, chunk_text) pairs of a shard.
+    pub fn build(chunks: impl IntoIterator<Item = (String, String)>) -> Self {
+        let docs: Vec<Document<String>> = chunks
+            .into_iter()
+            .map(|(id, text)| Document::new(id, text))
+            .collect();
+        let engine = SearchEngineBuilder::with_tokenizer_and_documents(FathomTokenizer, docs)
+            .build();
+        ShardBm25(engine)
+    }
+
+    /// Score all chunks against `query`, return (chunk_id, score) pairs sorted
+    /// by descending relevance. Pre-tokenises the query via the same bigram
+    /// pipeline used at index time.
+    pub fn score(&self, query: &str, top_n: usize) -> Vec<(String, f32)> {
+        if query.trim().is_empty() {
+            return Vec::new();
+        }
+        self.0
+            .search(query, top_n)
+            .into_iter()
+            .map(|r| (r.document.id, r.score))
+            .collect()
+    }
+}
+
+#[cfg(test)]
+mod build_tests {
+    use super::*;
+
+    #[test]
+    fn build_index_then_score_finds_verbatim_phrase() {
+        let chunks = vec![
+            (
+                "c1".to_string(),
+                "I think therefore I am, said Descartes.".to_string(),
+            ),
+            (
+                "c2".to_string(),
+                "Sometimes I think about philosophy in general.".to_string(),
+            ),
+        ];
+        let idx = ShardBm25::build(chunks);
+        let hits = idx.score("I think therefore I am", 10);
+        assert!(!hits.is_empty(), "BM25 returned no hits");
+        assert_eq!(hits[0].0, "c1", "expected verbatim chunk at rank 1");
+    }
+
+    #[test]
+    fn build_index_then_score_handles_all_stopword_query() {
+        let chunks = vec![
+            ("c1".to_string(), "I think therefore I am".to_string()),
+            ("c2".to_string(), "unrelated text about something else".to_string()),
+        ];
+        let idx = ShardBm25::build(chunks);
+        let hits = idx.score("I think therefore I am", 10);
+        assert_eq!(hits[0].0, "c1");
+    }
+
+    #[test]
+    fn empty_query_returns_empty() {
+        let idx = ShardBm25::build(vec![("c1".to_string(), "anything".to_string())]);
+        let hits = idx.score("", 10);
+        assert!(hits.is_empty());
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
