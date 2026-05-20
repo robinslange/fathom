@@ -106,6 +106,13 @@ mod build_tests {
         let hits = idx.score("", 10);
         assert!(hits.is_empty());
     }
+
+    #[test]
+    fn score_with_top_n_zero_returns_empty() {
+        let idx = ShardBm25::build(vec![("c1".to_string(), "relevant text".to_string())]);
+        let hits = idx.score("relevant", 0);
+        assert!(hits.is_empty());
+    }
 }
 
 #[cfg(test)]
