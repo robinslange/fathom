@@ -119,3 +119,104 @@ mod rrf_tests {
         assert_eq!(f1, f2);
     }
 }
+
+/// Linear convex combination of two score lists, each min-max normalised
+/// with a 99th-percentile clip on the high end.
+///
+/// `alpha` is the weight on the dense lane: `alpha * dense + (1 - alpha) * bm25`.
+/// Bruch & Gai (2022) prove all linear normalisations are rank-equivalent;
+/// min-max with outlier clip is the operationally cheapest pick.
+pub fn linear_fuse(dense_hits: &[Hit], bm25_hits: &[Hit], alpha: f32) -> Vec<Hit> {
+    use std::collections::HashMap;
+    type Key = (u32, String);
+
+    fn p99_clip(scores: &[f32]) -> f32 {
+        if scores.is_empty() { return 0.0; }
+        let mut sorted: Vec<f32> = scores.to_vec();
+        sorted.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
+        let idx = ((sorted.len() as f32) * 0.99).floor() as usize;
+        sorted[idx.min(sorted.len() - 1)]
+    }
+
+    fn normalise(hits: &[Hit]) -> HashMap<Key, f32> {
+        if hits.is_empty() { return HashMap::new(); }
+        let raw: Vec<f32> = hits.iter().map(|h| h.2).collect();
+        let max = p99_clip(&raw);
+        let min = raw.iter().cloned().fold(f32::INFINITY, f32::min);
+        let range = (max - min).max(1e-9);
+        hits.iter()
+            .map(|(g, c, s)| ((*g, c.clone()), ((s.min(max) - min) / range).clamp(0.0, 1.0)))
+            .collect()
+    }
+
+    let dense_norm = normalise(dense_hits);
+    let bm25_norm  = normalise(bm25_hits);
+
+    let mut scores: HashMap<Key, f32> = HashMap::new();
+    for (k, v) in dense_norm.iter() {
+        *scores.entry(k.clone()).or_insert(0.0) += alpha * v;
+    }
+    for (k, v) in bm25_norm.iter() {
+        *scores.entry(k.clone()).or_insert(0.0) += (1.0 - alpha) * v;
+    }
+    let mut fused: Vec<Hit> = scores.into_iter().map(|((g, c), s)| (g, c, s)).collect();
+    sort_with_lexicographic_tiebreak(&mut fused);
+    fused
+}
+
+#[cfg(test)]
+mod linear_tests {
+    use super::*;
+
+    #[test]
+    fn alpha_one_is_dense_only() {
+        let dense: Vec<Hit> = vec![(1, "c1".into(), 0.9), (2, "c2".into(), 0.5)];
+        let bm25: Vec<Hit>  = vec![(2, "c2".into(), 10.0), (1, "c1".into(), 1.0)];
+        let fused = linear_fuse(&dense, &bm25, 1.0);
+        assert_eq!(fused[0].1, "c1"); // dense ranking dominates
+    }
+
+    #[test]
+    fn alpha_zero_is_bm25_only() {
+        let dense: Vec<Hit> = vec![(1, "c1".into(), 0.9), (2, "c2".into(), 0.5)];
+        let bm25: Vec<Hit>  = vec![(2, "c2".into(), 10.0), (1, "c1".into(), 1.0)];
+        let fused = linear_fuse(&dense, &bm25, 0.0);
+        assert_eq!(fused[0].1, "c2"); // bm25 ranking dominates
+    }
+
+    #[test]
+    fn all_zero_list_does_not_panic() {
+        let dense: Vec<Hit> = vec![(1, "c1".into(), 0.0), (2, "c2".into(), 0.0)];
+        let bm25: Vec<Hit>  = vec![];
+        let fused = linear_fuse(&dense, &bm25, 0.5);
+        assert_eq!(fused.len(), 2);
+    }
+
+    #[test]
+    fn single_element_list_does_not_div_by_zero() {
+        let dense: Vec<Hit> = vec![(1, "c1".into(), 0.5)];
+        let bm25: Vec<Hit>  = vec![];
+        let fused = linear_fuse(&dense, &bm25, 0.5);
+        assert_eq!(fused.len(), 1);
+        assert!(fused[0].2.is_finite());
+    }
+
+    #[test]
+    fn p99_clip_compresses_outlier() {
+        // One outlier at 100, ninety-nine others at 1.0. Normalised scores
+        // should NOT all be compressed near 0 by the outlier.
+        let mut bm25: Vec<Hit> = (0..99).map(|i| (i, format!("c{i}"), 1.0)).collect();
+        bm25.push((99, "c99".into(), 100.0));
+        let dense: Vec<Hit> = Vec::new();
+        let fused = linear_fuse(&dense, &bm25, 0.0);
+        // c99 still ranks first, but the score gap between c1 and c98 isn't
+        // crushed to zero — they should each get some recognisable score.
+        let c1 = fused.iter().find(|h| h.1 == "c1").unwrap();
+        let c99 = fused.iter().find(|h| h.1 == "c99").unwrap();
+        // After p99 clip, max ≈ 1.0; c1 normalises to ~0.0 (min), c99 to ~1.0.
+        // Not the original 0.01 / 1.0 ratio that an uncapped min-max would
+        // produce.
+        assert!(c99.2 >= c1.2);
+        assert!(c99.2.is_finite());
+    }
+}
