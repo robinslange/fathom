@@ -672,14 +672,27 @@ pub fn run() {
     // process exit on macOS — visible to the user as a "Fathom closed
     // unexpectedly" dialog after Cmd+Q. We call libc::_exit (underscore
     // variant: skips atexit handlers and C++ static destructors entirely)
-    // before AppKit's normal shutdown gets a chance to abort us. By the
-    // time ExitRequested fires, the user has already asked to quit and any
-    // pending writes from our own code have already flushed.
+    // before AppKit's normal shutdown gets a chance to abort us.
+    //
+    // We hook three event sources because the order they fire in is
+    // Tauri-version-dependent and we want to win the race against the
+    // panicking C++ destructors:
+    //   - WindowEvent::CloseRequested  (per-window, earliest on Cmd+Q)
+    //   - RunEvent::ExitRequested      (app-level, fires after last window)
+    //   - RunEvent::Exit               (final, just before process death)
+    // Whichever fires first jumps to _exit(0); the others never run.
     app.run(|_handle, event| {
-        if let tauri::RunEvent::ExitRequested { .. } = &event {
-            unsafe {
+        match &event {
+            tauri::RunEvent::ExitRequested { .. } | tauri::RunEvent::Exit => unsafe {
                 libc::_exit(0);
-            }
+            },
+            tauri::RunEvent::WindowEvent {
+                event: tauri::WindowEvent::CloseRequested { .. },
+                ..
+            } => unsafe {
+                libc::_exit(0);
+            },
+            _ => {}
         }
     });
 }

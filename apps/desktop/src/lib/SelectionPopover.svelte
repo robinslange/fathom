@@ -2,38 +2,53 @@
   import { paraphrase, type Tier } from "./use-paraphrase.svelte.js";
   import { library } from "./use-library.svelte.js";
 
-  const POPOVER_WIDTH = 480;
-  const VIEWPORT_MARGIN = 12;
-  const GAP_FROM_SELECTION = 10;
+  const POPOVER_WIDTH = 420;
+  const VIEWPORT_MARGIN = 16;
+  const GAP_FROM_SELECTION = 14;
 
   let popoverEl: HTMLDivElement | null = $state(null);
   let metaOpen = $state(false);
 
+  // Place the popover in whichever vertical or horizontal gutter has room,
+  // preferring the side beside the selection so we never cover the source
+  // text. Order: right gutter → left gutter → above → below.
   let position = $derived.by(() => {
     const rect = paraphrase.selectionRect;
     if (!rect) return null;
-    const popH = popoverEl?.getBoundingClientRect().height ?? 240;
+    const popH = popoverEl?.getBoundingClientRect().height ?? 260;
     const viewportW = window.innerWidth;
     const viewportH = window.innerHeight;
 
+    const rightGutter = viewportW - rect.right - GAP_FROM_SELECTION - VIEWPORT_MARGIN;
+    const leftGutter = rect.left - GAP_FROM_SELECTION - VIEWPORT_MARGIN;
+
+    if (rightGutter >= POPOVER_WIDTH) {
+      // Sit in the right gutter, vertically aligned with the selection mid.
+      const top = clampVertical(rect.top + rect.height / 2 - popH / 2, popH, viewportH);
+      return { top, left: rect.right + GAP_FROM_SELECTION };
+    }
+    if (leftGutter >= POPOVER_WIDTH) {
+      const top = clampVertical(rect.top + rect.height / 2 - popH / 2, popH, viewportH);
+      return { top, left: rect.left - GAP_FROM_SELECTION - POPOVER_WIDTH };
+    }
+
+    // Fall back: above the selection, flipping below if not enough room.
     const preferredTop = rect.top - popH - GAP_FROM_SELECTION;
     const flipBelow = preferredTop < VIEWPORT_MARGIN;
     const top = flipBelow ? rect.bottom + GAP_FROM_SELECTION : preferredTop;
-
     const center = rect.left + rect.width / 2;
     let left = center - POPOVER_WIDTH / 2;
     left = Math.max(VIEWPORT_MARGIN, Math.min(left, viewportW - POPOVER_WIDTH - VIEWPORT_MARGIN));
 
-    // Caret X relative to popover left edge.
-    const caretX = Math.max(20, Math.min(POPOVER_WIDTH - 20, center - left));
-
     return {
-      top: Math.max(VIEWPORT_MARGIN, Math.min(top, viewportH - popH - VIEWPORT_MARGIN)),
+      top: clampVertical(top, popH, viewportH),
       left,
-      caretX,
-      caretSide: flipBelow ? ("top" as const) : ("bottom" as const),
     };
   });
+
+  function clampVertical(top: number, popH: number, viewportH: number): number {
+    return Math.max(VIEWPORT_MARGIN, Math.min(top, viewportH - popH - VIEWPORT_MARGIN));
+  }
 
   function onKeydown(e: KeyboardEvent) {
     if (e.key === "Escape" && paraphrase.popoverOpen) {
@@ -67,15 +82,13 @@
   <div
     bind:this={popoverEl}
     class="popover"
-    class:caret-bottom={position.caretSide === "bottom"}
-    class:caret-top={position.caretSide === "top"}
-    style="top: {position.top}px; left: {position.left}px; width: {POPOVER_WIDTH}px; --caret-x: {position.caretX}px"
+    style="top: {position.top}px; left: {position.left}px; width: {POPOVER_WIDTH}px"
     role="dialog"
     aria-label="Paraphrase"
   >
     <header class="head">
       <div class="tier-buttons" role="group" aria-label="Paraphrase depth">
-        {#each ["simple", "standard", "scholarly"] as Tier[] as t (t)}
+        {#each (["simple", "standard", "scholarly"] as Tier[]) as t (t)}
           <button
             class="tier-btn"
             class:active={paraphrase.tier === t}
@@ -104,11 +117,35 @@
     {#if metaOpen && paraphrase.paraphraseResult}
       {@const r = paraphrase.paraphraseResult}
       <div class="meta">
-        <span>{r.resolution}</span>
-        <span class="dot">·</span>
-        <span>{r.tier}</span>
-        <span class="dot">·</span>
-        <span>{r.model}</span>
+        <div class="meta-row">
+          <span>{r.resolution}</span>
+          <span class="dot">·</span>
+          <span>{r.tier}</span>
+          <span class="dot">·</span>
+          <span>{r.model}</span>
+        </div>
+        {#if r.faithfulness && r.faithfulness_verdict}
+          {@const f = r.faithfulness}
+          {@const v = r.faithfulness_verdict}
+          <div class="meta-block">
+            <div class="meta-block-title">Faithfulness check</div>
+            <div class="meta-row">
+              <span>support {f.support.toFixed(2)}</span>
+              <span class="dot">·</span>
+              <span>contradiction {f.contradiction_max.toFixed(2)}</span>
+            </div>
+            <div class="meta-row dim">
+              <span>passes when support &gt; {v.support_floor.toFixed(2)} and contradiction &lt; {v.contradiction_ceiling.toFixed(2)}</span>
+            </div>
+            <p class="meta-explain">
+              An NLI model scores each paraphrase sentence against the original
+              for entailment and contradiction. Support is the mean entailment;
+              contradiction is the worst single sentence. The model is
+              uncalibrated for classical prose, so treat these as a sanity
+              check rather than a verdict.
+            </p>
+          </div>
+        {/if}
       </div>
     {/if}
 
@@ -124,22 +161,28 @@
         {@const f = r.faithfulness}
         {@const v = r.faithfulness_verdict}
         {@const isWarn = v ? !v.faithful : false}
+        {@const headline = isWarn ? "May drift from the source" : "Stays close to the source"}
+        {@const introLabel = f.introductions.length === 1 ? "sentence" : "sentences"}
+        {@const introAction = isWarn ? "may go beyond the source" : "may add framing"}
         <div class="chip" class:warn={isWarn}>
-          <span class="glyph" aria-hidden="true">{isWarn ? "⚠" : "✓"}</span>
-          <span class="chip-label">{isWarn ? "Check" : "Faithful"}</span>
-          <span class="chip-meta">support {f.support.toFixed(2)}</span>
-          {#if isWarn}
-            <span class="chip-meta">· contradiction {f.contradiction_max.toFixed(2)}</span>
-          {/if}
           {#if f.introductions.length > 0}
             <details class="chip-detail">
-              <summary>{f.introductions.length} unsupported {f.introductions.length === 1 ? "sentence" : "sentences"}</summary>
+              <summary>
+                <span class="glyph" aria-hidden="true">{isWarn ? "⚠" : "✓"}</span>
+                <span class="chip-label">{headline}</span>
+                <span class="chip-meta chip-meta-sep">{f.introductions.length} {introLabel} {introAction}</span>
+              </summary>
               <ul>
                 {#each f.introductions as s}
                   <li>{s}</li>
                 {/each}
               </ul>
             </details>
+          {:else}
+            <div class="chip-row">
+              <span class="glyph" aria-hidden="true">{isWarn ? "⚠" : "✓"}</span>
+              <span class="chip-label">{headline}</span>
+            </div>
           {/if}
         </div>
       {/if}
@@ -178,23 +221,6 @@
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.08);
     font-family: "IBM Plex Sans", sans-serif;
   }
-  .popover::before {
-    content: "";
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    background: var(--panel);
-    border-right: 1px solid var(--rule-strong);
-    border-bottom: 1px solid var(--rule-strong);
-    transform: rotate(45deg);
-    left: calc(var(--caret-x) - 6px);
-  }
-  .popover.caret-bottom::before { bottom: -7px; }
-  .popover.caret-top::before {
-    top: -7px;
-    transform: rotate(-135deg);
-  }
-
   .head {
     display: flex;
     justify-content: space-between;
@@ -248,10 +274,38 @@
   .meta {
     font-family: "IBM Plex Mono", monospace;
     font-size: 0.72rem;
-    opacity: 0.55;
-    margin-bottom: 0.55rem;
+    margin-bottom: 0.7rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
   }
+  .meta-row {
+    opacity: 0.6;
+  }
+  .meta-row.dim { opacity: 0.4; }
   .meta .dot { margin: 0 0.3em; }
+  .meta-block {
+    border-top: 1px solid var(--rule);
+    padding-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .meta-block-title {
+    font-family: "IBM Plex Sans", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.65rem;
+    opacity: 0.5;
+    margin-bottom: 0.15rem;
+  }
+  .meta-explain {
+    font-family: "IBM Plex Sans", sans-serif;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    opacity: 0.7;
+    margin: 0.25rem 0 0;
+  }
 
   .busy {
     font-family: "IBM Plex Mono", monospace;
@@ -278,29 +332,56 @@
   .paraphrase-text.dim { opacity: 0.4; }
 
   .chip {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.4rem;
-    flex-wrap: wrap;
+    display: block;
     font-family: "IBM Plex Mono", monospace;
     font-size: 0.72rem;
-    padding: 0.25rem 0.55rem;
-    border-radius: 999px;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
     background: var(--surface-fill);
     color: var(--ink);
-    opacity: 0.75;
+    opacity: 0.85;
     margin-bottom: 0.6rem;
+    overflow: hidden;
   }
   .chip.warn {
     background: var(--warn-bg);
     color: var(--warn-ink);
     opacity: 1;
   }
+  .chip-row, .chip details > summary {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    min-width: 0;
+  }
   .chip .glyph { font-size: 0.85rem; }
   .chip .chip-label { font-weight: 600; }
-  .chip .chip-detail { width: 100%; margin-top: 0.3rem; }
-  .chip .chip-detail summary { cursor: pointer; }
-  .chip .chip-detail ul { padding-left: 1.1rem; margin: 0.25rem 0 0; }
+  .chip .chip-meta { white-space: nowrap; opacity: 0.75; }
+  .chip .chip-meta-sep::before { content: "· "; opacity: 0.5; }
+  .chip details > summary {
+    cursor: pointer;
+    list-style: none;
+  }
+  .chip details > summary::-webkit-details-marker { display: none; }
+  .chip details > summary::before {
+    content: "▸";
+    display: inline-block;
+    transition: transform 0.12s;
+    font-size: 0.7rem;
+    opacity: 0.5;
+    margin-right: 0.1rem;
+  }
+  .chip details[open] > summary::before { transform: rotate(90deg); }
+  .chip details ul {
+    padding-left: 1.4rem;
+    margin: 0.4rem 0 0;
+    border-top: 1px solid currentColor;
+    padding-top: 0.4rem;
+    opacity: 0.6;
+  }
+  .chip.warn details ul { opacity: 0.85; border-top-color: var(--warn-ink); }
+  .chip details li { line-height: 1.5; }
 
   .glossary-disclosure {
     font-size: 0.85rem;

@@ -5,44 +5,51 @@
 
   let viewportEl: HTMLDivElement | null = $state(null);
   let flowEl: HTMLDivElement | null = $state(null);
-  let viewportWidth = $state(0);
-  let viewportHeight = $state(0);
-  let columnStride = $state(0); // column-width + column-gap, in px
+  let columnStride = $state(0);
 
-  // Recompute layout each time book or viewport changes.
+  // Remeasure when book changes or paragraphs change shape.
   $effect(() => {
     library.loadedBook?.gutenberg_id;
     library.loadingBook;
-    viewportWidth;
-    viewportHeight;
+    library.paragraphs.length;
     tick().then(() => measure());
   });
 
+  // Watch the viewport for size changes (window resize, sidebar collapse,
+  // dev-tools open). ResizeObserver fires once on attach and again on each
+  // change.
+  $effect(() => {
+    if (!viewportEl) return;
+    const ro = new ResizeObserver(() => measure());
+    ro.observe(viewportEl);
+    return () => ro.disconnect();
+  });
+
+  // Cap the reading measure to a typographically sane width. 65ch ≈ 60-75
+  // chars per line, the standard sweet spot for prose readability. The
+  // remaining horizontal space becomes gutter the popover can occupy.
+  const MAX_MEASURE_PX = 680;
+
   function measure() {
     if (!viewportEl || !flowEl) return;
-    const w = viewportEl.clientWidth;
+    const viewportW = viewportEl.clientWidth;
     const h = viewportEl.clientHeight;
-    if (!w || !h) return;
-    viewportWidth = w;
-    viewportHeight = h;
-    // column-width = viewportWidth - 2 * column-gap-padding pattern.
-    // We use column-gap=64px (gutter) and one column per page.
+    if (!viewportW || !h) return;
+    const columnW = Math.min(viewportW, MAX_MEASURE_PX);
     const gap = 64;
-    columnStride = w + gap;
-    // Apply.
+    columnStride = columnW + gap;
     flowEl.style.height = `${h}px`;
-    flowEl.style.columnWidth = `${w}px`;
+    flowEl.style.columnWidth = `${columnW}px`;
     flowEl.style.columnGap = `${gap}px`;
-    flowEl.style.columnFill = "auto";
-    // Allow horizontal column overflow; the wrapper hides it.
+    flowEl.style.width = `${columnW}px`;
+    void flowEl.offsetHeight;
     const totalWidth = flowEl.scrollWidth;
-    const pageCount = Math.max(1, Math.round(totalWidth / columnStride));
+    const usableWidth = Math.max(totalWidth - gap, columnW);
+    const pageCount = Math.max(1, Math.ceil(usableWidth / columnStride));
     library.setPageCount(pageCount);
-    // If the currentPage is out of range, clamp.
     if (library.currentPage >= pageCount) library.setPage(pageCount - 1);
-    // If a chunk needs scroll-to, resolve now.
     const target = library.pendingScrollChunk;
-    if (target && flowEl) {
+    if (target) {
       const el = flowEl.querySelector(`[data-chunk-id="${target}"]`) as HTMLElement | null;
       if (el) {
         const page = Math.floor(el.offsetLeft / columnStride);
@@ -50,10 +57,6 @@
       }
       library.clearPendingScroll();
     }
-  }
-
-  function onResize() {
-    measure();
   }
 
   function onKeydown(e: KeyboardEvent) {
@@ -67,7 +70,7 @@
   }
 </script>
 
-<svelte:window onkeydown={onKeydown} onresize={onResize} />
+<svelte:window onkeydown={onKeydown} />
 
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <section class="reader" aria-label="Book reader" onmouseup={() => paraphrase.handleSelection()}>
@@ -133,6 +136,9 @@
     margin-bottom: 1.25rem;
     padding-bottom: 0.85rem;
     border-bottom: 1px solid var(--rule);
+    max-width: 680px;
+    width: 100%;
+    align-self: center;
   }
   .reader h2 {
     font-family: "IBM Plex Sans", sans-serif;
@@ -150,13 +156,20 @@
     min-height: 0;
     overflow: hidden;
     position: relative;
+    display: flex;
+    justify-content: center;
   }
 
   .book-flow {
-    /* width: 100% along with column-width = clientWidth coerces a single
-       column per "page"; subsequent columns overflow horizontally and are
-       paged by transform on the parent. column-fill: auto stops the browser
-       balancing columns. */
+    /* Multi-column horizontal pagination:
+       - column-width = capped measure forces one column per page-stride
+       - column-fill: auto stops the browser balancing across columns
+       - fixed height + width set in JS
+       - content that doesn't fit flows into additional columns laid out
+         to the right; the viewport parent clips overflow-x
+       - centred in the viewport so the gutters either side become space
+         the popover can use without covering the original text */
+    column-fill: auto;
     transition: transform 0.18s ease;
     will-change: transform;
   }

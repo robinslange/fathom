@@ -42,6 +42,9 @@ type SelectionAnchor = {
   snappedEndChar: number;
   selText: string;
   rect: DOMRect;
+  gutenbergId: number;
+  startByte: number;
+  endByte: number;
 };
 
 class ParaphraseStore {
@@ -60,6 +63,7 @@ class ParaphraseStore {
   private lastRequestKey: string | null = null;
   private requestSeq = 0;
   private effectsInitialised = false;
+  private lastAnchor: SelectionAnchor | null = null;
 
   initEffects(): void {
     if (this.effectsInitialised) return;
@@ -79,6 +83,7 @@ class ParaphraseStore {
     this.selectionRect = null;
     this.popoverOpen = false;
     this.lastRequestKey = null;
+    this.lastAnchor = null;
   }
 
   closePopover(): void {
@@ -87,31 +92,40 @@ class ParaphraseStore {
   }
 
   /**
-   * Entry point from the reader's mouseup. Snaps the visible selection to
-   * whole-sentence boundaries, opens the popover, and fires the paraphrase
-   * if the snapped range is new.
+   * Entry point from the reader's mouseup. Reads the current window selection,
+   * snaps it to whole-sentence boundaries, opens the popover, and fires a
+   * paraphrase if the snapped range is new. If the selection is collapsed or
+   * empty, dismisses the popover.
    */
   async handleSelection(): Promise<void> {
     const loadedBook = library.loadedBook;
     if (!loadedBook) return;
-    const anchor = computeAnchor();
-    if (!anchor) return;
-
+    const anchor = computeAnchor(loadedBook.gutenberg_id);
+    if (!anchor) {
+      // Click without drag — dismiss the popover.
+      if (this.popoverOpen) this.closePopover();
+      return;
+    }
     applySnappedRange(anchor);
+    await this.fireFromAnchor(anchor);
+  }
+
+  /**
+   * Fire a paraphrase from an already-computed (and already-snapped) anchor.
+   * Used by handleSelection after fresh mouseup, and by retryWithCurrentTier
+   * to re-fire after a tier change without re-reading window.getSelection
+   * (which may have been collapsed by clicking a popover button).
+   */
+  private async fireFromAnchor(anchor: SelectionAnchor): Promise<void> {
+    this.lastAnchor = anchor;
     this.lastSelectionText = anchor.selText;
     this.selectionRect = anchor.rect;
     this.popoverOpen = true;
 
-    const startByte =
-      anchor.paraByteStart + utf8ByteLength(anchor.paraText.slice(0, anchor.snappedStartChar));
-    const endByte =
-      anchor.paraByteStart + utf8ByteLength(anchor.paraText.slice(0, anchor.snappedEndChar));
-    if (endByte <= startByte) return;
+    if (anchor.endByte <= anchor.startByte) return;
 
-    const key = `${loadedBook.gutenberg_id}:${startByte}:${endByte}:${this.tier}`;
-
+    const key = `${anchor.gutenbergId}:${anchor.startByte}:${anchor.endByte}:${this.tier}`;
     if (key === this.lastRequestKey && this.paraphraseResult) {
-      // Same snapped range + tier as the existing result — nothing to do.
       return;
     }
     this.lastRequestKey = key;
@@ -124,13 +138,13 @@ class ParaphraseStore {
     try {
       const result = await invoke<FathomResult>("library_paraphrase_selection", {
         args: {
-          gutenbergId: loadedBook.gutenberg_id,
-          startByte,
-          endByte,
+          gutenbergId: anchor.gutenbergId,
+          startByte: anchor.startByte,
+          endByte: anchor.endByte,
           tier: this.tier,
         },
       });
-      if (myRequestId !== this.requestSeq) return; // superseded
+      if (myRequestId !== this.requestSeq) return;
       this.paraphraseResult = result;
     } catch (e) {
       if (myRequestId !== this.requestSeq) return;
@@ -149,21 +163,16 @@ class ParaphraseStore {
   }
 
   /**
-   * Re-fire the current selection (used when the user changes tier inside
-   * the popover). No-op if there is no active selection.
+   * Re-fire the cached anchor with the current tier. No-op if no anchor.
    */
   async retryWithCurrentTier(): Promise<void> {
-    if (!this.lastSelectionText) return;
-    // Force the next handleSelection to fire even if the byte-range matches
-    // (because the tier slug is part of the key, this is already handled —
-    // but we also need to bypass the "result already present" early return
-    // by clearing the cached key).
+    if (!this.lastAnchor) return;
     this.lastRequestKey = null;
-    await this.handleSelection();
+    await this.fireFromAnchor(this.lastAnchor);
   }
 }
 
-function computeAnchor(): SelectionAnchor | null {
+function computeAnchor(gutenbergId: number): SelectionAnchor | null {
   const selection = window.getSelection();
   if (!selection || selection.isCollapsed) return null;
   const range = selection.getRangeAt(0);
@@ -191,6 +200,9 @@ function computeAnchor(): SelectionAnchor | null {
   const selText = paraText.slice(snapped.start, snapped.end);
   const rect = range.getBoundingClientRect();
 
+  const startByte = paraByteStart + utf8ByteLength(paraText.slice(0, snapped.start));
+  const endByte = paraByteStart + utf8ByteLength(paraText.slice(0, snapped.end));
+
   return {
     paraEl,
     paraText,
@@ -199,6 +211,9 @@ function computeAnchor(): SelectionAnchor | null {
     snappedEndChar: snapped.end,
     selText,
     rect,
+    gutenbergId,
+    startByte,
+    endByte,
   };
 }
 
