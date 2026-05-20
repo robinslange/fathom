@@ -1,0 +1,2667 @@
+{
+  "tag": "v0.21.1-rrf-k30",
+  "generated": "2026-05-20T03:07:00.664931+00:00",
+  "manifest_build_id": "2026-05",
+  "embed_model_id": "bge-small-en-v1.5",
+  "books_loaded": 551,
+  "top_k": 50,
+  "queries_version": 1,
+  "queries_notes": "Three query categories: iconic_phrase has a known source book the query is taken from verbatim or near-verbatim. topical has no single source but should resonate in a domain. adversarial should NOT score high anywhere (noise-floor probe).",
+  "iconic": [
+    {
+      "query": "the unexamined life is not worth living",
+      "source": "Plato, Apology 38a",
+      "expected_gutenberg_ids": [
+        1656,
+        13726
+      ],
+      "expected_rank": 1,
+      "expected_best_similarity": 1.0,
+      "reciprocal_rank": 1.0,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 1656,
+          "chunk_id": "c000000",
+          "similarity": 1.0,
+          "title": "Apology",
+          "excerpt": "In what relation the “Apology” of Plato stands to the real defence of Socrates, there are no means of determining. It certainly agrees in tone and character with the description of Xenophon, who…"
+        }
+      ]
+    },
+    {
+      "query": "I think, therefore I am",
+      "source": "Descartes, Discourse on the Method",
+      "expected_gutenberg_ids": [
+        59,
+        25830
+      ],
+      "expected_rank": 1,
+      "expected_best_similarity": 1.0,
+      "reciprocal_rank": 1.0,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 59,
+          "chunk_id": "c000000",
+          "similarity": 1.0,
+          "title": "Discourse on the Method of Rightly Conducting One's Reason and of Seeking Truth in the Sciences",
+          "excerpt": "If this Discourse appear too long to be read at once, it may be divided into six Parts: and, in the first, will be found various considerations touching the Sciences; in the second, the principal…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 25830,
+          "chunk_id": "c000000",
+          "similarity": 1.0,
+          "title": "A Discourse of a Method for the Well Guiding of Reason",
+          "excerpt": "Other information and formats : www.gutenberg.org/ebooks/25830  LONDON, Printed by Thomas Newcombe MDCXLIX.  The Great DESCARTES (who may justly challenge the first place amongst the Philosophers of…"
+        }
+      ]
+    },
+    {
+      "query": "from my grandfather Verus I learned good morals",
+      "source": "Marcus Aurelius, Meditations I.1",
+      "expected_gutenberg_ids": [
+        2680,
+        6920,
+        55317
+      ],
+      "expected_rank": 1,
+      "expected_best_similarity": 0.06451613,
+      "reciprocal_rank": 1.0,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 6920,
+          "chunk_id": "c000028",
+          "similarity": 0.06451613,
+          "title": "Thoughts of Marcus Aurelius",
+          "excerpt": "From my grandfather Verus [I learned] good morals and the government of my temper.  From the reputation and remembrance of my father, modesty and a manly character.  From my mother, piety and…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 2680,
+          "chunk_id": "c000027",
+          "similarity": 0.060661763,
+          "title": "Meditations",
+          "excerpt": "Of my grandfather Verus I have learned to be gentle and meek, and to refrain from all anger and passion. From the fame and memory of him that begot me I have learned both shamefastness and manlike…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 56869,
+          "chunk_id": "c000343",
+          "similarity": 0.058874458,
+          "title": "The Art of Being Happy",
+          "excerpt": "The admirable Marcus Aurelius took delight in converse with himself; and learned to find enjoyment in the present by extracting from the past lessons for the future. I never fail to be affected when…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 55317,
+          "chunk_id": "c000000",
+          "similarity": 0.057983194,
+          "title": "The Meditations of the Emperor Marcus Aurelius Antoninus",
+          "excerpt": "Other information and formats : www.gutenberg.org/ebooks/55317  A new rendering based on the Foulis translation of 1742  by George W. Chrystal  Warner exhibitioner of Balliol College,…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 78320,
+          "chunk_id": "c000024",
+          "similarity": 0.057330057,
+          "title": "The Emperor Marcus Aurelius",
+          "excerpt": "“To the gods,” he says, “I am indebted for having good grandfathers, good parents, a good sister, good teachers, good associates, good kinsmen, and friends, nearly everything good.” From the…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 2680,
+          "chunk_id": "c000464",
+          "similarity": 0.055555556,
+          "title": "Meditations",
+          "excerpt": "Vespasian, 9th Roman Emperor XENOCRATES of Chalcedon, 396-314 B.C., a philosopher, and president of the Academy.  HIS FIRST BOOK  Of my grandfather Verus I have learned to be gentle and meek, and…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 6920,
+          "chunk_id": "c000029",
+          "similarity": 0.048809525,
+          "title": "Thoughts of Marcus Aurelius",
+          "excerpt": "From my great-grandfather, not to have frequented public schools, and to have had good teachers at home, and to know that on such things a man should spend liberally.  From my governor, to be neither…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 15877,
+          "chunk_id": "c000105",
+          "similarity": 0.04453241,
+          "title": "Thoughts of Marcus Aurelius Antoninus",
+          "excerpt": "From the reputation and remembrance of my father, [B] modesty and a manly character.  From my mother, [C] piety and beneficence, and abstinence, not only from evil deeds, but even from evil thoughts;…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 15877,
+          "chunk_id": "c000104",
+          "similarity": 0.04359568,
+          "title": "Thoughts of Marcus Aurelius Antoninus",
+          "excerpt": "[A] J. Smith in his Select Discourses on \"the Excellency and Nobleness of True Religion\" (c. vi.) has remarked on this Stoical arrogance. He finds it in Seneca and others. In Seneca certainly, and…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 15877,
+          "chunk_id": "c000107",
+          "similarity": 0.041514043,
+          "title": "Thoughts of Marcus Aurelius Antoninus",
+          "excerpt": "[B] His father's name was Annius Verus.  [C] His mother was Domitia Calvilla, named also Lucilla.  [D] Perhaps his mother's grandfather, Catilius Severus.  From my governor, to be neither of the…"
+        }
+      ]
+    },
+    {
+      "query": "some things are in our power and others are not",
+      "source": "Epictetus, Enchiridion 1",
+      "expected_gutenberg_ids": [
+        45109,
+        10661
+      ],
+      "expected_rank": 1,
+      "expected_best_similarity": 0.061669827,
+      "reciprocal_rank": 1.0,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 10661,
+          "chunk_id": "c000218",
+          "similarity": 0.061669827,
+          "title": "A Selection from the Discourses of Epictetus with the Encheiridion",
+          "excerpt": "Of things some are in our power, and others are not. In our power are opinion ([Greek: hupolaepsis]), movement towards a thing ([Greek: hormae]), desire, aversion ([Greek: echchlisis]), turning from…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 39065,
+          "chunk_id": "c000082",
+          "similarity": 0.055598456,
+          "title": "The Five Great Philosophies of Life",
+          "excerpt": "Again he makes a sharp distinction between what is in our power,—that is, what we think about things; and what are not in our power,—that is external facts. \"There are things which are within our…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 39855,
+          "chunk_id": "c000049",
+          "similarity": 0.053977273,
+          "title": "The Teaching of Epictetus",
+          "excerpt": "Of things that exist, some are in our own power, some are not in our own power. Of things that are in our own power are our opinions, impulses, pursuits, avoidances, and, in brief, all that is of our…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 12913,
+          "chunk_id": "c000305",
+          "similarity": 0.051315792,
+          "title": "Moral Science; a Compendium of Ethics",
+          "excerpt": "The Freedom of the Will . A distinction was taken by Epictetus and other Stoics between things in our power and things not in our power. The things in our power are our opinions and notions about…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 46921,
+          "chunk_id": "c000243",
+          "similarity": 0.0462963,
+          "title": "The Thoughts of Blaise Pascal",
+          "excerpt": "Yet he believed it demonstrable when he said, \"it is either in our power or it is not.\"  But he did not see that it is not in our power to regulate the heart, and he was wrong to draw this conclusion…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 10846,
+          "chunk_id": "c000271",
+          "similarity": 0.03481561,
+          "title": "Seekers after God",
+          "excerpt": "Epictetus began by laying down the broad comprehensive statement that there are some things which are in our power, and depend upon ourselves; other things which are beyond our power, and wholly…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 45851,
+          "chunk_id": "c002260",
+          "similarity": 0.033391327,
+          "title": "Aristotle",
+          "excerpt": "A distinction was made by Epictetus and other Stoics between things in our power and things not in our power. In our power are our opinions and notions about objects, and all our affections, desires,…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 8438,
+          "chunk_id": "c000226",
+          "similarity": 0.032388665,
+          "title": "The Ethics of Aristotle",
+          "excerpt": "And so too is Vice: because wherever it is in our power to do it is also in our power to forbear doing, and vice versâ : therefore if the doing (being in a given case creditable) is in our power, so…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 15877,
+          "chunk_id": "c000257",
+          "similarity": 0.03074814,
+          "title": "Thoughts of Marcus Aurelius Antoninus",
+          "excerpt": "Whatever of the things which are not within thy power thou shalt suppose to be good for thee or evil, it must of necessity be that, if such a bad thing befall thee, or the loss of such a good thing,…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 55317,
+          "chunk_id": "c000130",
+          "similarity": 0.030530874,
+          "title": "The Meditations of the Emperor Marcus Aurelius Antoninus",
+          "excerpt": "Whenever we imagine that anything which lies not in our power is good or evil for us, if the evil befall us or if we miss the good, we inevitably blame the Gods, and hate the men who are, or whom we…"
+        }
+      ]
+    },
+    {
+      "query": "the cave with prisoners chained watching shadows on the wall",
+      "source": "Plato, Republic 514a (allegory of the cave)",
+      "expected_gutenberg_ids": [
+        10214,
+        40437
+      ],
+      "expected_rank": 4,
+      "expected_best_similarity": 0.0497543,
+      "reciprocal_rank": 0.25,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 47658,
+          "chunk_id": "c000074",
+          "similarity": 0.06082949,
+          "title": "The Problem of Truth",
+          "excerpt": "\"They are strange prisoners, like ourselves, and they see only their own shadows or the shadows of one another which the fire throws on the opposite wall of the cave. And so also of the objects…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 51636,
+          "chunk_id": "c000033",
+          "similarity": 0.050115205,
+          "title": "Hegel's Lectures on the History of Philosophy: Volume 2 (of 3)",
+          "excerpt": "In the Republic, Plato further speaks in a figure of the difference between a condition of philosophic culture and a lack of Philosophy: it is a long comparison which is both striking and brilliant.…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 4095,
+          "chunk_id": "c000060",
+          "similarity": 0.049848024,
+          "title": "Plato and Platonism",
+          "excerpt": "And now (he writes in the seventh book of The Republic) take for a figure of human nature, as regards education and the lack thereof, some such condition as this. Think you see people as it were in…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 10214,
+          "chunk_id": "c000082",
+          "similarity": 0.0497543,
+          "title": "Introduction to the Philosophy and Writings of Plato",
+          "excerpt": "From all this it follows that the soul, while an inhabitant of earth, is in a fallen condition, an apostate from deity, an exile from the orb of light. Hence Plato, in the 7th book of his Republic,…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 20500,
+          "chunk_id": "c000214",
+          "similarity": 0.04924925,
+          "title": "A Short History of Greek Philosophy",
+          "excerpt": "The purely earthly unideal life is represented as a life of men tied neck and heels from birth in a cave, having their backs to the light, and their eyes fixed only on the shadows which are cast upon…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 51555,
+          "chunk_id": "c000794",
+          "similarity": 0.048368298,
+          "title": "On the Philosophy of Discovery, Chapters Historical and Critical",
+          "excerpt": "\"I understand, said he. I agree to what you say, and I arrange them as you direct.\"  And so the Sixth Book ends: and the Seventh Book opens with the celebrated image of the Cave, in which men are…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 47658,
+          "chunk_id": "c000073",
+          "similarity": 0.04805492,
+          "title": "The Problem of Truth",
+          "excerpt": "\"And now let me show in a figure how far our nature is enlightened or unenlightened. Behold! human beings living in an underground den, which has a mouth open towards the light and reaching all along…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 40438,
+          "chunk_id": "c000176",
+          "similarity": 0.046031747,
+          "title": "Plato and the Other Companions of Sokrates, 3rd ed. Volume 4",
+          "excerpt": ". 210 Moreover if, after having become fully accustomed to daylight and the contemplation of realities, he were to descend again into the cave, his eyesight would be dim and confused in that…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 40438,
+          "chunk_id": "c000175",
+          "similarity": 0.045138888,
+          "title": "Plato and the Other Companions of Sokrates, 3rd ed. Volume 4",
+          "excerpt": "207 Plato, Republic, p. 511 D-E.  Distinction between the philosopher and the unphilosophical public, illustrated by the simile of the Cave, and the captives imprisoned therein.  Sokrates now…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 20500,
+          "chunk_id": "c000215",
+          "similarity": 0.044763513,
+          "title": "A Short History of Greek Philosophy",
+          "excerpt": "Yet if they hold on in patience, and struggle up the steep till the sun himself breaks on their vision, what pain and dazzling once more, yet at the last what glorious revelation! True, if they…"
+        }
+      ]
+    },
+    {
+      "query": "philosophy is preparation for death",
+      "source": "Plato, Phaedo 64a",
+      "expected_gutenberg_ids": [
+        1658,
+        13726
+      ],
+      "expected_rank": 7,
+      "expected_best_similarity": 0.045238096,
+      "reciprocal_rank": 0.14285715,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 39273,
+          "chunk_id": "c000206",
+          "similarity": 0.05756579,
+          "title": "History of European Morals From Augustus to Charlemagne (Vol. 1 of 2)",
+          "excerpt": "Men who had formed such high conceptions of duty, who had bridled so completely the tumult of passion, and whose lives were spent in a calm sense of virtue and of dignity, were little likely to be…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 64488,
+          "chunk_id": "c001144",
+          "similarity": 0.05756579,
+          "title": "Roman Stoicism",
+          "excerpt": "For death the whole of philosophy is a preparation; yet when it is no longer a matter of uncertain fear, but close at hand and sure, some last words are to be said. All this is in the course of…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 78618,
+          "chunk_id": "c000099",
+          "similarity": 0.053997196,
+          "title": "The works of Plato (Vol. 1 of 6)",
+          "excerpt": "He begins [12] by stating that philosophy itself is nothing else than a preparation for and meditation on death. Death and philosophy have this in common: death separates the soul from the body,…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 35460,
+          "chunk_id": "c000191",
+          "similarity": 0.050711192,
+          "title": "Apollonius of Tyana, the Philosopher-Reformer of the First Century A.D.",
+          "excerpt": "When put on his trial, he would make no preparation for his defence. He had lived his life as it came from day to day, prepared for death, and would continue to do so (viii. 30). Moreover it was now…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 43800,
+          "chunk_id": "c000964",
+          "similarity": 0.045983087,
+          "title": "A Christian Directory, Part 2: Christian Economics",
+          "excerpt": "Though the chief part of our preparation for death be in the time of health, and it is a work for which the longest life is not too long; yet because the folly of unconverted sinners is so great, as…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 10846,
+          "chunk_id": "c000416",
+          "similarity": 0.0455914,
+          "title": "Seekers after God",
+          "excerpt": "It was a commonplace of ancient philosophy that the life of the wise man should be a contemplation of, and a preparation for, death. It certainly was so with Marcus Aurelius. The thoughts of the…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 13726,
+          "chunk_id": "c000104",
+          "similarity": 0.045238096,
+          "title": "Apology, Crito, and Phaedo of Socrates",
+          "excerpt": "He begins 12 by stating that philosophy itself is nothing else than a preparation for and meditation on death. Death and philosophy have this in common: death separates the soul from the body;…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 22797,
+          "chunk_id": "c000253",
+          "similarity": 0.040540542,
+          "title": "Diderot and the Encyclopædists (Vol. 2 of 2)",
+          "excerpt": "“A fancy common enough among the living is to dream that they are dead, that they stand by the side of their own corpse, and follow their own funeral. It is like a swimmer watching his garments…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 13726,
+          "chunk_id": "c000150",
+          "similarity": 0.030303031,
+          "title": "Apology, Crito, and Phaedo of Socrates",
+          "excerpt": "\"For as many as rightly apply themselves to philosophy seem to have left all others in ignorance, that they aim at nothing else than to die and be dead. If this, then, is true, it would surely be…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 41633,
+          "chunk_id": "c002894",
+          "similarity": 0.029411765,
+          "title": "A Christian Directory, Part 1: Christian Ethics",
+          "excerpt": "Dost thou know the worth of those precious hours which thou playest away? hast thou no more to do with them? Look inwards to thy soul, and forward to eternity, and bethink thee better.  Is it sport…"
+        }
+      ]
+    },
+    {
+      "query": "act only according to that maxim which you can will to be a universal law",
+      "source": "Kant, Groundwork / Critique of Practical Reason",
+      "expected_gutenberg_ids": [
+        5683,
+        4280,
+        5684
+      ],
+      "expected_rank": 18,
+      "expected_best_similarity": 0.030772686,
+      "reciprocal_rank": 0.055555556,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 54076,
+          "chunk_id": "c000302",
+          "similarity": 0.06082949,
+          "title": "Essays: Scientific, Political, & Speculative; Vol. 3 of 3",
+          "excerpt": "“There is therefore but one categorical imperative, namely this: Act only on that maxim whereby thou canst at the same time will that it should become a universal law .” (pp. 54–5.)  Again,…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 39065,
+          "chunk_id": "c000098",
+          "similarity": 0.04761905,
+          "title": "The Five Great Philosophies of Life",
+          "excerpt": "\"Everything in nature works according to laws. Rational beings alone have the faculty of acting according to the conception of laws, that is, according to principles; i.e. have a…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 12913,
+          "chunk_id": "c000910",
+          "similarity": 0.04740958,
+          "title": "Moral Science; a Compendium of Ethics",
+          "excerpt": "The question of the possibility, however, meanwhile postponed, the mere conception of a categorical Imperative is found to yield the one formula that can express it, from its not being dependent,…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 54076,
+          "chunk_id": "c000304",
+          "similarity": 0.046612464,
+          "title": "Essays: Scientific, Political, & Speculative; Vol. 3 of 3",
+          "excerpt": "“Let everyone be as happy as heaven pleases or as he can make himself; I will take nothing from him nor even envy him, only I do not wish to contribute anything either to his welfare or to his…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 60422,
+          "chunk_id": "c000137",
+          "similarity": 0.043496802,
+          "title": "Outlines of a Critical Theory of Ethics",
+          "excerpt": "( b ) An individual wishes to borrow money which he knows that he cannot repay. Can the maxim of this act be universalized? Evidently not: \"a system of nature in which it should be a universal law to…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 46129,
+          "chunk_id": "c000462",
+          "similarity": 0.04040404,
+          "title": "The Data of Ethics",
+          "excerpt": "In yet one more way may be shown the inconsistency of this transfigured utilitarianism which regards its doctrine as embodying the Christian maxim—\"Love your neighbor as yourself,\" and of that…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 46743,
+          "chunk_id": "c000765",
+          "similarity": 0.040384617,
+          "title": "The Methods of Ethics",
+          "excerpt": "Here, however, we seem brought into conflict with Kant’s fundamental principle, that a right action must be one of which the agent could “will the maxim to be law universal.” [370] But, as was…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 60422,
+          "chunk_id": "c000138",
+          "similarity": 0.0374269,
+          "title": "Outlines of a Critical Theory of Ethics",
+          "excerpt": "( c ) A man finds that he has certain powers, but is disinclined to develop them. Can he make the maxim of such conduct a universal law? He cannot will that it should become universal. \"As a rational…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 47880,
+          "chunk_id": "c000094",
+          "similarity": 0.037310608,
+          "title": "The Philosophy of Immanuel Kant",
+          "excerpt": "Kant seeks to derive his imperative from the contrast between acting as a moral agent and following inclination. Man regards himself as a moral agent, morally responsible for his conduct, and he…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 39551,
+          "chunk_id": "c000580",
+          "similarity": 0.036774628,
+          "title": "Ethics",
+          "excerpt": "The principle if made universal simply contradicts itself, and thus reveals that it is no principle at all, not rational. Summing this up in a formula, we get as our standard of right action the…"
+        }
+      ]
+    },
+    {
+      "query": "God is dead and we have killed him",
+      "source": "Nietzsche, Thus Spake Zarathustra / Gay Science",
+      "expected_gutenberg_ids": [
+        1998
+      ],
+      "expected_rank": 3,
+      "expected_best_similarity": 0.03576935,
+      "reciprocal_rank": 0.33333334,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 52881,
+          "chunk_id": "c000144",
+          "similarity": 0.03944672,
+          "title": "The Joyful Wisdom (\"La Gaya Scienza\")",
+          "excerpt": "The Madman. —Have you ever heard of the madman who on a bright morning lighted a lantern and ran to the market-place calling out unceasingly: \"I seek God! I seek God!\"—As there were many people…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 48495,
+          "chunk_id": "c000295",
+          "similarity": 0.036735766,
+          "title": "Nietzsche and Other Exponents of Individualism",
+          "excerpt": "The truth is that our moral sanctions are no longer accepted. People still believe in God, in the authority of church and state, but their belief is no longer a living faith. Whatever they may think…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 1998,
+          "chunk_id": "c001041",
+          "similarity": 0.03576935,
+          "title": "Thus Spake Zarathustra: A Book for All and None",
+          "excerpt": "And lately did I hear him say these words: “God is dead: of his pity for man hath God died.”—ZARATHUSTRA, II., “The Pitiful.”  —And again passed moons and years over Zarathustra’s soul,…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 17087,
+          "chunk_id": "c000117",
+          "similarity": 0.035331633,
+          "title": "Ancient Art and Ritual",
+          "excerpt": "Now at Magnesia, after the holy civic communion, the meal shared, we hear no more. Next year a fresh Bull will be chosen, and the cycle begin again. But at Athens at the annual “Ox-murder,” the…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 52124,
+          "chunk_id": "c000152",
+          "similarity": 0.034413237,
+          "title": "The Joyful Wisdom (\"La Gaya Scienza\")",
+          "excerpt": "125.  The Madman. —Have you ever heard of the madman who on a bright morning lighted a lantern and ran to the market-place calling out unceasingly: \"I seek God! I seek God!\"—As there were many…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 15098,
+          "chunk_id": "c000330",
+          "similarity": 0.032258064,
+          "title": "Diderot and the Encyclopædists (Vol. 1 of 2)",
+          "excerpt": "\"This struck him as true, and he died without making restitution.  \"And so behold us launched into a discussion on life and death, on the world and its alleged Creator.  \"Some one remarked that…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 27942,
+          "chunk_id": "c000164",
+          "similarity": 0.030303031,
+          "title": "A System of Logic, Ratiocinative and Inductive",
+          "excerpt": "At first sight this division has the air of an absurdity; a solemn distinction of things into one and more than one; as if we were to divide horses into single horses and teams of horses. And it is…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 55317,
+          "chunk_id": "c000023",
+          "similarity": 0.030303031,
+          "title": "The Meditations of the Emperor Marcus Aurelius Antoninus",
+          "excerpt": "It is the office of our rational power to apprehend how swiftly all things vanish; how the corporeal forms are swallowed up in the material world, and the memory of them in the tide of ages. Such are…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 41633,
+          "chunk_id": "c000486",
+          "similarity": 0.029545454,
+          "title": "A Christian Directory, Part 1: Christian Ethics",
+          "excerpt": "The thoughts of God are the less delightful to the soul, because that death and the grave do interpose, and we must pass through them before we can enjoy him: and it is unpleasing to nature, to think…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 27821,
+          "chunk_id": "c000397",
+          "similarity": 0.029411765,
+          "title": "A History of Mediaeval Jewish Philosophy",
+          "excerpt": "Since death is a decree of God, it is clear that he has a purpose in changing the relations of body and soul. But if the soul comes to an end, this change would be a vain piece of work of which he…"
+        }
+      ]
+    },
+    {
+      "query": "human life solitary poor nasty brutish and short",
+      "source": "Hobbes, Leviathan — NOT in corpus, recall baseline for missing source",
+      "expected_gutenberg_ids": [],
+      "expected_rank": null,
+      "expected_best_similarity": null,
+      "reciprocal_rank": 0.0,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 48027,
+          "chunk_id": "c000123",
+          "similarity": 0.036796536,
+          "title": "On the Ethics of Naturalism",
+          "excerpt": "The evolutionist will therefore contend that different degrees of value for the regulation of conduct belong to different moral intuitions or classes of them. If one class is habitually disregarded,…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 6463,
+          "chunk_id": "c000042",
+          "similarity": 0.032258064,
+          "title": "A Handbook of Ethical Theory",
+          "excerpt": "Hobbes [Footnote: Leviathan , chapter xv.], deeply concerned to discover some modus vivendi which should put a check upon strife between man and his fellow-man, and save us from a life \"solitary,…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 56075,
+          "chunk_id": "c000292",
+          "similarity": 0.032258064,
+          "title": "Seneca's Morals of a Happy Life, Benefits, Anger and Clemency",
+          "excerpt": "In the distribution of human life, we find that a great part of it passes away in evil doing ; a greater yet in doing just nothing at all : and effectually the whole in doing things beside our…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 8399,
+          "chunk_id": "c000934",
+          "similarity": 0.03125,
+          "title": "Manners and Social Usages",
+          "excerpt": "We all know that there is a worldly life, poor in aim and narrow in radius, which is as false as possible. To live only for this world, with its changing fashions, its imperfect judgments, its…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 73957,
+          "chunk_id": "c000224",
+          "similarity": 0.03125,
+          "title": "The English works of Thomas Hobbes of Malmesbury, Volume 03 (of 11)",
+          "excerpt": "Whatsoever therefore is consequent to a time of war, where every man is enemy to every man; the same is consequent to the time, wherein men live without other security, than what their own strength,…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 15877,
+          "chunk_id": "c000152",
+          "similarity": 0.031055901,
+          "title": "Thoughts of Marcus Aurelius Antoninus",
+          "excerpt": "Throwing away then all things, hold to these only which are few; and besides, bear in mind that every man lives only this present time, which is an indivisible point, and that all the rest of his…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 24372,
+          "chunk_id": "c000247",
+          "similarity": 0.030303031,
+          "title": "Practical Ethics",
+          "excerpt": "THE PENALTY.  To have no one for whom we supremely care, and no one who cares much for us; to have no place where we can shield ourselves from outward opposition and inward despair; to have no larger…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 12913,
+          "chunk_id": "c000372",
+          "similarity": 0.029411765,
+          "title": "Moral Science; a Compendium of Ethics",
+          "excerpt": "He proceeds to draw a very dismal picture of the results of this state of enmity of man against man—no industry, no agriculture, no arts, no society, and so forth, but only fear and danger of…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 13588,
+          "chunk_id": "c000027",
+          "similarity": 0.029411765,
+          "title": "The Young Gentleman and Lady's Monitor, and English Teacher's Assistant",
+          "excerpt": "I often consider mankind as wholly inconsistent with itself in a point that bears some affinity to the former. Though we seem grieved at the shortness of life in general, we are wishing every period…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 12887,
+          "chunk_id": "c000090",
+          "similarity": 0.028571429,
+          "title": "Laugh and Live",
+          "excerpt": "If we interview many of life's failures we will find that the overwhelming majority went down because of their neglect to get out of an environment that was not stimulating and because their…"
+        }
+      ]
+    },
+    {
+      "query": "happiness is an activity of the soul in accordance with virtue",
+      "source": "Aristotle, Nicomachean Ethics I.7",
+      "expected_gutenberg_ids": [
+        8438
+      ],
+      "expected_rank": 10,
+      "expected_best_similarity": 0.029411765,
+      "reciprocal_rank": 0.1,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 45851,
+          "chunk_id": "c001713",
+          "similarity": 0.053997196,
+          "title": "Aristotle",
+          "excerpt": "Happiness is to be numbered amongst the perfect and worshipful objects — it is the ἀρχὴ for the sake of which all of us do everything: and we consider the principle and the cause of all good…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 25110,
+          "chunk_id": "c000428",
+          "similarity": 0.044603743,
+          "title": "The Approach to Philosophy",
+          "excerpt": "\"dwell in the land of health, amid fair sights and sounds; and beauty, the effluence of fair works, will visit the eye and ear, like a healthful breeze from a purer region, and insensibly draw the…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 41412,
+          "chunk_id": "c000191",
+          "similarity": 0.035401,
+          "title": "A History of Philosophy in Epitome",
+          "excerpt": "Although it might seem from this as though Aristotle placed the happiness of man in the natural activity of the soul, and regarded this as self-sufficient, still he is not blind to the fact that…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 45851,
+          "chunk_id": "c001671",
+          "similarity": 0.0345805,
+          "title": "Aristotle",
+          "excerpt": "On the whole, these three passages present a variance which I am unable to reconcile in the meaning which Aristotle annexes to the very equivocal word — nature .  Although Aristotle tells us that…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 64488,
+          "chunk_id": "c000154",
+          "similarity": 0.033199318,
+          "title": "Roman Stoicism",
+          "excerpt": "In setting forth an ideal for human activity Aristotle conceives that other philosophers have differed more in words than in substance, and he hopes to reconcile them through the new term…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 46544,
+          "chunk_id": "c000565",
+          "similarity": 0.031933766,
+          "title": "The Theistic Conception of the World",
+          "excerpt": "The co-operation of these powers and susceptibilities of the soul in their relation to the good has a parallel and an illustration in their operation in relation to the beautiful .  The ideas of…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 22105,
+          "chunk_id": "c000071",
+          "similarity": 0.03125,
+          "title": "Christianity and Ethics: A Handbook of Christian Ethics",
+          "excerpt": "'Those obstinate questionings Of sense and outward things,'  which are the heritage of human nature.  {40}  The Ethics of Aristotle does not essentially differ from that of Plato. He is the first to…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 11100,
+          "chunk_id": "c000336",
+          "similarity": 0.030303031,
+          "title": "History of Modern Philosophy",
+          "excerpt": "As the harmony of impulses constitutes the essence of virtue, so also it is the way to true happiness. Experience shows that unsocial, unsympathetic, vicious men are miserable; that love to society…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 77777,
+          "chunk_id": "c001196",
+          "similarity": 0.030303031,
+          "title": "The Stoics, Epicureans and Sceptics",
+          "excerpt": "The real meaning of Carneades can only be that virtue consists in an activity directed towards the possession of what is according to nature, and hence that it cannot as the highest Good be separated…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 8438,
+          "chunk_id": "c000110",
+          "similarity": 0.029411765,
+          "title": "The Ethics of Aristotle",
+          "excerpt": "Moreover, since Happiness is a kind of working of the soul in the way of perfect Excellence, we must enquire concerning Excellence: for so probably shall we have a clearer view concerning Happiness;…"
+        }
+      ]
+    },
+    {
+      "query": "what is past is done with",
+      "source": "Marcus Aurelius, Meditations VIII.36",
+      "expected_gutenberg_ids": [
+        2680,
+        6920,
+        55317
+      ],
+      "expected_rank": null,
+      "expected_best_similarity": null,
+      "reciprocal_rank": 0.0,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 49244,
+          "chunk_id": "c000540",
+          "similarity": 0.052258063,
+          "title": "Fundamental Philosophy, Vol. 2 (of 2)",
+          "excerpt": "The past is an essentially relative idea. When we speak of the past , we have to take some point to which it refers, and in respect to which we say it is past. This point is the present, either in…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 16406,
+          "chunk_id": "c000947",
+          "similarity": 0.03366546,
+          "title": "An Introduction to Philosophy",
+          "excerpt": "I am by no means sure that it is past. With the lapse of time, old doctrines take on new aspects, and come to be couched in a language that suits the temper of the later age. Sometimes the doctrine…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 8438,
+          "chunk_id": "c000488",
+          "similarity": 0.032258064,
+          "title": "The Ethics of Aristotle",
+          "excerpt": "But nothing which is done and past can be the object of Moral Choice; for instance, no man chooses to have sacked Troy; because, in fact, no one ever deliberates about what is past, but only about…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 42932,
+          "chunk_id": "c000059",
+          "similarity": 0.03125,
+          "title": "Plotinos: Complete Works, v. 3",
+          "excerpt": "It might be objected that the former of these men enjoyed pleasure longer than the other. This consideration has nothing to do with happiness. If by this (enjoyed) pleasure we mean the free exercise…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 77338,
+          "chunk_id": "c000988",
+          "similarity": 0.03124249,
+          "title": "The English works of Thomas Hobbes of Malmesbury, Volume 06 (of 11)",
+          "excerpt": "The principles concerning not done are the contraries of these.  That shall be done : which some man can, and means to do. And which some man can, and desires to do. And which is in the way, and upon…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 49244,
+          "chunk_id": "c000542",
+          "similarity": 0.030397423,
+          "title": "Fundamental Philosophy, Vol. 2 (of 2)",
+          "excerpt": "The past, therefore, is always in reference to a present point, taken in the course of time, and it is only in respect to this, that any thing is said to have been, to be past; without this relation,…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 14357,
+          "chunk_id": "c000079",
+          "similarity": 0.030303031,
+          "title": "Rudolph Eucken : a philosophy of life",
+          "excerpt": "Through a study of history, too, we become aware of the intimate connection that exists between the present and the past. The present moment is a very transient thing; its roots are in the past, its…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 43719,
+          "chunk_id": "c000593",
+          "similarity": 0.030303031,
+          "title": "Life's Basis and Life's Ideal: The Fundamentals of a New Philosophy of Life",
+          "excerpt": "“It is done with just the proper combination of sympathy and criticism.”— The British Weekly  PUBLISHED BY  ADAM & CHARLES BLACK. 4 SOHO SQUARE. LONDON, W."
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 50086,
+          "chunk_id": "c000759",
+          "similarity": 0.029726775,
+          "title": "Creation or Evolution? A Philosophical Inquiry",
+          "excerpt": "[99] The practice of judging of the future by the past is sometimes treated as if it were a mere habit of the uncultivated and undisciplined part of mankind—a kind of mental weakness. Undoubtedly,…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 5116,
+          "chunk_id": "c000252",
+          "similarity": 0.029411765,
+          "title": "Pragmatism: A New Name for Some Old Ways of Thinking",
+          "excerpt": "When new experiences lead to retrospective judgments, using the past tense, what these judgments utter WAS true, even tho no past thinker had been led there. We live forwards, a Danish thinker has…"
+        }
+      ]
+    },
+    {
+      "query": "the only thing I know is that I know nothing",
+      "source": "Socrates via Plato, Apology 21d",
+      "expected_gutenberg_ids": [
+        1656,
+        13726
+      ],
+      "expected_rank": 1,
+      "expected_best_similarity": 1.0,
+      "reciprocal_rank": 1.0,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 1656,
+          "chunk_id": "c000000",
+          "similarity": 1.0,
+          "title": "Apology",
+          "excerpt": "In what relation the “Apology” of Plato stands to the real defence of Socrates, there are no means of determining. It certainly agrees in tone and character with the description of Xenophon, who…"
+        }
+      ]
+    },
+    {
+      "query": "when you arise in the morning think of what a privilege it is to be alive",
+      "source": "Marcus Aurelius (paraphrase)",
+      "expected_gutenberg_ids": [
+        2680,
+        6920,
+        55317
+      ],
+      "expected_rank": 17,
+      "expected_best_similarity": 0.02631579,
+      "reciprocal_rank": 0.05882353,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 15419,
+          "chunk_id": "c000010",
+          "similarity": 0.035326086,
+          "title": "Letters to a Daughter and A Little Sermon to School Girls",
+          "excerpt": "Certain self-evident duties are imposed upon every rational being. One of the first of these is the duty of being usefully employed a large portion of our time. It is probable that nearly all young…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 12956,
+          "chunk_id": "c000521",
+          "similarity": 0.0344952,
+          "title": "A History of Indian Philosophy, Volume 1",
+          "excerpt": "We should think of the transitoriness ( anityatâ ) of all things, that what a thing was in the morning, it is not at mid-day, what it was at mid-day it is not at night; for all things are transitory…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 20819,
+          "chunk_id": "c000209",
+          "similarity": 0.032585472,
+          "title": "Aims and Aids for Girls and Young Women",
+          "excerpt": "But we must put things to their true use, else pleasure will keep away. Oh, how much might we enjoy life if we would put things to their true use! When the sun shines, we must love it and think of…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 41901,
+          "chunk_id": "c000492",
+          "similarity": 0.03255189,
+          "title": "The Victorious Attitude",
+          "excerpt": "Assume the victorious attitude, and think of yourself as an absolutely perfect being, divine, immortal, possessing superb health, a magnificent physique, a vigorous constitution, a sublime…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 14312,
+          "chunk_id": "c000063",
+          "similarity": 0.032258064,
+          "title": "What All The World's A-Seeking",
+          "excerpt": "And with your abundant means and opportunities build your life upon this great law of service, and experience the pleasure of growing into that full, rich, ever increasing and satisfying life that…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 8910,
+          "chunk_id": "c000182",
+          "similarity": 0.03125,
+          "title": "The System of Nature, or, the Laws of the Moral and Physical World. Volume 2",
+          "excerpt": "He proceeds, \"It is an incontestible truth, that God exists necessarily, and the same necessity obliges to exist always and every where: from whence it follows, that he is in every thing similar to…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 78320,
+          "chunk_id": "c000090",
+          "similarity": 0.03125,
+          "title": "The Emperor Marcus Aurelius",
+          "excerpt": "“In the morning when thou risest unwillingly, let this thought be present—I am rising to the work of a human being. Why then am I dissatisfied if I am going to do the things for which I exist and…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 12020,
+          "chunk_id": "c000341",
+          "similarity": 0.030303031,
+          "title": "A Woman of the World: Her Counsel to Other People's Sons and Daughters",
+          "excerpt": "Speak often to your boy of the pathos of dumb animals dependent upon human thoughtfulness for food, drink, and decent usage.  Say what a privilege it seems to you to be able to befriend them, and to…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 51374,
+          "chunk_id": "c000010",
+          "similarity": 0.030303031,
+          "title": "The Golden Gems of Life; Or, Gathered Jewels for the Home Circle",
+          "excerpt": "Many of you to-day are just starting on the duties of active life. The volume of the future lies unopened before you. Its covers are illuminated by the pictures of fancy, and its edges are gleaming…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 20500,
+          "chunk_id": "c000140",
+          "similarity": 0.029411765,
+          "title": "A Short History of Greek Philosophy",
+          "excerpt": "To prove the second, that even if anything is, it cannot be known to man, he argued thus: \"If what a man thinks is not identical with what is, plainly what is cannot be thought. And that what a man…"
+        }
+      ]
+    },
+    {
+      "query": "everything that happens happens as it should",
+      "source": "Marcus Aurelius, Meditations IV.10",
+      "expected_gutenberg_ids": [
+        2680,
+        6920,
+        55317
+      ],
+      "expected_rank": 1,
+      "expected_best_similarity": 0.036295004,
+      "reciprocal_rank": 1.0,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 2680,
+          "chunk_id": "c000287",
+          "similarity": 0.036295004,
+          "title": "Meditations",
+          "excerpt": "Up and down, from one age to another, go the ordinary things of the world; being still the same. And either of everything in particular before it come to pass, the mind of the universe doth consider…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 21668,
+          "chunk_id": "c000122",
+          "similarity": 0.034721117,
+          "title": "The Complex Vision",
+          "excerpt": "For in all these primordial energizings of the complex vision everything that happens, happens simultaneously. With the consciousness \"I am I\" there comes simultaneously into existence the…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 55317,
+          "chunk_id": "c000248",
+          "similarity": 0.032258064,
+          "title": "The Meditations of the Emperor Marcus Aurelius Antoninus",
+          "excerpt": "The course of things in the world is ever the same; a continual rotation; up and down, from age to age. Either the Universal Mind exerts itself in every particular event, in which case you must…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 10715,
+          "chunk_id": "c000246",
+          "similarity": 0.03219512,
+          "title": "The Essays of Arthur Schopenhauer; Counsels and Maxims",
+          "excerpt": "There is nothing that better fits us to endure the misfortunes of life with composure, than to know for certain that everything that happens—from the smallest up to the greatest facts of…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 6920,
+          "chunk_id": "c000222",
+          "similarity": 0.03125,
+          "title": "Thoughts of Marcus Aurelius",
+          "excerpt": "The nature of the All moved to make the universe. But now either everything that takes place comes by way of consequence or [continuity]; or even the chief things towards which the ruling power of…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 40079,
+          "chunk_id": "c000142",
+          "similarity": 0.03125,
+          "title": "The Philosophy of Disenchantment",
+          "excerpt": "In Schopenhauer's opinion, the greatest novels were \"Tristram Shandy,\" \"Wilhelm Meister,\" \"Don Quixote,\" and the \"Nouvelle Héloïse.\" To \"Don Quixote\" he ascribed an allegorical meaning, but as an…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 65274,
+          "chunk_id": "c000293",
+          "similarity": 0.031156156,
+          "title": "Chance, Love, and Logic: Philosophical Essays",
+          "excerpt": "Whoever holds that every act of the will as well as every idea of the mind is under the rigid governance of a necessity co-ordinated with that of the physical world, will logically be carried to the…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 15877,
+          "chunk_id": "c000318",
+          "similarity": 0.030303031,
+          "title": "Thoughts of Marcus Aurelius Antoninus",
+          "excerpt": "The nature of the All moved to make the universe. But now either everything that takes place comes by way of consequence or [continuity]; or even the chief things towards which the ruling power of…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 43572,
+          "chunk_id": "c001309",
+          "similarity": 0.030303031,
+          "title": "A Commentary to Kant's 'Critique of Pure Reason'",
+          "excerpt": "Thesis. —Causality according to the laws of nature is not the only causality from which the appearances of the world can be deduced. There is also required for their explanation another, that of…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 4280,
+          "chunk_id": "c000332",
+          "similarity": 0.029411765,
+          "title": "The Critique of Pure Reason",
+          "excerpt": "That something happens, then, is a perception which belongs to a possible experience, which becomes real only because I look upon the phenomenon as determined in regard to its place in time,…"
+        }
+      ]
+    },
+    {
+      "query": "a treatise of human nature being an attempt to introduce the experimental method",
+      "source": "Hume, Treatise of Human Nature (verbatim subtitle)",
+      "expected_gutenberg_ids": [
+        4705,
+        62856
+      ],
+      "expected_rank": 1,
+      "expected_best_similarity": 0.06451613,
+      "reciprocal_rank": 1.0,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 62856,
+          "chunk_id": "c000000",
+          "similarity": 0.06451613,
+          "title": "A Treatise of Human Nature",
+          "excerpt": "Thomas Hodge Grose  Other information and formats : www.gutenberg.org/ebooks/62856  Introductions to Books I and II of  David Hume’s Treatise of Human Nature  Thomas Hill Green  A Treatise of Human…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 18819,
+          "chunk_id": "c000125",
+          "similarity": 0.0625,
+          "title": "Hume",
+          "excerpt": "It is assuredly one of Hume's greatest merits that he clearly recognised the fact that philosophy is based upon psychology; and that the inquiry into the contents and the operations of the mind must…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 42843,
+          "chunk_id": "c000144",
+          "similarity": 0.041090146,
+          "title": "Life and Correspondence of David Hume, Volume 1",
+          "excerpt": "Such are a few remarks on the matter of the first part of the \"Treatise of Human Nature\"—given not by any means as an analysis of the doctrines there taught, but merely as an attempt to…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 42843,
+          "chunk_id": "c000119",
+          "similarity": 0.040204022,
+          "title": "Life and Correspondence of David Hume, Volume 1",
+          "excerpt": "It has been generally and justly remarked, that the Treatise is among the least systematic of philosophical works—that it has neither a definite and comprehensive plan, nor a logical arrangement.…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 36208,
+          "chunk_id": "c000042",
+          "similarity": 0.039411765,
+          "title": "Lectures on the true, the beautiful and the good",
+          "excerpt": "This is our first need. But there is another, not less legitimate, the need of not being the dupe of chimerical principles, of barren abstractions, of combinations more or less ingenious, but…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 53791,
+          "chunk_id": "c000197",
+          "similarity": 0.03142137,
+          "title": "Philosophical Works, v. 1 (of 4)",
+          "excerpt": "My design in the present Work is sufficiently explained in the Introduction. The reader must only observe, that all the subjects I have there planned out to myself are not treated in these two…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 54992,
+          "chunk_id": "c000141",
+          "similarity": 0.030798601,
+          "title": "Prolegomena to the Study of Hegel's Philosophy, and Especially of His Logic",
+          "excerpt": "[2] Arist. Metaph. i. 2. 26.  [3] Treatise of Human Nature (Understanding), iii. 7 and ii. 6.  [4] Ibid. iii. 14.  [5] Treatise of Human Nature (Understanding iv. 4.)  [6] Treatise of Human Nature…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 10616,
+          "chunk_id": "c000456",
+          "similarity": 0.030303031,
+          "title": "An Essay Concerning Humane Understanding, Volume 2",
+          "excerpt": "In the study of Nature we must beware of Hypotheses and wrong Principles.  I would not, therefore, be thought to disesteem or dissuade the study of NATURE. I readily agree the contemplation of his…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 67097,
+          "chunk_id": "c000040",
+          "similarity": 0.029797548,
+          "title": "Early Greek philosophy",
+          "excerpt": "Nor is it true that the Greeks made no use of experiment. The rise of the experimental method dates from the time when the medical schools began to influence the development of philosophy, and…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 42843,
+          "chunk_id": "c000131",
+          "similarity": 0.029411765,
+          "title": "Life and Correspondence of David Hume, Volume 1",
+          "excerpt": "It may make this brief sketch more clear, to notice a circumstance in the history of philosophy, which, perhaps, serves better in an incidental manner to mark the boundaries of the field of Hume's…"
+        }
+      ]
+    },
+    {
+      "query": "the will to power",
+      "source": "Nietzsche — corpus has pg52915 'Will to Power Book III-IV' specifically (high-volume target)",
+      "expected_gutenberg_ids": [],
+      "expected_rank": null,
+      "expected_best_similarity": null,
+      "reciprocal_rank": 0.0,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 52914,
+          "chunk_id": "c000007",
+          "similarity": 0.042328045,
+          "title": "The Will to Power: An Attempted Transvaluation of All Values. Book I and II",
+          "excerpt": "\"Wherever I found a living thing, there found I Will to Power; and even in the will of the servant found I the will to be master.  \"Only where there is life, is there also will: not, however, Will to…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 53622,
+          "chunk_id": "c000687",
+          "similarity": 0.036587067,
+          "title": "What Nietzsche Taught",
+          "excerpt": "However, let us not overlook the importance of the doctrine of the will to power either in its relation to Nietzsche's writings or in its application to ourselves. By this doctrine the philosopher…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 1998,
+          "chunk_id": "c000518",
+          "similarity": 0.036128048,
+          "title": "Thus Spake Zarathustra: A Book for All and None",
+          "excerpt": "Only where there is life, is there also will: not, however, Will to Life, but—so teach I thee—Will to Power!  Much is reckoned higher than life itself by the living one; but out of the very…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 64295,
+          "chunk_id": "c000168",
+          "similarity": 0.0356383,
+          "title": "Young Men; In Business",
+          "excerpt": "Another condition of success is force, or energy. This comes often by heredity, transmitted from parent to child. In any case it is a precious gift, a great talent, for the right use of which every…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 53622,
+          "chunk_id": "c000711",
+          "similarity": 0.035635963,
+          "title": "What Nietzsche Taught",
+          "excerpt": "The will to power is the primitive motive force out of which all other motives have been derived. 162  From a psychological point of view the idea of \"cause\" is our feeling of power in the act which…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 52915,
+          "chunk_id": "c000524",
+          "similarity": 0.033546552,
+          "title": "The Will to Power: An Attempted Transvaluation of All Values. Book III and IV",
+          "excerpt": "776.  Concerning the Machiavellism of Power.  The will to power appears:—  (a) Among the oppressed and slaves of all kinds, in the form of will to \" freedom \": the mere fact of breaking loose from…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 53620,
+          "chunk_id": "c000680",
+          "similarity": 0.032258064,
+          "title": "The life of Friedrich Nietzsche",
+          "excerpt": "The work remained in an incomplete condition. Nietzsche knew it, and the mass of thoughts which he had not expressed saddened him like a remorse. He was about to attempt another test. It was without…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 47588,
+          "chunk_id": "c000098",
+          "similarity": 0.032105,
+          "title": "Friedrich Nietzsche",
+          "excerpt": "Nietzsche replaces Schopenhauer's Will to Life and Darwin's Struggle for Existence by the Will to Power . In his view the fight is not for life—bare existence—but for power. And he has a great…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 53622,
+          "chunk_id": "c000725",
+          "similarity": 0.031511333,
+          "title": "What Nietzsche Taught",
+          "excerpt": "(b) In the case of a stronger species, ascending to power, in the form of the will to overpower. If this fails, then it shrinks to the \"will to justice\"—that is to say, to the will to the same…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 1998,
+          "chunk_id": "c000512",
+          "similarity": 0.03132381,
+          "title": "Thus Spake Zarathustra: A Book for All and None",
+          "excerpt": "Hearken now unto my word, ye wisest ones! Test it seriously, whether I have crept into the heart of life itself, and into the roots of its heart!  Wherever I found a living thing, there found I Will…"
+        }
+      ]
+    },
+    {
+      "query": "every action of yours that has no reference to a social end",
+      "source": "Marcus Aurelius, Meditations IX.23",
+      "expected_gutenberg_ids": [
+        2680,
+        6920,
+        55317
+      ],
+      "expected_rank": 1,
+      "expected_best_similarity": 0.06003584,
+      "reciprocal_rank": 1.0,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 55317,
+          "chunk_id": "c000245",
+          "similarity": 0.06003584,
+          "title": "The Meditations of the Emperor Marcus Aurelius Antoninus",
+          "excerpt": "You yourself are a part of a social system necessary to complete the whole. Accordingly, let your every action be a similar part of the social life. And if any action has not its reference, either…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 15877,
+          "chunk_id": "c000383",
+          "similarity": 0.057258062,
+          "title": "Thoughts of Marcus Aurelius Antoninus",
+          "excerpt": "As thou thyself art a component part of a social system, so let every act of thine be a component part of social life. Whatever act of thine then has no reference either immediately or remotely to a…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 6920,
+          "chunk_id": "c000281",
+          "similarity": 0.056891024,
+          "title": "Thoughts of Marcus Aurelius",
+          "excerpt": "As thou thyself art a component part of a social system, so let every act of thine be a component part of social life. Whatever act of thine then has no reference either immediately or remotely to a…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 2680,
+          "chunk_id": "c000284",
+          "similarity": 0.046257798,
+          "title": "Meditations",
+          "excerpt": "As thou thyself, whoever thou art, were made for the perfection and consummation, being a member of it, of a common society; so must every action of thine tend to the perfection and consummation of a…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 15877,
+          "chunk_id": "c000487",
+          "similarity": 0.043722942,
+          "title": "Thoughts of Marcus Aurelius Antoninus",
+          "excerpt": "First, do nothing inconsiderately, nor without a purpose. Second, make thy acts refer to nothing else than to a social end.  Consider that before long thou wilt be nobody and nowhere, nor will any of…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 6920,
+          "chunk_id": "c000375",
+          "similarity": 0.041911766,
+          "title": "Thoughts of Marcus Aurelius",
+          "excerpt": "First, do nothing inconsiderately, nor without a purpose. Second, make thy acts refer to nothing else than to a social end.  Consider that before long thou wilt be nobody and nowhere, nor will any of…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 34656,
+          "chunk_id": "c000363",
+          "similarity": 0.033518463,
+          "title": "Evolution",
+          "excerpt": "On the one hand, before accepting the argument that there is no purpose in the action of the social organism because there is none in that of the animal, we must prove that there is none in that of…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 41633,
+          "chunk_id": "c002766",
+          "similarity": 0.03125,
+          "title": "A Christian Directory, Part 1: Christian Ethics",
+          "excerpt": "Naturally action is the end of all our powers; and the power were vain, but in respect to the act: to be able to understand, to read, to write, to go, &c. were little worth, if it were not that we…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 56441,
+          "chunk_id": "c000379",
+          "similarity": 0.030303031,
+          "title": "Analysis of the Phenomena of the Human Mind",
+          "excerpt": "In applying the names of actions to the proper subjects of them, there are three Modes of the action, one or other of which is always implied. The first is, when the action has no reference to any…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 42933,
+          "chunk_id": "c001425",
+          "similarity": 0.029411765,
+          "title": "Plotinos: Complete Works, v. 4",
+          "excerpt": "Page lviii : \"Soul and relation with God\", reference to \"i.\" was misprinted as \"ii.\"  Page lviii : \"Soul conforms destiny to her character... 53-238\" corrected to 15-238.  Page lx : \"Soul split into…"
+        }
+      ]
+    },
+    {
+      "query": "no man steps in the same river twice",
+      "source": "Heraclitus — fragment, not a complete book; recall baseline",
+      "expected_gutenberg_ids": [],
+      "expected_rank": null,
+      "expected_best_similarity": null,
+      "reciprocal_rank": 0.0,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 57998,
+          "chunk_id": "c000122",
+          "similarity": 0.06451613,
+          "title": "On Sameness and Identity: A Psychological Study",
+          "excerpt": "Aristotle, Metaph., Book X, c. 5, § 3.  Section 21. When Heraclitus of Ephesus, moved thereto by his view of the constant flux of things, declared it impossible to enter the same river twice, [30]…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 15000,
+          "chunk_id": "c000931",
+          "similarity": 0.051827244,
+          "title": "The Life of Reason: The Phases of Human Progress",
+          "excerpt": "If we imagine, on the contrary, that this animal could speak and had from the first called his haunt the river , he would have repeated its name on seeing it even when it was frozen, for he had not…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 46759,
+          "chunk_id": "c000120",
+          "similarity": 0.046078432,
+          "title": "Philosophic Nights in Paris",
+          "excerpt": "One never crosses the same river twice, said the Greek philosopher, and if this be to some a source of bitterness, others will find in it good reason to take heart. The latter are those whose…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 4095,
+          "chunk_id": "c000029",
+          "similarity": 0.045019157,
+          "title": "Plato and Platonism",
+          "excerpt": "+Transliteration: eimen te kai ouk eimen. E-text editor's translation: \"We are and are not.\" Heraclitus, Fragments. Fragmenta Philosophorum Graecorum, Vol. 1, 326. Ed. F.W.A. Mullach. Darmstadt:…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 25447,
+          "chunk_id": "c000010",
+          "similarity": 0.03545168,
+          "title": "Mysticism and Logic and Other Essays",
+          "excerpt": "This theory, though no longer one which science can accept, is nevertheless scientific in spirit. Science, too, might have inspired the famous saying to which Plato alludes: \"You cannot step twice…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 43409,
+          "chunk_id": "c000274",
+          "similarity": 0.0331018,
+          "title": "The Kingdom of God is Within You; What is Art?",
+          "excerpt": "These arguments are equivalent to telling a man who is crossing a swift river and steering his boat against the current, that no one can cross a river by steering against the current, but that he…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 12426,
+          "chunk_id": "c000309",
+          "similarity": 0.0322841,
+          "title": "Routledge's Manual of Etiquette",
+          "excerpt": "A ball generally begins about half-past nine or ten o'clock.  A man who stands up to dance without being acquainted with the figures, makes himself ridiculous, and places his partner in an…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 2940,
+          "chunk_id": "c000102",
+          "similarity": 0.03145498,
+          "title": "Evolution and Ethics, and Other Essays",
+          "excerpt": "As no man fording a swift stream can dip his foot twice into the same water, so no man can, with exactness, affirm of anything in the sensible world that it is.[Note 2} As he utters the words, nay,…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 58559,
+          "chunk_id": "c000898",
+          "similarity": 0.03125,
+          "title": "The Essays of Adam Smith",
+          "excerpt": "According to Plato and Timæus, the principles out of which the Deity formed the World, and which were themselves eternal, were three in number. The Subject-matter of things, the Species, or Specific…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 455,
+          "chunk_id": "c000434",
+          "similarity": 0.030303031,
+          "title": "The University of Hard Knocks",
+          "excerpt": "Go to Keokuk, Iowa, for your answer.  They have built a great concrete obstacle clear across the path of the river. It is many feet high, and many, many feet long. The river cannot go on south. Watch…"
+        }
+      ]
+    },
+    {
+      "query": "appearances are not realities and what is is not what seems",
+      "source": "Plato — recurring motif across Republic, Phaedo, Theaetetus",
+      "expected_gutenberg_ids": [
+        10214,
+        40437,
+        1658,
+        13726
+      ],
+      "expected_rank": null,
+      "expected_best_similarity": null,
+      "reciprocal_rank": 0.0,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 1572,
+          "chunk_id": "c000000",
+          "similarity": 1.0,
+          "title": "Timaeus",
+          "excerpt": "Other information and formats : www.gutenberg.org/ebooks/1572  Of all the writings of Plato the Timaeus is the most obscure and repulsive to the modern reader, and has nevertheless had the greatest…"
+        }
+      ]
+    },
+    {
+      "query": "concerning the principles of human knowledge",
+      "source": "Berkeley, Principles of Human Knowledge (verbatim title)",
+      "expected_gutenberg_ids": [
+        4723
+      ],
+      "expected_rank": 8,
+      "expected_best_similarity": 0.032574154,
+      "reciprocal_rank": 0.125,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 57998,
+          "chunk_id": "c000289",
+          "similarity": 0.06350806,
+          "title": "On Sameness and Identity: A Psychological Study",
+          "excerpt": "[56] Locke's Essays, Philadelphia, 1846, p. 415, et seq.  [57] \"A Treatise Concerning the Principles of Human Knowledge,\" §§ 123-132. Ed. Fraser, Vol. I, pp. 220-225.  [58] §§ 45-48, pp.…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 39746,
+          "chunk_id": "c000766",
+          "similarity": 0.049910873,
+          "title": "The Works of George Berkeley. Vol. 1 of 4: Philosophical Works, 1705-21",
+          "excerpt": "My purpose therefore is, to try if I can discover what those Principles are which have introduced all that doubtfulness and uncertainty, those absurdities and contradictions, into the several sects…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 32547,
+          "chunk_id": "c000111",
+          "similarity": 0.04897959,
+          "title": "Essays in Radical Empiricism",
+          "excerpt": "[26] [Cf. Berkeley: Principles of Human Knowledge , Introduction; Hume: An Enquiry Concerning Human Understanding , sect. vii , part ii (Selby-Bigge’s edition, p. 74); James Mill: Analysis of the…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 52090,
+          "chunk_id": "c000509",
+          "similarity": 0.04631579,
+          "title": "Man a Machine",
+          "excerpt": "“ Principia philosophiae , ” by Descartes, 166 , 204 , 206 .  “Principles of Human Knowledge,” by Berkeley, 200 .  Prometheus, 24 , 70 , 96 , 141 .  Protestant College of Sedan, 187…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 48149,
+          "chunk_id": "c000035",
+          "similarity": 0.04488417,
+          "title": "Fundamental Philosophy, Vol. 1 (of 2)",
+          "excerpt": "It is the same with certainty as with other objects of human knowledge. The fact is presented to us in all its magnitude, and with all clearness; but we do not penetrate to its innermost nature. Our…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 62856,
+          "chunk_id": "c000318",
+          "similarity": 0.041241497,
+          "title": "A Treatise of Human Nature",
+          "excerpt": "[1] ‘Principles of Human Knowledge,’ sec. 89.  [2] See above, paragraph 122.  His theory of universals …  Berkeley’s answer to these questions must be gathered from his theory of general…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 35722,
+          "chunk_id": "c000034",
+          "similarity": 0.032896087,
+          "title": "Ontology, or the Theory of Being",
+          "excerpt": "But since the human mind itself is the natural instrument whereby man acquires all his knowledge, it will be at once apparent that the study of the phenomenon of knowledge itself, of the cognitive…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 4723,
+          "chunk_id": "c000005",
+          "similarity": 0.032574154,
+          "title": "A Treatise Concerning the Principles of Human Knowledge",
+          "excerpt": "My purpose therefore is, to try if I can discover what those Principles are which have introduced all that doubtfulness and uncertainty, those absurdities and contradictions, into the several sects…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 48149,
+          "chunk_id": "c000245",
+          "similarity": 0.032258064,
+          "title": "Fundamental Philosophy, Vol. 1 (of 2)",
+          "excerpt": "Starting with a given assent, we may, perhaps, arrive at different principles, independent one of the other, all equally fundamental, as regards our mind: in this case there will be not only one, but…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 58169,
+          "chunk_id": "c000436",
+          "similarity": 0.03125,
+          "title": "Hegel's Lectures on the History of Philosophy: Volume 3 (of 3)",
+          "excerpt": "George Berkeley was born in 1684 at Kilcrin, near Thomastown, in the county of Kilkenny, Ireland: in 1754 he died as an English Bishop. [280] He wrote the “Theory of Vision,” 1709; “A Treatise…"
+        }
+      ]
+    }
+  ],
+  "topical": [
+    {
+      "query": "form and matter",
+      "notes": "Should land in Aristotle + Maimonides territory.",
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 45851,
+          "chunk_id": "c001983",
+          "similarity": 0.05,
+          "title": "Aristotle",
+          "excerpt": "Upon this reasoning, it seems that Matter is the true Essence. Yet, on the other hand, this will be seen to be impossible. For the principal characteristic of Essence is to be separable and Hoc…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 45851,
+          "chunk_id": "c000271",
+          "similarity": 0.049411766,
+          "title": "Aristotle",
+          "excerpt": "The remarks of Boêthus and Simplikius upon this point deserve attention. Schol. pp. 50-54, Br.; p. 54, a. 2: οὐ περὶ τῆς ἀσχέτου ὕλης ἐστὶν ὁ παρὼν…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 54618,
+          "chunk_id": "c000078",
+          "similarity": 0.045208845,
+          "title": "Æsthetic as science of expression and general linguistic",
+          "excerpt": "The relation between matter and form, or between content and form, as is generally said, is one of the most disputed questions in Æsthetic. Does the æsthetic fact consist of content alone, or of…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 41707,
+          "chunk_id": "c000046",
+          "similarity": 0.04349817,
+          "title": "The Development of Metaphysics in Persia",
+          "excerpt": "The analysis of matter results in a number of different elements, the diversity of which is reduced to one simple element.  Form and matter are inseparable: no change in matter can annihilate…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 9306,
+          "chunk_id": "c000073",
+          "similarity": 0.042069994,
+          "title": "Aesthetic as Science of Expression and General Linguistic",
+          "excerpt": "[Sidenote] Content and form in Aesthetic.  The relation between matter and form, or between content and form , as it is generally called, is one of the most disputed questions in Aesthetic. Does the…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 42933,
+          "chunk_id": "c000816",
+          "similarity": 0.03982684,
+          "title": "Plotinos: Complete Works, v. 4",
+          "excerpt": "Form and light, two methods of sight, v. 5.7 (32- 586 ).  Form and matter in all things, iv. 7.1 (2- 56 ).  Form and matter intermediary between, is sense-object, iii. 6.17 (26- 381 ).  Form as…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 18440,
+          "chunk_id": "c000052",
+          "similarity": 0.038675956,
+          "title": "Logic: Deductive and Inductive",
+          "excerpt": "This leads to a very important distinction to which we shall often have to refer in subsequent pages—namely, the distinction between the Form and the Matter of a proposition or of an argument. The…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 54992,
+          "chunk_id": "c000439",
+          "similarity": 0.037649542,
+          "title": "Prolegomena to the Study of Hegel's Philosophy, and Especially of His Logic",
+          "excerpt": "The relativity of form and matter, or of form and content, is indeed almost a commonplace of popular discussion on logical subjects. But like other uncritical applications of great truths, this is…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 38943,
+          "chunk_id": "c000029",
+          "similarity": 0.035027027,
+          "title": "Science and Medieval Thought",
+          "excerpt": "For, to resume, closely allied to the argument concerning universals was that concerning “form and matter.” Whether the terms used were “form and matter,” force or energy or “pneuma” and…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 74236,
+          "chunk_id": "c000486",
+          "similarity": 0.03478261,
+          "title": "The English works of Thomas Hobbes of Malmesbury, Volume 04 (of 11)",
+          "excerpt": "Matter is the same with body ; but never without respect to a body which is made thereof. Form is the aggregate of all accidents together, for which we give the matter a new name; so albedo ,…"
+        }
+      ],
+      "similarity_span": 0.031132076
+    },
+    {
+      "query": "eudaimonia and human flourishing",
+      "notes": "Greek ethics.",
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 39551,
+          "chunk_id": "c000262",
+          "similarity": 0.036442164,
+          "title": "Ethics",
+          "excerpt": "Eudaemonism. —Aristotle's conception of the good is fundamentally the same. It is a full development of man's capacities, culminating in a rational and harmonious life. If, says Aristotle, we are…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 57342,
+          "chunk_id": "c000684",
+          "similarity": 0.032258064,
+          "title": "The Lives and Opinions of Eminent Philosophers",
+          "excerpt": "A poetical expression is, as Posidonius defines it in his introduction on Style, “A metrical or rhythmical diction, proceeding in preparation, and avoiding all resemblance to prose.” For…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 16835,
+          "chunk_id": "c000200",
+          "similarity": 0.03125,
+          "title": "An Interpretation of Rudolf Eucken's Philosophy",
+          "excerpt": "In The Problem of Human Life Eucken sees in the message of every one of the great thinkers of the ages, however much he may differ from them, the vindication of a life higher than that of sense or…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 43967,
+          "chunk_id": "c000219",
+          "similarity": 0.03125,
+          "title": "A Christian Directory, Part 4: Christian Politics",
+          "excerpt": "And human laws, while they bind us to or from an outward act, do thereby bind us as rational free agents, knowingly to choose or refuse those acts; nor can a law which is a moral instrument any…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 15877,
+          "chunk_id": "c000155",
+          "similarity": 0.030303031,
+          "title": "Thoughts of Marcus Aurelius Antoninus",
+          "excerpt": "As physicians have always their instruments and knives ready for cases which suddenly require their skill, so do thou have principles ready for the understanding of things divine and human, and for…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 27821,
+          "chunk_id": "c000888",
+          "similarity": 0.030303031,
+          "title": "A History of Mediaeval Jewish Philosophy",
+          "excerpt": "Maimonides's ethics as well as his interpretation of the Pentateuchal laws is intellectualistic, as the foregoing account shows. And it is natural that it should be. The prevailing trend of thought…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 10741,
+          "chunk_id": "c000002",
+          "similarity": 0.029411765,
+          "title": "The Essays of Arthur Schopenhauer: the Wisdom of Life",
+          "excerpt": "Now whether human life corresponds, or could possibly correspond, to this conception of existence, is a question to which, as is well-known, my philosophical system returns a negative answer. On the…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 76650,
+          "chunk_id": "c000012",
+          "similarity": 0.029411765,
+          "title": "The English works of Thomas Hobbes of Malmesbury, Volume 05 (of 11)",
+          "excerpt": "The arguments by which this question is disputed, are drawn from four fountains. 1. From authorities . 2. From the inconveniences consequent to either opinion . 3. From the attributes of God . 4.…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 60422,
+          "chunk_id": "c000058",
+          "similarity": 0.029098362,
+          "title": "Outlines of a Critical Theory of Ethics",
+          "excerpt": "Here too we must 'back to Aristotle.' According to him the end of conduct is eudaimonia , success, welfare, satisfied life. But eudaimonia is found not in pleasure, but in the fulfillment of human…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 2680,
+          "chunk_id": "c000071",
+          "similarity": 0.028571429,
+          "title": "Meditations",
+          "excerpt": "As physicians and chirurgeons have always their instruments ready at hand for all sudden cures; so have thou always thy dogmata in a readiness for the knowledge of things, both divine and human: and…"
+        }
+      ],
+      "similarity_span": 0.018260347
+    },
+    {
+      "query": "categorical imperative and moral duty",
+      "notes": "Kantian deontology.",
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 42968,
+          "chunk_id": "c000539",
+          "similarity": 0.050117925,
+          "title": "The Riddle of the Universe at the close of the nineteenth century",
+          "excerpt": "The cupola of his great cathedral of faith was crowned by Kant with his curious idol, the famous “categorical imperative.” According to it, the demand of the universal moral law is unconditional,…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 41412,
+          "chunk_id": "c000374",
+          "similarity": 0.041757442,
+          "title": "A History of Philosophy in Epitome",
+          "excerpt": "The categorical imperative is the necessary law of freedom binding upon all men, and is distinguished from material motives, in that the latter have no fixed character. For men are at variance in…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 46544,
+          "chunk_id": "c000582",
+          "similarity": 0.040878754,
+          "title": "The Theistic Conception of the World",
+          "excerpt": "The idea of moral obligation necessarily presupposes the freedom of the will. This is a principle so obvious that it needs no elucidation. If man have duties, he must possess the power of fulfilling…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 43062,
+          "chunk_id": "c000258",
+          "similarity": 0.04013208,
+          "title": "Theoretical Ethics",
+          "excerpt": "Any separation of morality from the position of something due to God personally, obscures and weakens the ethical view. This has been the bane not only of pagan, materialistic, atheistic, or grossly…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 5246,
+          "chunk_id": "c000492",
+          "similarity": 0.039638933,
+          "title": "Modern French Philosophy: a Study of the Development Since Comte",
+          "excerpt": "The old notion of duty or obligation must, in Guyau’s opinion, be abandoned. The sole commandment which a scientific and positive ethic, such as he endeavours to indicate, can recognise, is…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 39551,
+          "chunk_id": "c000644",
+          "similarity": 0.037405625,
+          "title": "Ethics",
+          "excerpt": "(2) The Authority of Duty. —A duty, in Kant's words, is a categorical imperative—it claims the absolute right of way as against immediate inclination. That which, on one side, is the constraint…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 47880,
+          "chunk_id": "c000093",
+          "similarity": 0.037336305,
+          "title": "The Philosophy of Immanuel Kant",
+          "excerpt": "Kant's account of duty is determined by the sharp separation which he makes of man as moral agent and man regarded \"from the point of view of anthropology.\" The commands of duty must be derived…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 11100,
+          "chunk_id": "c000643",
+          "similarity": 0.037037037,
+          "title": "History of Modern Philosophy",
+          "excerpt": "After it has been settled what the categorical imperative enjoins, the further problem awaits us of explaining how it is possible. The categorical imperative is possible only on I the presupposition…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 5775,
+          "chunk_id": "c000227",
+          "similarity": 0.03470874,
+          "title": "Problems of Conduct: An Introductory Survey of Ethics",
+          "excerpt": "(4) Kant's \"categorical imperative\" is purely formal and empty. We OUGHT, we OUGHT-but what? It leads, if to anything, to a mere emotional reinforcement of our preexisting moral conceptions, to that…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 62663,
+          "chunk_id": "c000440",
+          "similarity": 0.033710513,
+          "title": "A Beginner's History of Philosophy, Vol. 2: Modern Philosophy",
+          "excerpt": "The categorical imperative is unique—there is nothing like it in human nature. It is the one kind of willing that has absolute validity; and that is because it is unique in having itself for its…"
+        }
+      ],
+      "similarity_span": 0.028532973
+    },
+    {
+      "query": "the categories of the understanding",
+      "notes": "Kantian epistemology.",
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 62663,
+          "chunk_id": "c000411",
+          "similarity": 0.049170956,
+          "title": "A Beginner's History of Philosophy, Vol. 2: Modern Philosophy",
+          "excerpt": "Categories of Quantity,—Unity, Plurality, Totality.  Categories of Quality,—Reality, Negation, Limitation.  Categories of Relation,—Substance, Cause, Reciprocity.  Categories of…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 62663,
+          "chunk_id": "c000410",
+          "similarity": 0.048642535,
+          "title": "A Beginner's History of Philosophy, Vol. 2: Modern Philosophy",
+          "excerpt": "Since the days of Aristotle the general terms used in reasoning have been called categories. Any class-term or genus may be called a category. There are certain summa genera , the most extensive…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 41412,
+          "chunk_id": "c000349",
+          "similarity": 0.045742754,
+          "title": "A History of Philosophy in Epitome",
+          "excerpt": "From these judgments result the same number of fundamental conceptions or categories of the understanding, viz.:  From these twelve categories all the rest may be derived by combination. From the…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 37864,
+          "chunk_id": "c000021",
+          "similarity": 0.03965336,
+          "title": "Know the Truth: A Critique on the Hamiltonian Theory of Limitation",
+          "excerpt": "\"While we regard as conclusive Kant's analysis of Time and Space into conditions of thought, we cannot help viewing his deduction of the 'Categories of Understanding' and the 'Ideas of Speculative…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 27942,
+          "chunk_id": "c001791",
+          "similarity": 0.03888889,
+          "title": "A System of Logic, Ratiocinative and Inductive",
+          "excerpt": "This is doubtless a true statement of the leading idea in the classification. The Category Οὐσία was certainly understood by Aristotle to be a general name for all possible answers to the…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 40097,
+          "chunk_id": "c000041",
+          "similarity": 0.03765823,
+          "title": "The World as Will and Idea (Vol. 2 of 3)",
+          "excerpt": "Now all that has been quoted is contradicted in the most glaring manner by the whole of the rest of his doctrine of the understanding, of its categories, and of the possibility of experience as he…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 43572,
+          "chunk_id": "c000090",
+          "similarity": 0.035304006,
+          "title": "A Commentary to Kant's 'Critique of Pure Reason'",
+          "excerpt": "In contrast of sensibility Kant sets the intellectual faculties, understanding and Reason. In the understanding originate certain pure concepts, or as he more usually names them, categories. The…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 32701,
+          "chunk_id": "c000230",
+          "similarity": 0.034632035,
+          "title": "Kant's Theory of Knowledge",
+          "excerpt": "We may now consider how Kant 'discovers' the categories or conceptions which belong to the understanding as such. [10] His method is sound in principle. He begins with an account of the understanding…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 62663,
+          "chunk_id": "c000412",
+          "similarity": 0.033779763,
+          "title": "A Beginner's History of Philosophy, Vol. 2: Modern Philosophy",
+          "excerpt": "Having named the a priori forms of the understanding, how does Kant show that by their means our knowledge of nature has validity? Because when the understanding functions, it prescribes these forms…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 35722,
+          "chunk_id": "c000415",
+          "similarity": 0.032258064,
+          "title": "Ontology, or the Theory of Being",
+          "excerpt": "By using these notions as predicates of our judgments we are enabled to interpret things, to obtain a genuine if inadequate insight into reality; for we assume as established in the Theory of…"
+        }
+      ],
+      "similarity_span": 0.029204782
+    },
+    {
+      "query": "Forms and the Good",
+      "notes": "Platonic metaphysics.",
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 40437,
+          "chunk_id": "c001116",
+          "similarity": 0.040204678,
+          "title": "Plato and the Other Companions of Sokrates, 3rd ed. Volume 3",
+          "excerpt": "Quintuple gradation in the Constituents of the Good. 1. Measure. 2. Symmetry. 3. Intelligence. 4. Practical Arts and Right Opinions. 5. True and Pure Pleasures.  We thus see (says Sokrates in…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 42932,
+          "chunk_id": "c000138",
+          "similarity": 0.038351253,
+          "title": "Plotinos: Complete Works, v. 3",
+          "excerpt": "But if the good be everywhere a form; if, in the measure that one rises (along the ladder of beings), there is a progression in the form—for the soul is more of a form than the form of the body; in…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 41633,
+          "chunk_id": "c003026",
+          "similarity": 0.032258064,
+          "title": "A Christian Directory, Part 1: Christian Ethics",
+          "excerpt": "[160] Psal. lxxviii. 37; 2 Cor. vii. 11.  [161] 1 John i. 6; ii. 3-5, 15; iv. 6-8, 20; v. 3; Matt. x. 37.  [162] The similitude of superstition to religion maketh it the more deformed: and as…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 61151,
+          "chunk_id": "c000124",
+          "similarity": 0.032258064,
+          "title": "Good Form and Christian Etiquette",
+          "excerpt": "There are many teachings as to what constitutes good form at table. It would be impossible for the ordinary mortal so to acquaint himself with them as to become a “social success;” and this is…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 61151,
+          "chunk_id": "c000004",
+          "similarity": 0.03125,
+          "title": "Good Form and Christian Etiquette",
+          "excerpt": "S. M. I. Henry.  “Good form” is especially a society phrase, but it is full of meaning, such as has a direct bearing on even the life and walk of a missionary. It is of sufficient importance to…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 73430,
+          "chunk_id": "c000401",
+          "similarity": 0.03125,
+          "title": "History as past ethics; an introduction to the history of morals",
+          "excerpt": "Such dependence as this on rules and forms and rites is of course disastrous to all true morality. It fosters the idea that morality consists in the performance of certain outer acts, instead of…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 26842,
+          "chunk_id": "c000340",
+          "similarity": 0.030303031,
+          "title": "The Sense of Beauty: Being the Outlines of Aesthetic Theory",
+          "excerpt": "The much-praised expression of function and truth in architectural works reduces itself to this principle. The useful contrivance at first appeals to our practical approval; while we admire its…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 56869,
+          "chunk_id": "c000598",
+          "similarity": 0.030303031,
+          "title": "The Art of Being Happy",
+          "excerpt": "‘Not to thy eternal resting place,  Shalt thou retire alone: * *  * * Thou shalt lie down  With patriarchs of the infant world, with kings,  The powerful of the earth, the wise, the good,  Fair…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 42933,
+          "chunk_id": "c000151",
+          "similarity": 0.029411765,
+          "title": "Plotinos: Complete Works, v. 4",
+          "excerpt": "Studying the origin of evils that might affect all beings in general, or some one class in particular, it is reasonable to begin by defining evil, from a consideration of its nature. That would be…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 61151,
+          "chunk_id": "c000140",
+          "similarity": 0.029411765,
+          "title": "Good Form and Christian Etiquette",
+          "excerpt": "Even good form may be made too burdensome to be endured, and it is the privilege of conscientious Christian society to strike the happy medium between this oppressive formalism and the true kindly…"
+        }
+      ],
+      "similarity_span": 0.02168616
+    },
+    {
+      "query": "scepticism and the limits of knowledge",
+      "notes": "Hume + Pyrrho territory.",
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 53620,
+          "chunk_id": "c000280",
+          "similarity": 0.04433714,
+          "title": "The life of Friedrich Nietzsche",
+          "excerpt": "\" The philosopher of the desperate knowledge abandons himself to blind science: knowledge at any price.  \"Even if metaphysics be only an anthropomorphic appearance, for the tragic philosopher that…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 4280,
+          "chunk_id": "c000956",
+          "similarity": 0.035150375,
+          "title": "The Critique of Pure Reason",
+          "excerpt": "Scepticism not a Permanent State for Human Reason.  The consciousness of ignorance—unless this ignorance is recognized to be absolutely necessary ought, instead of forming the conclusion of my…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 43116,
+          "chunk_id": "c000045",
+          "similarity": 0.03503584,
+          "title": "Lectures on the Philosophy of the Human Mind (Vol. 1 of 3)",
+          "excerpt": "The study of the powers and limits of the understanding, and of the sources of evidence in external nature and ourselves, instead of either forming or favouring a tendency to scepticism, is then, it…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 72074,
+          "chunk_id": "c000378",
+          "similarity": 0.034975223,
+          "title": "Pragmatism and idealism",
+          "excerpt": "272 The reader who is anxious to obtain a working idea of the limits of knowledge from a scientific point of view had better consult such pieces of literature as Sir Oliver Lodge’s recent…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 40436,
+          "chunk_id": "c000844",
+          "similarity": 0.032258064,
+          "title": "Plato and the Other Companions of Sokrates, 3rd ed. Volume 2",
+          "excerpt": "Antithesis between the eloquent lecturer and the analytical cross-examiner.  It is this antithesis between the eloquent popular lecturer, and the analytical enquirer and cross-examiner, which the…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 4280,
+          "chunk_id": "c000968",
+          "similarity": 0.031899326,
+          "title": "The Critique of Pure Reason",
+          "excerpt": "To the uncritical dogmatist, who has not surveyed the sphere of his understanding, nor determined, in accordance with principles, the limits of possible cognition, who, consequently, is ignorant of…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 43572,
+          "chunk_id": "c000169",
+          "similarity": 0.03125,
+          "title": "A Commentary to Kant's 'Critique of Pure Reason'",
+          "excerpt": "Distinction between knowing and thinking. [142] —Since according to Critical teaching the limits of sense-experience are the limits of knowledge, the term knowledge has for Kant a very limited…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 77155,
+          "chunk_id": "c000093",
+          "similarity": 0.03125,
+          "title": "Scepticism and animal faith",
+          "excerpt": "The sceptic, then, as a consequence of carrying his scepticism to the greatest lengths, finds himself in the presence of more luminous and less equivocal objects than does the working and believing…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 72074,
+          "chunk_id": "c000379",
+          "similarity": 0.031015038,
+          "title": "Pragmatism and idealism",
+          "excerpt": "I do not think that this whole question of the limits of our knowledge is such a burning question to-day as it was some years ago, there being several reasons for this. One is that we live in an age…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 4280,
+          "chunk_id": "c000962",
+          "similarity": 0.030303031,
+          "title": "The Critique of Pure Reason",
+          "excerpt": "The polemic of scepticism is properly directed against the dogmatist, who erects a system of philosophy without having examined the fundamental objective principles on which it is based, for the…"
+        }
+      ],
+      "similarity_span": 0.025368828
+    },
+    {
+      "query": "virtue and the good life",
+      "notes": "Ethics generally.",
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 18712,
+          "chunk_id": "c000320",
+          "similarity": 0.053030305,
+          "title": "Levels of Living",
+          "excerpt": "Holiness of life is not in innocence of evil but in positive forcefulness for good; not in doing as little harm as we can, but in filling the whole life with worthy, helpful, uplifting deeds. The…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 35354,
+          "chunk_id": "c002553",
+          "similarity": 0.036185384,
+          "title": "Moral Theology",
+          "excerpt": "(c) Good prudence is that which in thought and in act functions well with regard to the means for leading a good life. It is only this prudence that receives the name of virtue; and, since it is…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 77134,
+          "chunk_id": "c000286",
+          "similarity": 0.03230277,
+          "title": "The philosophy of Gassendi",
+          "excerpt": "One satisfaction remains: our ethic will at least deal with human nature and leave us our natural material. More than that, it will assert the unity of virtues, on the very sound principle that if we…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 5621,
+          "chunk_id": "c000129",
+          "similarity": 0.032258064,
+          "title": "Baron d'Holbach : a Study of Eighteenth Century Radicalism in France",
+          "excerpt": "Government then assumes the functions of moral restraint formally delegated to religion; and punishments render virtue attractive and vice repugnant. Holbach's theory of social organization is…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 56075,
+          "chunk_id": "c000140",
+          "similarity": 0.032258064,
+          "title": "Seneca's Morals of a Happy Life, Benefits, Anger and Clemency",
+          "excerpt": "Virtue is that perfect good which is the complement of a happy life ; the only immortal thing that belongs to mortality—it is the knowledge both of others and itself—it is an invincible greatness…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 54938,
+          "chunk_id": "c000411",
+          "similarity": 0.031441905,
+          "title": "The Philosophy of the Practical: Economic and Ethic",
+          "excerpt": "The utilitarian character of Greek Ethic has been affirmed on several occasions; but one experiences a certain repugnance in applying so precise a term to the documents of ancient thought that remain…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 11224,
+          "chunk_id": "c000056",
+          "similarity": 0.03125,
+          "title": "Utilitarianism",
+          "excerpt": "Life would be a poor thing, very ill provided with sources of happiness, if there were not this provision of nature, by which things originally indifferent, but conducive to, or otherwise associated…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 50141,
+          "chunk_id": "c000433",
+          "similarity": 0.03125,
+          "title": "Philosophical Studies",
+          "excerpt": "But it is now time to turn to the other idea, with which I said that Moral Philosophy has been largely concerned, though it is not, strictly speaking, a moral idea, at all.  And I think, perhaps, a…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 73782,
+          "chunk_id": "c000048",
+          "similarity": 0.030730732,
+          "title": "What I believe",
+          "excerpt": "The idea of individual salvation, with which the early Christians consoled themselves for their political subjection, becomes impossible as soon as we escape from a very narrow conception of the good…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 11100,
+          "chunk_id": "c000333",
+          "similarity": 0.029887218,
+          "title": "History of Modern Philosophy",
+          "excerpt": "Virtue pleases by its own worth and beauty, not because of any external advantage. We must not corrupt the love of the good for its own sake by mixing with it the hope of future reward, which at the…"
+        }
+      ],
+      "similarity_span": 0.034511786
+    },
+    {
+      "query": "the will and freedom of choice",
+      "notes": "Free will discussion.",
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 55108,
+          "chunk_id": "c000502",
+          "similarity": 0.062561095,
+          "title": "The Logic of Hegel",
+          "excerpt": "Of contingency in respect of the Will it is especially important to form a proper estimate. The Freedom of the Will is an expression that often means mere free-choice, or the will in the form of…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 21668,
+          "chunk_id": "c000133",
+          "similarity": 0.05661882,
+          "title": "The Complex Vision",
+          "excerpt": "Consciousness itself must be added to this list. For whatever arguments may be used in the realm of thought, when the moment of choice arrives in the realm of action, we are always conscious of the…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 33411,
+          "chunk_id": "c000472",
+          "similarity": 0.04663487,
+          "title": "A critical history of Greek philosophy",
+          "excerpt": "Hence the individual is not free. There can be no true freedom of the will in a world governed by necessity. We may, without harm, say that we choose to do this or that, that our acts are voluntary.…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 26321,
+          "chunk_id": "c000239",
+          "similarity": 0.043867923,
+          "title": "Life and Matter: A Criticism of Professor Haeckel's \"Riddle of the Universe\"",
+          "excerpt": "In the above chapter I must not be understood as pretending to settle the thorny question of a reconciliation between freedom of choice and pre-determination or prevision. All I there contend for is…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 43544,
+          "chunk_id": "c000616",
+          "similarity": 0.04200269,
+          "title": "The philosophy of life, and philosophy of language, in a course of lectures",
+          "excerpt": "Consequently, this free will and choice, so peculiar to man, depends intimately and essentially upon that controversy between understanding and will, which, if not inborn, has become, at least, a…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 77134,
+          "chunk_id": "c000312",
+          "similarity": 0.038265307,
+          "title": "The philosophy of Gassendi",
+          "excerpt": "The discussion on Liberty, Fate, and Divination forms a metaphysic of Ethic in so far as Gassendi recognises the necessity of supplying an argument for the possibility of morality. Ethically, freedom…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 62856,
+          "chunk_id": "c000540",
+          "similarity": 0.038074713,
+          "title": "A Treatise of Human Nature",
+          "excerpt": "Its relation to Locke: Locke’s account of freedom, will, and desire.  The place held by the ‘Essay concerning Human Understanding,’ as a sort of philosopher’s Bible in the last century, is…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 33411,
+          "chunk_id": "c000436",
+          "similarity": 0.03615495,
+          "title": "A critical history of Greek philosophy",
+          "excerpt": "Aristotle is a pronounced supporter of the freedom of the will. He censures Socrates because the latter's theory of virtue practically amounts to a denial of freedom. According to Socrates, whoever…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 43544,
+          "chunk_id": "c000615",
+          "similarity": 0.035765674,
+          "title": "The philosophy of life, and philosophy of language, in a course of lectures",
+          "excerpt": "Thus, then, has the very first step in this comparative psychology carried us, at once, to the utmost limits of what is knowable by man. Still it has tended, in passing, to place in an eminently…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 43062,
+          "chunk_id": "c000191",
+          "similarity": 0.03457825,
+          "title": "Theoretical Ethics",
+          "excerpt": "This difference between questions of right and questions of utility easily solves a supposed difficulty in the moral freedom of the will. If choices were simply between greater or less degrees of…"
+        }
+      ],
+      "similarity_span": 0.04329727
+    },
+    {
+      "query": "the existence of God",
+      "notes": "Cosmological / ontological arguments.",
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 4705,
+          "chunk_id": "c000238",
+          "similarity": 0.047930285,
+          "title": "A Treatise of Human Nature",
+          "excerpt": "It is evident, that all reasonings from causes or effects terminate in conclusions, concerning matter of fact; that is, concerning the existence of objects or of their qualities. It is also evident,…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 46921,
+          "chunk_id": "c000314",
+          "similarity": 0.041172598,
+          "title": "The Thoughts of Blaise Pascal",
+          "excerpt": "Thus we may well know that there is a God, without knowing what he is.  We know then the existence and the nature of the finite, because we also are finite and have dimension.  We know the existence…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 53791,
+          "chunk_id": "c000422",
+          "similarity": 0.038517974,
+          "title": "Philosophical Works, v. 1 (of 4)",
+          "excerpt": "'Tis evident, that all reasonings from causes or effects terminate in conclusions concerning matter of fact; that is, concerning the existence of objects or of their qualities. 'Tis also evident,…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 18269,
+          "chunk_id": "c000255",
+          "similarity": 0.03478357,
+          "title": "Pascal's Pensées",
+          "excerpt": "We know then the existence and nature of the finite, because we also are finite and have extension. We know the existence of the infinite, and are ignorant of its nature, because it has extension…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 42843,
+          "chunk_id": "c000255",
+          "similarity": 0.03367289,
+          "title": "Life and Correspondence of David Hume, Volume 1",
+          "excerpt": "Some pretend that there can be no necessity, according to the system of atheism, \"because even matter cannot be determined without something superior to determine it.\"— Fenelon.  Three proofs of…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 5246,
+          "chunk_id": "c000579",
+          "similarity": 0.03258749,
+          "title": "Modern French Philosophy: a Study of the Development Since Comte",
+          "excerpt": "Renouvier is anxious that we should examine the data upon which we may found “rational hypotheses” as to the nature of God. The Critical Philosophy has upset the demonstrations of the existence…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 11100,
+          "chunk_id": "c000283",
+          "similarity": 0.032397784,
+          "title": "History of Modern Philosophy",
+          "excerpt": "More certain than our sensitive knowledge of the existence of external objects, are our immediate or intuitive knowledge of our own existence and our mediate or demonstrative knowledge of the…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 11100,
+          "chunk_id": "c000621",
+          "similarity": 0.032258064,
+          "title": "History of Modern Philosophy",
+          "excerpt": "The proof of the existence of God may be attempted in three ways: we may argue the existence of a supreme cause either by starting from a definite experience (the special constitution and order of…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 76464,
+          "chunk_id": "c000461",
+          "similarity": 0.032258064,
+          "title": "The dialogues of Plato in five volumes, Vol. 2 (of 5)",
+          "excerpt": "To deal fairly with such arguments, they should be translated as far as possible into their modern equivalents. ‘If the ideas of men are eternal, their souls are eternal, and if not the ideas, then…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 5246,
+          "chunk_id": "c000576",
+          "similarity": 0.031655844,
+          "title": "Modern French Philosophy: a Study of the Development Since Comte",
+          "excerpt": "The idea of God, Renouvier shows, arises out of the discussions of the nature of the universal laws of the universe and from the progress of personalities. The plausible conceptions of God based on…"
+        }
+      ],
+      "similarity_span": 0.028699515
+    },
+    {
+      "query": "perception and the senses",
+      "notes": "Locke + Berkeley + Hume.",
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 41412,
+          "chunk_id": "c000124",
+          "similarity": 0.036004648,
+          "title": "A History of Philosophy in Epitome",
+          "excerpt": "We see with the eyes, and hear with the ears, but to group together the perceptions attained through these different organs, and to hold them fast in the unity of self-consciousness, is beyond the…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 42933,
+          "chunk_id": "c000300",
+          "similarity": 0.032913998,
+          "title": "Plotinos: Complete Works, v. 4",
+          "excerpt": "The principle which makes use of the senses contemplates only by grasping exterior things, and far from uniting itself to the objects of its contemplation, from this perception it gathers no more…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 40307,
+          "chunk_id": "c000192",
+          "similarity": 0.032258064,
+          "title": "The Letters of William James, Vol. 1",
+          "excerpt": "The German character is without mountains or valleys; its favorite food is roast veal; and in other lines it prefers whatever may be the analogue thereof—all which gives life here a certain…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 43116,
+          "chunk_id": "c000650",
+          "similarity": 0.032258064,
+          "title": "Lectures on the Philosophy of the Human Mind (Vol. 1 of 3)",
+          "excerpt": "In perception there is, as I have already frequently repeated, a certain series —the presence of an external object—the affection of the sensorial organ—the affection of the sentient mind. As…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 55761,
+          "chunk_id": "c000172",
+          "similarity": 0.03125,
+          "title": "The Philosophy of Spiritual Activity",
+          "excerpt": "The unprejudiced study of experience, in perceiving and conceiving, such as we have attempted to describe it in the preceding chapters, is liable to be interfered with again and again by certain…"
+        },
+        {
+          "rank": 6,
+          "gutenberg_id": 61593,
+          "chunk_id": "c000249",
+          "similarity": 0.03125,
+          "title": "Arabic Thought and Its Place in History",
+          "excerpt": "There are three different worlds or planes of existence (i.) the `alam al-mulk is that in which existence is apparent to the senses, the world made known by perception, and this is in a state of…"
+        },
+        {
+          "rank": 7,
+          "gutenberg_id": 40794,
+          "chunk_id": "c000418",
+          "similarity": 0.030303031,
+          "title": "Essays in Experimental Logic",
+          "excerpt": "I mentioned incidentally in the first section that it is conceivable that failure to give adequate consideration to practical judgments may have a compromising effect upon the consideration of other…"
+        },
+        {
+          "rank": 8,
+          "gutenberg_id": 78618,
+          "chunk_id": "c001061",
+          "similarity": 0.029806176,
+          "title": "The works of Plato (Vol. 1 of 6)",
+          "excerpt": "Theætetus now resumes the argument, and though it would seem that Protagoras’s doctrine had been already sufficiently refuted, yet Socrates resolves to try it by one more test. Each sense has its…"
+        },
+        {
+          "rank": 9,
+          "gutenberg_id": 4391,
+          "chunk_id": "c000103",
+          "similarity": 0.029411765,
+          "title": "Selections from the Principles of Philosophy",
+          "excerpt": "That the perceptions of the senses do not teach us what is in reality in things, but what is beneficial of hurtful to the composite whole of mind and body.  It will be sufficient to remark that the…"
+        },
+        {
+          "rank": 10,
+          "gutenberg_id": 43572,
+          "chunk_id": "c000844",
+          "similarity": 0.029411765,
+          "title": "A Commentary to Kant's 'Critique of Pure Reason'",
+          "excerpt": "“By an idealist, therefore, we must not understand one who denies the existence of outer objects of the senses, but only one who does not admit that their existence is known through immediate…"
+        }
+      ],
+      "similarity_span": 0.017136723
+    }
+  ],
+  "adversarial": [
+    {
+      "query": "the the the the the",
+      "notes": "High-frequency token spam. Top similarity should be < 0.65.",
+      "top_similarity": 0.032258064,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 28696,
+          "chunk_id": "c000075",
+          "similarity": 0.032258064,
+          "title": "Symbolic Logic",
+          "excerpt": "(1) The Subject is evidently “the man &c.” (Note that in this sentence, the Predicate comes first.) At first sight, the Subject seems to be an ‘ Individual ’; but on further consideration, we…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 52106,
+          "chunk_id": "c002740",
+          "similarity": 0.032258064,
+          "title": "The origin and development of the moral ideas",
+          "excerpt": "17 Georgi, Russia , iii. 156.  18 Murdoch, ‘Ethnological Results of the Point Barrow Expedition,’ in Ann. Rep. Bur. Ethn. ix. 419 sq. See also Turner, ‘Ethnology of the the Ungava District,’…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 5078,
+          "chunk_id": "c000021",
+          "similarity": 0.03125,
+          "title": "When a Man Comes to Himself",
+          "excerpt": "THE END"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 77777,
+          "chunk_id": "c001307",
+          "similarity": 0.03125,
+          "title": "The Stoics, Epicureans and Sceptics",
+          "excerpt": "Immortality, Stoic view of, 219 .  Imperfect expression of Stoics, 94 .  Imperialism, Byzantine, 33 .  Imperturbability, mental, of Sceptics, 18 , 525 .  Impressions the basis of perceptions, 77…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 5116,
+          "chunk_id": "c000365",
+          "similarity": 0.030303031,
+          "title": "Pragmatism: A New Name for Some Old Ways of Thinking",
+          "excerpt": "The End"
+        }
+      ]
+    },
+    {
+      "query": "asdf qwerty zxcv hjkl",
+      "notes": "Nonsense ASCII. Top similarity should be < 0.50.",
+      "top_similarity": 0.032258064,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 28696,
+          "chunk_id": "c000623",
+          "similarity": 0.032258064,
+          "title": "Symbolic Logic",
+          "excerpt": "1 d h′ 0 † 2 c e 0 † 3 h 1 b′ 0 † 4 a d′ 0 † 5 b e′ 0 ; 1 d h′ † 3 h b′ † 4 a d′ † 5 b e′ † 2 c e ¶ a c 0  1 b 1 a′ 0 † 2 d h 0 † 3 c e 0 † 4 a h′ 0 † 5…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 41633,
+          "chunk_id": "c003156",
+          "similarity": 0.03125,
+          "title": "A Christian Directory, Part 1: Christian Ethics",
+          "excerpt": "[538] Prov. xxiii. 16; Psal. cxlv. 6, 11-13, 21.  [539] Psal. cxix. 172; xlix. 3; xxxv. 28.  [540] Jer. viii. 6; Prov. vi. 22; Psal. lxxvii. 12; cv.; cxiv.; cxlix. 11.  [541] 1 Tim. vi. 13; 1 Pet.…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 28696,
+          "chunk_id": "c000629",
+          "similarity": 0.030303031,
+          "title": "Symbolic Logic",
+          "excerpt": "1 e 1 d 0 † 2 h b 0 † 3 a′ 1 k′ 0 † 4 c e′ 0 † 5 b′ 1 d′ 0 † 6 a c′ 0 ; 1 e d † 4 c e′ † 5 b′ d′ † 2 h b † 6 a c′ † 3 a′ k′ ¶ h k′ 0"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 43572,
+          "chunk_id": "c001643",
+          "similarity": 0.029411765,
+          "title": "A Commentary to Kant's 'Critique of Pure Reason'",
+          "excerpt": "[196] Cf. above, pp. xxxv, 36 ff.; below, pp. 565-7.  [197] A 2.  [198] A 2.  [199] B 1.  [200] Cf. below, p. 55.  [201] B 1.  [202] Cf. below, p. 54.  [203] B 2-3.  [204] Cf. below, p. 55.  [205] B…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 28696,
+          "chunk_id": "c000631",
+          "similarity": 0.028571429,
+          "title": "Symbolic Logic",
+          "excerpt": "1 e k 0 † 2 b′ m 0 † 3 a c′ 0 † 4 h′ 1 e′ 0 † 5 d 1 k′ 0 † 6 c b 0 † 7 d′ 1 l′ 0 † 8 h m′ 0 ; 1 e k † 4 h′ e′ † 5 d k′ † 7 d′ l′ † 8 h m′ † 2 b′…"
+        }
+      ]
+    },
+    {
+      "query": "",
+      "notes": "Empty query. Should error gracefully, NOT return high-similarity hits.",
+      "top_similarity": 0.0,
+      "top_hits": []
+    },
+    {
+      "query": "good",
+      "notes": "Single common word. Top similarity should be in the 0.55–0.65 range — present but not confident.",
+      "top_similarity": 0.032258064,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 43572,
+          "chunk_id": "c001616",
+          "similarity": 0.032258064,
+          "title": "A Commentary to Kant's 'Critique of Pure Reason'",
+          "excerpt": "[58] On the Radical Evil in Human Nature, W. vi. p. 20; Abbott’s trans. p. 326. “This opinion [that the world is constantly advancing from worse to better] is certainly not founded on experience…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 70666,
+          "chunk_id": "c000076",
+          "similarity": 0.032258064,
+          "title": "The ethics of Hercules",
+          "excerpt": "Good health; conducive to peace of mind and longevity.  Good order; stable, satisfying.  Good complexion; gratifying, favorable, advantageous, etc.  Good face; fair or smooth, or indicating…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 43572,
+          "chunk_id": "c000107",
+          "similarity": 0.03125,
+          "title": "A Commentary to Kant's 'Critique of Pure Reason'",
+          "excerpt": "In one fundamental respect Kant broke with the teaching of Rousseau, namely, in questioning his doctrine of the natural goodness and indefinite perfectibility of human nature. [58] Nothing, Kant…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 64488,
+          "chunk_id": "c000222",
+          "similarity": 0.03125,
+          "title": "Roman Stoicism",
+          "excerpt": "‘Do you ask me of what kind the good is? Listen then. It is orderly, just, innocent, pious, self-controlled, useful, fair, necessary, severe, upright, always of advantage; fearless, painless,…"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 1998,
+          "chunk_id": "c000053",
+          "similarity": 0.030303031,
+          "title": "Thus Spake Zarathustra: A Book for All and None",
+          "excerpt": "The hour when ye say: “What good is my happiness! It is poverty and pollution and wretched self-complacency. But my happiness should justify existence itself!”  The hour when ye say: “What good…"
+        }
+      ]
+    },
+    {
+      "query": "🦀 hello world 🚀",
+      "notes": "Emoji + filler. Tests Unicode handling. Similarity should be diffuse.",
+      "top_similarity": 0.032258064,
+      "top_hits": [
+        {
+          "rank": 1,
+          "gutenberg_id": 28696,
+          "chunk_id": "c000617",
+          "similarity": 0.032258064,
+          "title": "Symbolic Logic",
+          "excerpt": "1 c b′ 0 † 2 c′ 1 d 0 † 3 b 1 a′ 0 ; 1 c b′ † 2 c′ d † 3 b a′ ¶ d a′ 0  1 d 1 e′ 0 † 2 c 1 a′ 0 † 3 b d′ 0 † 4 e 1 a 0 ; 1 d e′ † 3 b d′ † 4 e a † 2 c…"
+        },
+        {
+          "rank": 2,
+          "gutenberg_id": 54618,
+          "chunk_id": "c000919",
+          "similarity": 0.032258064,
+          "title": "Æsthetic as science of expression and general linguistic",
+          "excerpt": "[16] See above, pp. 18 - 20 .  [17] Cf. Volkmann, Rhet. d. G. u. Röm. pp. 532-544.  [18] Comparetti, Virgilio net M. E. i. p. 172.  [19] Nuove ricerche sul hello, ch. 10.  [20] See above, pp. 145 -…"
+        },
+        {
+          "rank": 3,
+          "gutenberg_id": 14314,
+          "chunk_id": "c000079",
+          "similarity": 0.03125,
+          "title": "Etiquette",
+          "excerpt": "Informal Greetings  Informal greetings are almost as limited as formal, but not quite; for besides saying \"How do you do?\" you can say \"Good morning\" and on occasions \"How are you?\" or \"Good…"
+        },
+        {
+          "rank": 4,
+          "gutenberg_id": 28696,
+          "chunk_id": "c000618",
+          "similarity": 0.03125,
+          "title": "Symbolic Logic",
+          "excerpt": "1 c 1 b′ 0 † 2 a 1 e′ 0 † 3 d 1 b 0 † 4 a′ 1 c′ 0 ; 1 c b′ † 3 d b † 4 a′ c′ † 2 a e′ ¶ d e′ 0 † d 1 i.e. ¶ d 1 e′ 0"
+        },
+        {
+          "rank": 5,
+          "gutenberg_id": 28696,
+          "chunk_id": "c000619",
+          "similarity": 0.030303031,
+          "title": "Symbolic Logic",
+          "excerpt": "1 b′ d 0 † 2 e 1 c′ 0 † 3 b 1 a′ 0 † 4 d′ 1 c 0 ; 1 b′ d † 3 b a′ † 4 d′ c † 2 e c′ ¶ a′ e 0 † e 1 i.e. ¶ e 1 a′ 0"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "iconic_count": 20,
+    "iconic_with_expected_books": 17,
+    "iconic_recall_at_k": 0.88235295,
+    "iconic_mrr": 0.53326875,
+    "iconic_hits_at_1": 0.47058824,
+    "iconic_hits_at_5": 0.5882353,
+    "iconic_hits_at_10": 0.7647059,
+    "adversarial_max_similarity": 0.032258064,
+    "search_pass_seconds": 16.145460042
+  }
+}

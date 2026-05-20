@@ -42,9 +42,13 @@ mod tiebreak_tests {
     }
 }
 
-/// Default k for RRF. Lower than the literature default (60) to amplify
-/// the rank-1 signal in asymmetric retrieval — see spec for the math.
-pub const RRF_K_DEFAULT: u32 = 10;
+/// Default k for RRF. Bench calibration (2026-05-20, see
+/// `crates/fathom-bench/results/v0.21.1-final.notes.md`) found k=30 dominates
+/// the load-bearing criteria on this corpus: 13/15 iconic queries in top-10,
+/// adversarial max 0.032, hits@10 76.5%. The spec's a-priori k=10 amplified
+/// BM25 outliers too much given how strong the dense lane has become since
+/// v0.20.
+pub const RRF_K_DEFAULT: u32 = 30;
 
 /// Reciprocal rank fusion. Ranks are **1-indexed**: the top doc in a list
 /// contributes `1 / (k + 1)`, not `1 / k`. A doc missing from a list
