@@ -1,13 +1,14 @@
 use crate::types::GlossaryEntry;
-use once_cell::sync::Lazy;
 use regex::Regex;
 use std::collections::HashMap;
+use std::sync::LazyLock;
 
-static PARAPHRASE_RE: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"(?si)PARAPHRASE[^:]*:\s*(.+?)(?:GLOSSARY:|$)").unwrap());
-static GLOSSARY_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"(?si)GLOSSARY:\s*(.+)").unwrap());
-static BACKTICK_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"`([^`]+)`").unwrap());
-static PARENS_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"\(([^)]*)\)").unwrap());
+static PARAPHRASE_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?si)PARAPHRASE[^:]*:\s*(.+?)(?:GLOSSARY:|$)").unwrap());
+static GLOSSARY_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?si)GLOSSARY:\s*(.+)").unwrap());
+static BACKTICK_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"`([^`]+)`").unwrap());
+static PARENS_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\(([^)]*)\)").unwrap());
 
 /// Parse a model response into `(paraphrase, glossary)`.
 ///

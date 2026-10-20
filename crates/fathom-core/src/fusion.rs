@@ -247,8 +247,8 @@ mod linear_tests {
 /// time via `include_str!`. Match returns the gutenberg_ids associated with
 /// the matched phrase. Empty Vec means no match.
 pub mod iconic {
-    use once_cell::sync::Lazy;
     use serde::Deserialize;
+    use std::sync::LazyLock;
 
     #[derive(Debug, Deserialize)]
     struct File {
@@ -265,7 +265,7 @@ pub mod iconic {
 
     static RAW: &str = include_str!("../data/iconic-phrases.toml");
 
-    static ENTRIES: Lazy<Vec<(String, Vec<u32>)>> = Lazy::new(|| {
+    static ENTRIES: LazyLock<Vec<(String, Vec<u32>)>> = LazyLock::new(|| {
         let f: File = toml::from_str(RAW).expect("iconic-phrases.toml parses");
         f.phrase
             .into_iter()

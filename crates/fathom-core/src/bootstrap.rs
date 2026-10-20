@@ -10,12 +10,12 @@
 use anyhow::{anyhow, bail, Context, Result};
 use directories::ProjectDirs;
 use futures_util::StreamExt;
-use once_cell::sync::Lazy;
 use reqwest::header::{CONTENT_RANGE, RANGE};
 use reqwest::StatusCode;
 use sha2::{Digest, Sha256};
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
+use std::sync::LazyLock;
 use std::sync::{Arc, Mutex as StdMutex};
 use tokio::fs::{File, OpenOptions};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
@@ -115,8 +115,8 @@ pub type ProgressCallback = Box<dyn Fn(u64, Option<u64>) + Send + Sync>;
 /// actually contend on.
 type DownloadLockMap = HashMap<&'static str, Arc<AsyncMutex<()>>>;
 
-static DOWNLOAD_LOCKS: Lazy<StdMutex<DownloadLockMap>> =
-    Lazy::new(|| StdMutex::new(HashMap::new()));
+static DOWNLOAD_LOCKS: LazyLock<StdMutex<DownloadLockMap>> =
+    LazyLock::new(|| StdMutex::new(HashMap::new()));
 
 fn lock_for(id: &'static str) -> Arc<AsyncMutex<()>> {
     let mut map = DOWNLOAD_LOCKS.lock().expect("download lock map poisoned");

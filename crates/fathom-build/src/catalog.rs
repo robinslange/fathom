@@ -9,12 +9,12 @@
 //! ("?") and we extract only the death year where present.
 
 use crate::types::{Agent, AgentRole, AgentSource, Candidate};
-use once_cell::sync::Lazy;
 use regex::Regex;
+use std::sync::LazyLock;
 
 /// Years inside an agent string. We accept `YYYY-YYYY`, `YYYY BCE-YYYY BCE`,
 /// `YYYY?-YYYY?`, `YYYY-`, `-YYYY`. Death year is the second number, optional.
-static YEAR_RANGE: Lazy<Regex> = Lazy::new(|| {
+static YEAR_RANGE: LazyLock<Regex> = LazyLock::new(|| {
     // Accepts: `1817-1893`, `428? BCE-348? BCE`, `121-180`, `1800-`, `-1879`
     Regex::new(
         r"(?P<birth>-?\d{1,4})\??\s*(?:BCE|CE)?\s*-\s*(?P<death>-?\d{1,4})?\??\s*(?:BCE|CE)?",
@@ -22,7 +22,7 @@ static YEAR_RANGE: Lazy<Regex> = Lazy::new(|| {
     .unwrap()
 });
 
-static ROLE_TAG: Lazy<Regex> = Lazy::new(|| {
+static ROLE_TAG: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(r"\[(Translator|Editor|Illustrator|Author|Compiler|Contributor|Commentator)\]")
         .unwrap()
 });

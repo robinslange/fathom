@@ -3,20 +3,20 @@ use fathom_core::{
     bootstrap, fathom_with_judge, judge, themes, FathomResult, JudgeMode, Mode, Tier,
 };
 use fathom_engine::LlamaCppBackend;
-use once_cell::sync::OnceCell;
 use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
+use std::sync::OnceLock;
 use tauri::{AppHandle, Emitter};
 use tokio::sync::Mutex as AsyncMutex;
 
-static LLAMA: OnceCell<AsyncMutex<Option<Arc<LlamaCppBackend>>>> = OnceCell::new();
+static LLAMA: OnceLock<AsyncMutex<Option<Arc<LlamaCppBackend>>>> = OnceLock::new();
 
 fn llama_cell() -> &'static AsyncMutex<Option<Arc<LlamaCppBackend>>> {
     LLAMA.get_or_init(|| AsyncMutex::new(None))
 }
 
-static RUNTIME: OnceCell<AsyncMutex<Option<Arc<Runtime>>>> = OnceCell::new();
+static RUNTIME: OnceLock<AsyncMutex<Option<Arc<Runtime>>>> = OnceLock::new();
 
 fn runtime_cell() -> &'static AsyncMutex<Option<Arc<Runtime>>> {
     RUNTIME.get_or_init(|| AsyncMutex::new(None))
@@ -453,7 +453,7 @@ async fn library_ensure_judge(app: AppHandle) -> Result<(), AppError> {
 
 /// Pre-fetch and load Gemma so the onboarding popup can flip the
 /// paraphrase-model row to ready independently of DeBERTa. Idempotent
-/// via the LLAMA OnceCell guard.
+/// via the LLAMA OnceLock guard.
 #[tauri::command]
 async fn library_ensure_llama(app: AppHandle) -> Result<(), AppError> {
     ensure_llama(&app).await?;

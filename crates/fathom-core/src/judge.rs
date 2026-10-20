@@ -23,11 +23,11 @@ use crate::bootstrap::{ensure_model_downloaded, ProgressCallback};
 use crate::types::FaithfulnessScore;
 use anyhow::{anyhow, Context, Result};
 use ndarray::Array2;
-use once_cell::sync::OnceCell;
 use ort::session::{builder::GraphOptimizationLevel, Session};
 use ort::value::Tensor;
 use std::path::PathBuf;
 use std::sync::Mutex;
+use std::sync::OnceLock;
 use tokenizers::Tokenizer;
 use unicode_segmentation::UnicodeSegmentation;
 
@@ -46,7 +46,7 @@ struct JudgeState {
     tokenizer: Tokenizer,
 }
 
-static JUDGE: OnceCell<Mutex<JudgeState>> = OnceCell::new();
+static JUDGE: OnceLock<Mutex<JudgeState>> = OnceLock::new();
 
 /// Load the NLI model and tokenizer on first call (async because it may need
 /// to download the ONNX file). Subsequent calls return immediately.
