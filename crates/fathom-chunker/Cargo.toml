@@ -12,4 +12,3 @@ description = "Fathom chunking: paragraph-level with UAX#29 sentence boundaries 
 serde.workspace = true
 unicode-segmentation.workspace = true
 regex.workspace = true
-once_cell.workspace = true

@@ -1235,7 +1235,6 @@ dependencies = [
  "fathom-engine",
  "futures-util",
  "minisign",
- "once_cell",
  "rbook",
  "regex",
  "reqwest 0.12.28",
@@ -1253,7 +1252,6 @@ dependencies = [
 name = "fathom-chunker"
 version = "0.0.1"
 dependencies = [
- "once_cell",
  "regex",
  "serde",
  "unicode-segmentation",
@@ -1287,7 +1285,6 @@ dependencies = [
  "lru",
  "minisign-verify",
  "ndarray",
- "once_cell",
  "ort",
  "regex",
  "reqwest 0.12.28",
@@ -1315,7 +1312,6 @@ dependencies = [
  "fathom-engine",
  "futures-util",
  "libc",
- "once_cell",
  "serde",
  "serde_json",
  "tauri",
