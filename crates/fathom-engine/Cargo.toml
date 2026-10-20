@@ -6,7 +6,7 @@ license.workspace = true
 authors.workspace = true
 repository.workspace = true
 rust-version.workspace = true
-description = "Fathom backend abstraction: llama.cpp (bundled), Ollama (connector), HTTP (cloud)"
+description = "Fathom backend abstraction: llama.cpp (bundled), Ollama (connector)"
 
 [dependencies]
 anyhow.workspace = true
