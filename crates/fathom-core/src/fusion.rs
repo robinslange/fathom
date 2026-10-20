@@ -6,7 +6,7 @@ pub type Hit = (u32, String, f32);
 
 /// Sort hits by score DESC, then gutenberg_id ASC, then chunk_id ASC.
 /// Same tiebreak as the existing dense path so fused output is deterministic.
-pub fn sort_with_lexicographic_tiebreak(hits: &mut Vec<Hit>) {
+pub fn sort_with_lexicographic_tiebreak(hits: &mut [Hit]) {
     hits.sort_by(|a, b| {
         b.2.partial_cmp(&a.2)
             .unwrap_or(std::cmp::Ordering::Equal)

@@ -22,7 +22,7 @@ use serde::{Deserialize, Serialize};
 use std::io::{BufRead, BufWriter, Write};
 use std::path::PathBuf;
 
-#[derive(Debug, ClapArgs)]
+#[derive(Debug, ClapArgs, Default)]
 pub struct Args {
     /// Limit to first N books — useful for the 50-book validation pass.
     #[arg(long)]
@@ -33,16 +33,6 @@ pub struct Args {
     /// Skip the assemble step (only emit the input JSONL).
     #[arg(long, default_value_t = false)]
     pub skip_assemble: bool,
-}
-
-impl Default for Args {
-    fn default() -> Self {
-        Self {
-            limit: None,
-            skip_prepare: false,
-            skip_assemble: false,
-        }
-    }
 }
 
 const ALLOWED_DROP_REASONS: &[&str] = &[
