@@ -11,7 +11,6 @@ use clap::Args as ClapArgs;
 use std::path::PathBuf;
 
 const CATALOG_URL: &str = "https://www.gutenberg.org/cache/epub/feeds/pg_catalog.csv";
-const USER_AGENT: &str = "Fathom-Build/0.2 (https://fathom.app contact@robinslange.dev)";
 
 #[derive(Debug, ClapArgs, Default)]
 pub struct Args {
@@ -48,7 +47,7 @@ pub async fn run(args: Args) -> Result<()> {
 
 async fn fetch_catalog(url: &str, out: &PathBuf) -> Result<()> {
     let client = reqwest::Client::builder()
-        .user_agent(USER_AGENT)
+        .user_agent(super::USER_AGENT)
         .timeout(std::time::Duration::from_secs(120))
         .build()?;
     let resp = client.get(url).send().await?.error_for_status()?;

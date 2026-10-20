@@ -19,7 +19,6 @@ use std::time::Duration;
 use tokio::time::sleep;
 
 const RDF_URL_PREFIX: &str = "https://www.gutenberg.org/cache/epub";
-const USER_AGENT: &str = "Fathom-Build/0.2 (https://fathom.app contact@robinslange.dev)";
 
 #[derive(Debug, ClapArgs)]
 pub struct Args {
@@ -53,7 +52,7 @@ pub async fn run(args: Args) -> Result<()> {
     ensure_dir(&cache_dir)?;
 
     let client = reqwest::Client::builder()
-        .user_agent(USER_AGENT)
+        .user_agent(super::USER_AGENT)
         .timeout(Duration::from_secs(60))
         .build()?;
 
