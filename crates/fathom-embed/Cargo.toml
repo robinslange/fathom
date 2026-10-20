@@ -10,7 +10,6 @@ description = "Fathom embeddings: bge-small ONNX wrapper. Deterministic CPU-only
 
 [dependencies]
 anyhow.workspace = true
-thiserror.workspace = true
 serde.workspace = true
 ort.workspace = true
 ndarray.workspace = true

@@ -1236,7 +1236,6 @@ dependencies = [
  "futures-util",
  "minisign",
  "once_cell",
- "quick-xml 0.37.5",
  "rbook",
  "regex",
  "reqwest 0.12.28",
@@ -1245,9 +1244,7 @@ dependencies = [
  "serde",
  "serde_bytes",
  "serde_json",
- "serde_yaml",
  "sha2",
- "thiserror 2.0.18",
  "tokio",
  "zstd",
 ]
@@ -1256,11 +1253,9 @@ dependencies = [
 name = "fathom-chunker"
 version = "0.0.1"
 dependencies = [
- "anyhow",
  "once_cell",
  "regex",
  "serde",
- "thiserror 2.0.18",
  "unicode-segmentation",
 ]
 
@@ -1302,7 +1297,6 @@ dependencies = [
  "serde_json",
  "serde_yaml",
  "sha2",
- "thiserror 2.0.18",
  "tokenizers",
  "tokio",
  "toml 0.8.2",
@@ -1339,7 +1333,6 @@ dependencies = [
  "once_cell",
  "ort",
  "serde",
- "thiserror 2.0.18",
  "tokenizers",
 ]
 
@@ -1355,8 +1348,6 @@ dependencies = [
  "once_cell",
  "reqwest 0.12.28",
  "serde",
- "serde_json",
- "thiserror 2.0.18",
  "tokio",
 ]
 
@@ -3270,7 +3261,7 @@ checksum = "092791278e026273c1b65bbdcfbba3a300f2994c896bd01ab01da613c29c46f1"
 dependencies = [
  "base64 0.22.1",
  "indexmap 2.14.0",
- "quick-xml 0.39.4",
+ "quick-xml",
  "serde",
  "time",
 ]
@@ -3416,15 +3407,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8fd00f0bb2e90d81d1044c2b32617f68fcb9fa3bb7640c23e9c748e53fb30934"
 dependencies = [
  "unicode-ident",
-]
-
-[[package]]
-name = "quick-xml"
-version = "0.37.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "331e97a1af0bf59823e6eadffe373d7b27f485be8748f71471c662c1f269b7fb"
-dependencies = [
- "memchr",
 ]
 
 [[package]]
@@ -3592,7 +3574,7 @@ checksum = "95c4508280cb6d4144b510be3d029d0bab6bd36c87890bf505b1f2f2b73caec8"
 dependencies = [
  "indexmap 2.14.0",
  "percent-encoding",
- "quick-xml 0.39.4",
+ "quick-xml",
  "thiserror 2.0.18",
  "zip",
 ]
