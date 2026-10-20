@@ -15,7 +15,7 @@ members = [
 version = "0.0.1"
 edition = "2021"
 license = "Apache-2.0"
-authors = ["Robin Lange <robinsimonlange@gmail.com>"]
+authors = ["omit <https://omit.nz>"]
 repository = "https://github.com/robinslange/fathom"
 rust-version = "1.90"
 
