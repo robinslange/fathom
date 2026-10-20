@@ -13,3 +13,9 @@ pub mod manifest;
 pub mod shard;
 pub mod sign;
 pub mod verify;
+
+const USER_AGENT: &str = concat!(
+    "fathom-build/",
+    env!("CARGO_PKG_VERSION"),
+    " (+https://omit.nz; robin@omit.nz)"
+);
