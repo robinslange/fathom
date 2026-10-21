@@ -207,8 +207,8 @@ pub fn to_f16_bytes(vector: &[f32]) -> Vec<u8> {
 /// Unpack f16 bytes into f32. Used by the runtime shard loader.
 pub fn from_f16_bytes(bytes: &[u8]) -> Vec<f32> {
     let mut out = Vec::with_capacity(bytes.len() / 2);
-    for chunk in bytes.chunks_exact(2) {
-        let h = f16::from_le_bytes([chunk[0], chunk[1]]);
+    for chunk in bytes.as_chunks::<2>().0 {
+        let h = f16::from_le_bytes(*chunk);
         out.push(h.to_f32());
     }
     out
