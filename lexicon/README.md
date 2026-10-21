@@ -1,6 +1,6 @@
 # Lexicon substrate map format
 
-Each YAML file in this directory defines a curated substrate map for one philosophical text or text group. The lexicon is the codified-expertise layer that makes Fathom not just-another-paraphraser — every substrate term ships verified against scholarly sources.
+Each YAML file in this directory defines a curated substrate map for one philosophical text or text group. The lexicon is the codified-expertise layer that makes Fathom not just-another-paraphraser: each substrate term should be checked against a scholarly source before it ships.
 
 ## Schema
 
@@ -19,22 +19,22 @@ passages:
       "in our power":
         substrate: "eph' hēmin"                            # canonical transliteration
         gloss: "What is genuinely up to us; the only proper domain of moral concern"
-        citation: "LSJ s.v. ἐφ' ἡμῖν; Long & Sedley §53"  # REQUIRED — see below
+        citation: "LSJ s.v. ἐφ' ἡμῖν; Long & Sedley §53"  # optional — see below
 ```
 
 ## Fields
 
 - `source.language`: substrate language (`Greek`, `Latin`, `German`, `French`, `Danish`, `Classical Chinese (pinyin)`, `Sanskrit (IAST)`, `Pali`, etc.)
 - `passages[].id`: unique slug
-- `passages[].fingerprint`: leading ~50 chars of the source text, unique within the file. Used by `lookup.py` for matching.
+- `passages[].fingerprint`: leading ~50 chars of the source text, unique within the file. Matched by `lookup_canonical` in `crates/fathom-core/src/lexicon.rs` (case-folded, whitespace-normalised substring of the first 300 chars of the input).
 - `passages[].terms`: map of `English phrase` → `{substrate, gloss, citation}`
 - `terms[].substrate`: the source-language term in its canonical transliteration. Greek uses macrons (`hēmin`, not `hemin`). Sanskrit uses IAST (`ātman`, not `atman`). Chinese uses pinyin with tone marks (`dào`, not `dao`).
 - `terms[].gloss`: one-line PHILOSOPHICAL meaning. Not a dictionary definition. Should answer "what did the author mean by this concept" not "what does this English word mean".
-- `terms[].citation`: **REQUIRED**. The scholarly source you verified the term against. See below.
+- `terms[].citation`: optional. The scholarly source you verified the term against. See below.
 
-## The citation requirement
+## Citations
 
-Every substrate term MUST carry a `citation` field pointing to where you verified it. The Fathom verifier subagent will check this before any PR merges.
+`citation` is optional in the schema: the loader accepts terms without it, and none of the current files carry one yet. New terms should include one so a reviewer can check the substrate against its source. Nothing checks this automatically; review is by hand.
 
 **Acceptable citation formats:**
 
@@ -50,7 +50,7 @@ Every substrate term MUST carry a `citation` field pointing to where you verifie
 
 Multiple sources can be combined with semicolons.
 
-## Anti-patterns (will be flagged by the verifier)
+## Anti-patterns
 
 These are the failure modes we've observed in LLM-generated lexicons. Treat them as automatic FAIL:
 
@@ -58,7 +58,7 @@ These are the failure modes we've observed in LLM-generated lexicons. Treat them
 
 2. **Garbled transliterations** — using a verb form where a noun belongs, or wrong inflection. Example: `diplē lambanē` for "two handles" — `lambanē` is a verb form; the standard Greek is `labai` (plural of `labē`).
 
-3. **Plausible-but-fictional terms** — vocabulary that looks like authentic source-language morphology but doesn't appear in the corpus. The verifier catches these by failing to find the term in Perseus / Monier-Williams / Pali Text Society / ctext.org.
+3. **Plausible-but-fictional terms** — vocabulary that looks like authentic source-language morphology but doesn't appear in the corpus. Catch these by failing to find the term in Perseus / Monier-Williams / Pali Text Society / ctext.org.
 
 4. **Misattribution across authors** — Aristotelian term tagged to Plato, Heideggerian term tagged to Husserl, etc.
 
@@ -73,7 +73,7 @@ If you are submitting via PR (community contribution), or running a lexicon-gene
 3. Confirm it is used in the philosophical sense you're attributing.
 4. Add the verification source as the `citation` field.
 
-If you cannot verify a term, **omit it**. Wrong substrate is worse than no substrate. The verifier will catch fabrications and the PR will not merge.
+If you cannot verify a term, **omit it**. Wrong substrate is worse than no substrate.
 
 ## Contributing
 
@@ -84,4 +84,4 @@ Filename conventions:
 - Use kebab-case
 - Avoid duplicates — check existing files first
 
-All fabricated substrate terms are grounds for PR rejection. The verifier subagent runs automatically on every PR.
+All fabricated substrate terms are grounds for PR rejection.
